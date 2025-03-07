@@ -1,0 +1,99 @@
+.container {
+  background: url("/assets/login_bg.png");
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.registerContainer {
+  background: linear-gradient(
+    rgba(255, 255, 255, 0.3),
+    rgba(255, 255, 255, 0.2)
+  );
+  backdrop-filter: blur(10px);
+  width: 320px; /* Match login module */
+  padding: 24px; /* Adjust padding for better spacing */
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+}
+
+/* Heading */
+.registerContainer h1 {
+  text-align: left;
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
+/* Input Container */
+.inputContainer p {
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+/* Input Wrapper */
+.inputWrapper {
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+/* Icon */
+.icon {
+  font-size: 16px; /* Match login module */
+  color: #1c4a2a;
+  margin-right: 10px;
+}
+
+.inputWrapper input,
+.roleDropdown {
+  width: 100%;
+  border: none;
+  outline: none;
+  /* padding: 8px; */
+  font-size: 14px;
+  background: transparent;
+}
+
+/* Role Dropdown */
+.roleDropdown {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  background: white;
+}
+
+/* Buttons */
+.registerButton,
+.resetButton {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.registerButton {
+  background-color: #1c4a2a;
+  color: white;
+  border: none;
+}
+
+.resetButton {
+  background-color: white;
+  color: #1c4a2a;
+  border: 1px solid #1c4a2a;
+}

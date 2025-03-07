@@ -1,0 +1,128 @@
+.container {
+  background: url("/assets/login_bg.png");
+  background-size: cover;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loginContainer {
+  background: linear-gradient(
+    rgba(255, 255, 255, 0.3),
+    rgba(255, 255, 255, 0.2)
+  );
+  backdrop-filter: blur(10px);
+  width: 360px;
+  height: 387px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  padding: 32px 16px;
+}
+
+.loginContainer h1 {
+  margin: 0 0 20px;
+  font-weight: 500;
+  font-family: "Montserrat", sans-serif;
+  font-size: 32px;
+}
+
+.loginContainer p {
+  color: #8c8c8c;
+  font-family: "Montserrat", sans-serif;
+}
+
+.loginContainer a {
+  color: #1c4a2a;
+  text-decoration: none;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+}
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  /* background-color: red; */
+  width: 95%;
+  margin-top: 20px;
+}
+
+.inputWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #1c4a2a;
+  font-size: 10px;
+}
+
+.inputContainer input {
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  width: 100%;
+}
+
+.inputContainer p {
+  margin-top: 10px;
+}
+.inputContainer input:focus {
+  outline: none;
+}
+
+.loginButton {
+  background-color: #1c4a2a;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.loginButton:hover {
+  background-color: #165122;
+}
+.forgotPassword {
+  color: #1c4a2a;
+  width: 100%;
+  font-weight: 500;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.resetButton {
+  background-color: #c6b09a;
+  color: #fff;
+  padding: 12px 24px;
+  border: 1px solid #e0e8e0;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  margin-top: 10px;
+  /* margin: 10px 10px 5px 10px; */
+  margin-top: 10px;
+}
+
+.resetButton:hover {
+  /* background-color: #F3F3F3; */
+}

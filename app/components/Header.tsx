@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import styles from "../../styles/landing-page.module.css";
+import styles from "../styles/landing-page.module.css";
 import { useRouter } from "next/navigation";
 
 export default function Header() {
@@ -33,8 +33,11 @@ export default function Header() {
           </ul>
         </div>
         <div className={styles.authButtons}>
-          <button className={styles.login}>Login</button>
-          <button className={styles.register}>Register</button>
+            {/* TODO: use reusable button */}
+
+            {/* <Button text = "Login" variant="primary" className="styles.login"/> */}
+          <button className={styles.login} onClick={() => router.push("/auth/login")}>Login</button>
+          <button className={styles.register} onClick={() => router.push("/auth/register")}>Register</button>
         </div>
       </nav>
     </div>
