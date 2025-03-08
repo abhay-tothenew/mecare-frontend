@@ -1,137 +1,137 @@
 .container {
-    background: url("/assets/login_bg.png");
-    background-size: cover;
-    background-position: center;
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .registerContainer {
-    background: linear-gradient(
-      rgba(255, 255, 255, 0.3),
-      rgba(255, 255, 255, 0.2)
-    );
-    backdrop-filter: blur(10px);
-    width: 400px;
-    padding: 32px;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 16px;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-  }
-  
-  .registerContainer h1 {
-    margin: 0 0 16px;
-    font-weight: 500;
-    font-family: "Montserrat", sans-serif;
-    font-size: 28px;
-    color: #0E2515;
-  }
-  
-  .registerContainer p {
-    color: #8c8c8c;
-    font-family: "Montserrat", sans-serif;
-    font-size: 14px;
-    margin-bottom: 16px;
-  }
+  background: url("/assets/login_bg.png");
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-  .registerContainer a {
-    color: #1c4a2a;
-    text-decoration: none;
-    font-family: "Montserrat", sans-serif;
-    font-weight: 500;
-  }
-  
-  .inputContainer {
-    width: 100%;
-    margin-bottom: 12px;
-  }
-  
-  .inputContainer p {
-    color: #333;
-    font-family: "Montserrat", sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    margin-bottom: 5px;
-    color: #8C8C8C;
-  }
-  
-  .inputWrapper {
-    display: flex;
-    align-items: center;
-    background: #F5F5F5;
-    padding: 10px;
-    border-radius: 10px;
-    /* border: 1px solid #ccc; */
-    width: 100%;
-    margin-bottom: 10px;
-  }
+.registerContainer {
+  background: linear-gradient(
+    rgba(255, 255, 255, 0.3),
+    rgba(255, 255, 255, 0.2)
+  );
+  backdrop-filter: blur(10px);
+  width: 400px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+}
 
-  .inputWrapper input {
-    background-color: #F5F5F5;
-  }
-  
-  .icon {
-    font-size: 16px;
-    color: #1c4a2a;
-    margin-right: 12px;
-  }
-  
-  .inputWrapper input,
-  .roleDropdown {
-    width: 100%;
-    border: none;
-    outline: none;
-    font-size: 14px;
-    background: transparent;
-  }
-  
-  .roleDropdown {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    /* border: 1px solid #ccc; */
-    margin-bottom: 10px;
-    background: #F5F5F5;
-    font-size: 14px;
-    color: #8C8C8C;
-  }
-  
-  .registerButton,
-  .resetButton {
-    width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 12px;
-    border: none;
-  }
-  
-  .registerButton {
-    background-color: #1c4a2a;
-    color: white;
-    transition: background 0.3s ease;
-    font-weight: 500;
-    font-family: "Montserrat", sans-serif;
-  }
-  
-  /* .registerButton:hover {
+.registerContainer h1 {
+  margin: 0 0 16px;
+  font-weight: 500;
+  font-family: "Montserrat", sans-serif;
+  font-size: 28px;
+  color: #0e2515;
+}
+
+.registerContainer p {
+  color: #8c8c8c;
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.registerContainer a {
+  color: #1c4a2a;
+  text-decoration: none;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+}
+
+.inputContainer {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.inputContainer p {
+  color: #333;
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 5px;
+  color: #8c8c8c;
+}
+
+.inputWrapper {
+  display: flex;
+  align-items: center;
+  background: #f5f5f5;
+  padding: 10px;
+  border-radius: 10px;
+  /* border: 1px solid #ccc; */
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.inputWrapper input {
+  background-color: #f5f5f5;
+}
+
+.icon {
+  font-size: 16px;
+  color: #1c4a2a;
+  margin-right: 12px;
+}
+
+.inputWrapper input,
+.roleDropdown {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  background: transparent;
+}
+
+.roleDropdown {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  /* border: 1px solid #ccc; */
+  margin-bottom: 10px;
+  background: #f5f5f5;
+  font-size: 14px;
+  color: #8c8c8c;
+}
+
+.registerButton,
+.resetButton {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 12px;
+  border: none;
+}
+
+.registerButton {
+  background-color: #1c4a2a;
+  color: white;
+  transition: background 0.3s ease;
+  font-weight: 500;
+  font-family: "Montserrat", sans-serif;
+}
+
+/* .registerButton:hover {
     background-color: #163d22;
   } */
-  
-  .resetButton {
-    background-color: #C6B09A;
-    color: white;
-    transition: background 0.3s ease;
-    font-weight: 500;
-    font-family: "Montserrat", sans-serif;
-  }
+
+.resetButton {
+  background-color: #c6b09a;
+  color: white;
+  transition: background 0.3s ease;
+  font-weight: 500;
+  font-family: "Montserrat", sans-serif;
+}
 /*   
   .resetButton:hover {
     background-color: #8c8c8c;

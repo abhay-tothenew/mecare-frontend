@@ -1,0 +1,236 @@
+.container {
+  font-family: "Montserrat", sans-serif;
+  text-align: center;
+  background-color: #f9f9f9;
+}
+
+/* .header {
+    background-color: #1c4a2a;
+    color: white;
+    padding: 16px;
+    font-size: 24px;
+    font-weight: bold;
+  } */
+
+.hero {
+  color: white;
+}
+
+.heroSection {
+  width: 100%;
+  background-color: #ffffff;
+  padding: 40px 20px;
+  text-align: center;
+  position: relative;
+  top: 0;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.heroText {
+  font-size: 32px;
+  font-weight: 500;
+  color: #0e2515;
+  margin-bottom: 25px;
+  font-family: "Montserrat", sans-serif;
+}
+
+/* .searchButton {
+    background-color: #1c4a2a;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    cursor: pointer;
+  }
+   */
+
+.searchBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  border-radius: 8px;
+  width: 80%;
+  margin: 0 auto;
+  overflow: hidden;
+  border: 1px solid #374957;
+}
+
+.searchBox input {
+  flex-grow: 1;
+  border: none;
+  font-size: 16px;
+}
+
+.searchButton {
+  background-color: #1c4a2a;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.heroButtons {
+  margin-top: 20px;
+}
+
+.primaryBtn {
+  background-color: #1c4a2a;
+  color: white;
+  padding: 12px 20px;
+  margin: 10px;
+  border-radius: 8px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Services Section */
+.services {
+  padding: 40px 20px;
+}
+
+.services h2 {
+  font-size: 24px;
+  color: #0e2515;
+  margin-bottom: 20px;
+}
+
+.serviceGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  /* max-width: 800px; */
+  margin: 0 auto;
+}
+
+.serviceCard {
+  background-color: #1c4a2a;
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.serviceIcon {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.topDoctors {
+  text-align: center;
+  padding: 40px 20px;
+  background: #f9f9f9;
+}
+
+.topDoctors h2 {
+  font-size: 28px;
+  color: #1c4a2a;
+  margin-bottom: 20px;
+}
+
+.topDoctorsGrid {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.topDoctorCard {
+  background: #F8FCF9;
+  padding: 20px;
+  border-radius: 12px;
+  width: 200px;
+  height: 330px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.topDoctorCard:hover {
+  transform: translateY(-5px);
+}
+
+.imageContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+/* .doctorImage {
+  border-radius: 50%;
+  border: 3px solid #1c4a2a;
+} */
+
+.doctorName {
+  font-size: 18px;
+  font-weight: 500;
+  color: #1c4a2a;
+  margin-bottom: 13px;
+  font-family: "Montserrat", sans-serif;
+}
+
+.specialty {
+  font-size: 14px;
+  color: #8C8C8C;
+  margin-bottom: 30px;
+}
+
+.ratings {
+  font-size: 14px;
+  color: #8C8C8C;
+  margin-bottom: 12px;
+}
+
+.appointmentButton {
+  background-color: #F8FCF9;
+  color: #0e2515;
+  padding: 10px;
+  width: 100%;
+  border: 1px solid #DEDEDE;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-weight: 500;
+  font-family: "Montserrat", sans-serif;
+}
+
+
+.viewAllButton {
+  margin-top: 20px;
+  background-color: transparent;
+  border: 1px solid #1c4a2a;
+  color: #1c4a2a;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.viewAllButton:hover {
+  background-color: #1c4a2a;
+  color: white;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .searchBox {
+    width: 90%;
+    flex-direction: column;
+  }
+
+  .searchBox input {
+    width: 100%;
+    padding: 12px;
+  }
+
+  .heroButtons {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .serviceGrid {
+    grid-template-columns: 1fr;
+  }
+}
