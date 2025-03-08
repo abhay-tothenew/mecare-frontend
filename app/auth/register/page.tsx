@@ -14,7 +14,7 @@ export default function Register() {
       <div className={styles.registerContainer}>
         <h1>Register</h1>
         <p>
-          Already have an account? <Link href="/auth/login">Login here</Link>
+          Already a member? <Link href="/auth/login">Login</Link>
         </p>
         <div className={styles.inputContainer}>
           <p>Role</p>
@@ -47,7 +47,7 @@ export default function Register() {
             <input type="password" placeholder="Password" />
           </div>
         </div>
-        <button className={styles.registerButton}>Register</button>
+        <button className={styles.registerButton}>Submit</button>
         <button className={styles.resetButton}>Reset</button>
       </div>
     </div>
