@@ -1,0 +1,93 @@
+[
+    {
+      "id": 1,
+      "name": "Dr. Jane Doe",
+      "specialty": "Dentist",
+      "experience": "9 Years",
+      "ratings": 4.5,
+      "image": "/assets/Frame.png",
+      "location": "New York, USA"
+    },
+    {
+      "id": 2,
+      "name": "Dr. John Smith",
+      "specialty": "Cardiologist",
+      "experience": "12 Years",
+      "ratings": 4.8,
+      "image": "/assets/Frame.png",
+      "location": "Los Angeles, USA"
+    },
+    {
+      "id": 3,
+      "name": "Dr. Alice Johnson",
+      "specialty": "Neurologist",
+      "experience": "8 Years",
+      "ratings": 4.2,
+      "image": "/assets/Frame.png",
+      "location": "Chicago, USA"
+    },
+    {
+      "id": 4,
+      "name": "Dr. Robert Brown",
+      "specialty": "Orthopedic Surgeon",
+      "experience": "15 Years",
+      "ratings": 4.7,
+      "image": "/assets/Frame.png",
+      "location": "Houston, USA"
+    },
+    {
+      "id": 5,
+      "name": "Dr. Emily White",
+      "specialty": "Pediatrician",
+      "experience": "10 Years",
+      "ratings": 4.9,
+      "image": "/assets/Frame.png",
+      "location": "San Francisco, USA"
+    },
+    {
+      "id": 6,
+      "name": "Dr. Michael Green",
+      "specialty": "Dermatologist",
+      "experience": "7 Years",
+      "ratings": 4.3,
+      "image": "/assets/Frame.png",
+      "location": "Boston, USA"
+    },
+    {
+      "id": 7,
+      "name": "Dr. Sarah Wilson",
+      "specialty": "Gynecologist",
+      "experience": "11 Years",
+      "ratings": 4.6,
+      "image": "/assets/Frame.png",
+      "location": "Seattle, USA"
+    },
+    {
+      "id": 8,
+      "name": "Dr. Daniel Martinez",
+      "specialty": "ENT Specialist",
+      "experience": "9 Years",
+      "ratings": 4.4,
+      "image": "/assets/Frame.png",
+      "location": "Miami, USA"
+    },
+    {
+      "id": 9,
+      "name": "Dr. Olivia Adams",
+      "specialty": "Psychiatrist",
+      "experience": "13 Years",
+      "ratings": 4.8,
+      "image": "/assets/Frame.png",
+      "location": "Denver, USA"
+    },
+    {
+      "id": 10,
+      "name": "Dr. William Cooper",
+      "specialty": "General Physician",
+      "experience": "6 Years",
+      "ratings": 4.1,
+      "image": "/assets/Frame.png",
+      "location": "Austin, USA"
+    }
+  ]
+  

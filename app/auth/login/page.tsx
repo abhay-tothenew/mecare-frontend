@@ -1,7 +1,6 @@
 import Link from "next/link";
 import styles from "../../styles/login-page.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLock, faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { AtSign, LockIcon } from "lucide-react";
 
 export default function Login() {
   return (
@@ -13,16 +12,19 @@ export default function Login() {
         </p>
         <div className={styles.inputContainer}>
           <p>Email</p>
-          <input type="text" placeholder="Email" />
-
+          <div className={styles.inputWrapper}>
+            <AtSign className={styles.icon} size={18} />
+            <input type="text" placeholder="Email" />
+          </div>
           <p>Password</p>
-          <input type="password" placeholder="Password" />
+          <div className={styles.inputWrapper}>
+            <LockIcon className={styles.icon} size={18}/>
+            <input type="password" placeholder="Password" />
+          </div>
         </div>
         <button className={styles.loginButton}>Login</button>
         <button className={styles.resetButton}>Reset</button>
-        <p className={styles.forgotPassword} style={{ color: "#1c4a2a" }}>
-          Forgot Password?
-        </p>
+        <p className={styles.forgotPassword}>Forgot Password?</p>
       </div>
     </div>
   );

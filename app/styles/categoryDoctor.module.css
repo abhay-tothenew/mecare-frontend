@@ -1,0 +1,126 @@
+.container {
+  padding: 20px;
+}
+
+.doctorsContainer {
+  margin-top: 50px;
+}
+.doctorsHeader {
+  text-align: center;
+}
+
+.doctorsHeader h2 {
+  font-size: 44px;
+  font-weight: 500;
+  margin-bottom: 15px;
+  color: #0e2515;
+  font-family: "Montserrat", sans-serif;
+}
+
+.content {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.filterContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.filterContainer h3 {
+  color: #0e2515;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+}
+
+.filterContainer span{
+    color: #1C4A2A;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+
+.filters {
+  width: 250px;
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.filters h3 {
+  font-size: 18px;
+  /* margin-bottom: 10px; */
+}
+
+.filterSection {
+  background-color: #e0e8e0;
+  border-radius: 10px;
+}
+.filterSection h4 {
+  margin-top: 10px;
+  padding: 10px;
+}
+
+.filterSection label {
+  display: block;
+  margin-bottom: 5px;
+  padding-left: 10px;
+  padding-bottom: 5px;
+}
+
+.doctorGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  width: 100%;
+  height: fit-content;
+  margin-top: 25px;
+}
+
+.doctorCard {
+  background: #f8fcf9;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  border: 1px solid #e0e8e0;
+}
+
+.doctorCard h3 {
+  margin-top: 15px;
+  font-size: 20px;
+  font-weight: 500;
+  color: #0e2515;
+  font-family: "Montserrat", sans-serif;
+}
+
+.doctorCard p {
+  font-size: 16px;
+  color: #8c8c8c;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  margin-top: 15px;
+}
+
+.doctorImage {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.bookButton {
+  margin-top: 35px;
+  margin-bottom: 10px;
+  background: #f8fcf9;
+  color: #0e2515;
+  border: 1px solid #e0e8e0;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 70%;
+  font-size: 15px;
+}

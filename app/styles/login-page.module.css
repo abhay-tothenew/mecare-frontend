@@ -56,24 +56,29 @@
 .inputWrapper {
   position: relative;
   width: 100%;
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  background: white;
 }
 
 .icon {
   position: absolute;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
+  left: 12px;
   color: #1c4a2a;
-  font-size: 10px;
+  font-size: 15px;
 }
 
-.inputContainer input {
-  padding: 8px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 500;
+.inputWrapper input {
   width: 100%;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  padding-left: 35px;
+  font-weight: 500;
+  font-family: "Montserrat", sans-serif;
 }
 
 .inputContainer p {

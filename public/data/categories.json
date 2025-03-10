@@ -1,0 +1,370 @@
+[
+  {
+    "id": 1,
+    "name": "General Physician",
+    "image": "https://images.apollo247.in/specialty/615ebc75-4172-4f46-9ba0-b3688c053fcc-1721716587044.png?tr=q-80,f-webp,w-100,dpr-1,c-at_max",
+    "doctors": [
+      {
+        "id": 1,
+        "name": "Dr. Jane Doe",
+        "experience": "9 Years",
+        "ratings": 4.5,
+        "image": "/assets/Frame.png",
+        "location": "New York, USA",
+        "gender":"Male"
+      },
+      {
+        "id": 2,
+        "name": "Dr. John Smith",
+        "experience": "12 Years",
+        "ratings": 4.8,
+        "image": "/assets/Frame.png",
+        "location": "Los Angeles, USA",
+        "gender":"Male"
+      },
+      {
+        "id": 3,
+        "name": "Dr. Alice Johnson",
+        "experience": "8 Years",
+        "ratings": 4.2,
+        "image": "/assets/Frame.png",
+        "location": "Chicago, USA",
+        "gender":"Female"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Dentist",
+    "image": "https://images.apollo247.in/specialty/4ce59e16-e22b-4059-9cae-365408e34b8c-1718393604945.png?tr=q-80,f-webp,w-100,dpr-1,c-at_max",
+    "doctors": [
+      {
+        "id": 1,
+        "name": "Dr. Jane Doe",
+        "experience": "9 Years",
+        "ratings": 4.5,
+        "image": "/assets/Frame.png",
+        "location": "New York, USA",
+        "gender":"Female"
+      },
+      {
+        "id": 2,
+        "name": "Dr. John Smith",
+        "experience": "12 Years",
+        "ratings": 4.8,
+        "image": "/assets/Frame.png",
+        "location": "Los Angeles, USA",
+        "gender":"Male"
+      },
+      {
+        "id": 3,
+        "name": "Dr. Alice Johnson",
+        "experience": "8 Years",
+        "ratings": 4.2,
+        "image": "/assets/Frame.png",
+        "location": "Chicago, USA",
+        "gender":"Female"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Cardiologist",
+    "image": "https://images.apollo247.in/specialty/f325ede7-8710-49a6-b0ea-32ddc06f2b4c-1718393325515.png?tr=q-80,f-webp,w-100,dpr-1,c-at_max",
+    "doctors": [
+      {
+        "id": 1,
+        "name": "Dr. Jane Doe",
+        "experience": "9 Years",
+        "ratings": 4.5,
+        "image": "/assets/Frame.png",
+        "location": "New York, USA",
+        "gender":"Female"
+      },
+      {
+        "id": 2,
+        "name": "Dr. John Smith",
+        "experience": "12 Years",
+        "ratings": 4.8,
+        "image": "/assets/Frame.png",
+        "location": "Los Angeles, USA",
+        "gender":"Male"
+      },
+      {
+        "id": 3,
+        "name": "Dr. Alice Johnson",
+        "experience": "8 Years",
+        "ratings": 4.2,
+        "image": "/assets/Frame.png",
+        "location": "Chicago, USA",
+        "gender":"Female"
+      },
+      {
+        "id": 4,
+        "name": "Dr. Vineet Singh",
+        "experience": "15 Years",
+        "ratings": 4.7,
+        "image": "/assets/Frame.png",
+        "location": "Houston, USA",
+        "gender":"Male"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Neurologist",
+    "image": "https://images.apollo247.in/specialty/7cedbc2f-1c04-46cb-8fc8-bcd2eca77802-1718362077372.png?tr=q-80,f-webp,w-100,dpr-1,c-at_max",
+    "doctors": [
+      {
+        "id": 1,
+        "name": "Dr. Jane Doe",
+        "experience": "9 Years",
+        "ratings": 4.5,
+        "image": "/assets/Frame.png",
+        "location": "New York, USA",
+        "gender":"Female"
+      },
+      {
+        "id": 2,
+        "name": "Dr. John Smith",
+        "experience": "12 Years",
+        "ratings": 4.8,
+        "image": "/assets/Frame.png",
+        "location": "Los Angeles, USA",
+        "gender":"Male"
+      },
+      {
+        "id": 3,
+        "name": "Dr. Alice Johnson",
+        "experience": "8 Years",
+        "ratings": 4.2,
+        "image": "/assets/Frame.png",
+        "location": "Chicago, USA",
+        "gender":"Male"
+
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Orthopedic Surgeon",
+    "image": "https://images.apollo247.in/specialty/07337088-ca54-4e67-8c53-6a5c03b07a7f-1718517850079.png?tr=q-80,f-webp,w-100,dpr-1,c-at_max",
+    "doctors": [
+      {
+        "id": 1,
+        "name": "Dr. Jane Doe",
+        "experience": "9 Years",
+        "ratings": 4.5,
+        "image": "/assets/Frame.png",
+        "location": "New York, USA",
+        "gender":"Male"
+
+      },
+      {
+        "id": 2,
+        "name": "Dr. John Smith",
+        "experience": "12 Years",
+        "ratings": 4.8,
+        "image": "/assets/Frame.png",
+        "location": "Los Angeles, USA",
+        "gender":"Male"
+
+      },
+      {
+        "id": 3,
+        "name": "Dr. Alice Johnson",
+        "experience": "8 Years",
+        "ratings": 4.2,
+        "image": "/assets/Frame.png",
+        "location": "Chicago, USA",
+        "gender":"Male"
+
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Pediatrician",
+    "image": "https://images.apollo247.in/specialties/ic_paediatrics.png?tr=q-80,f-webp,w-100,dpr-1,c-at_max",
+    "doctors": [
+      {
+        "id": 1,
+        "name": "Dr. Jane Doe",
+        "experience": "9 Years",
+        "ratings": 4.5,
+        "image": "/assets/Frame.png",
+        "location": "New York, USA",
+        "gender":"Male"
+
+      },
+      {
+        "id": 2,
+        "name": "Dr. John Smith",
+        "experience": "12 Years",
+        "ratings": 4.8,
+        "image": "/assets/Frame.png",
+        "location": "Los Angeles, USA",
+        "gender":"Female"
+
+      },
+      {
+        "id": 3,
+        "name": "Dr. Alice Johnson",
+        "experience": "8 Years",
+        "ratings": 4.2,
+        "image": "/assets/Frame.png",
+        "location": "Chicago, USA",
+        "gender":"Female"
+
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Dermatologist",
+    "image": "https://images.apollo247.in/specialty/73dae7a6-ec1f-45c4-98bd-0c8acb6e4eca-1718393652685.png?tr=q-80,f-webp,w-100,dpr-1,c-at_max",
+    "doctors": [
+      {
+        "id": 1,
+        "name": "Dr. Jane Doe",
+        "experience": "9 Years",
+        "ratings": 4.5,
+        "image": "/assets/Frame.png",
+        "location": "New York, USA",
+        "gender":"Male"
+
+      },
+      {
+        "id": 2,
+        "name": "Dr. John Smith",
+        "experience": "12 Years",
+        "ratings": 4.8,
+        "image": "/assets/Frame.png",
+        "location": "Los Angeles, USA",
+        "gender":"Male"
+
+      },
+      {
+        "id": 3,
+        "name": "Dr. Alice Johnson",
+        "experience": "8 Years",
+        "ratings": 4.2,
+        "image": "/assets/Frame.png",
+        "location": "Chicago, USA",
+        "gender":"Male"
+
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "name": "ENT Specialist",
+    "image": "https://images.apollo247.in/specialties/ic_ent.png?tr=q-80,f-webp,w-100,dpr-1,c-at_max",
+    "doctors": [
+      {
+        "id": 1,
+        "name": "Dr. Jane Doe",
+        "experience": "9 Years",
+        "ratings": 4.5,
+        "image": "/assets/Frame.png",
+        "location": "New York, USA",
+        "gender":"Male"
+
+      },
+      {
+        "id": 2,
+        "name": "Dr. John Smith",
+        "experience": "12 Years",
+        "ratings": 4.8,
+        "image": "/assets/Frame.png",
+        "location": "Los Angeles, USA",
+        "gender":"Male"
+
+      },
+      {
+        "id": 3,
+        "name": "Dr. Alice Johnson",
+        "experience": "8 Years",
+        "ratings": 4.2,
+        "image": "/assets/Frame.png",
+        "location": "Chicago, USA",
+        "gender":"Male"
+
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Psychiatrist",
+    "image": "https://images.apollo247.in/specialty/6147312b-0e6b-4b2e-a20c-991243a85625-1718394692716.png?tr=q-80,f-webp,w-100,dpr-1,c-at_max",
+    "doctors": [
+      {
+        "id": 1,
+        "name": "Dr. Jane Doe",
+        "experience": "9 Years",
+        "ratings": 4.5,
+        "image": "/assets/Frame.png",
+        "location": "New York, USA",
+        "gender":"Male"
+
+      },
+      {
+        "id": 2,
+        "name": "Dr. John Smith",
+        "experience": "12 Years",
+        "ratings": 4.8,
+        "image": "/assets/Frame.png",
+        "location": "Los Angeles, USA",
+        "gender":"Male"
+
+      },
+      {
+        "id": 3,
+        "name": "Dr. Alice Johnson",
+        "experience": "8 Years",
+        "ratings": 4.2,
+        "image": "/assets/Frame.png",
+        "location": "Chicago, USA",
+        "gender":"Male"
+
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "name": "Diabetologist",
+    "image": "https://images.apollo247.in/specialty/556c709b-bde6-4b81-becd-3e809ec2d682-1718393677886.png?tr=q-80,f-webp,w-100,dpr-1,c-at_max",
+    "doctors": [
+      {
+        "id": 1,
+        "name": "Dr. Jane Doe",
+        "experience": "9 Years",
+        "ratings": 4.5,
+        "image": "/assets/Frame.png",
+        "location": "New York, USA",
+        "gender":"Male"
+
+      },
+      {
+        "id": 2,
+        "name": "Dr. John Smith",
+        "experience": "12 Years",
+        "ratings": 4.8,
+        "image": "/assets/Frame.png",
+        "location": "Los Angeles, USA",
+        "gender":"Male"
+
+      },
+      {
+        "id": 3,
+        "name": "Dr. Alice Johnson",
+        "experience": "8 Years",
+        "ratings": 4.2,
+        "image": "/assets/Frame.png",
+        "location": "Chicago, USA",
+        "gender":"Male"
+
+      }
+    ]
+  }
+]
