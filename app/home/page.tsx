@@ -1,13 +1,19 @@
+"use client";
 import React from "react";
 import styles from "../styles/home.module.css";
 import Image from "next/image";
 import Footer from "../components/Footer";
 import Doctors from "../../public/data/doctors.json";
 import SearchBar from "../components/SearchBar";
+import { useRouter } from "next/navigation";
+import { auth0 } from "../lib/auth0";
 // import { FaSearch, FaUserMd, FaPills, FaHeartbeat, FaVial } from "react-icons/fa";
 
-const Home = () => {
+const Home = async () => {
   // console.log(Doctors)
+  const router = useRouter();
+ 
+
   return (
     <div className={styles.container}>
       <SearchBar />
@@ -102,7 +108,10 @@ const Home = () => {
                 </p>
               </div>
               <div>
-                <button className={styles.appointmentButton}>
+                <button className={styles.appointmentButton}
+                                    onClick={() => router.push("/appointment/ScheduleSlot")}
+
+                >
                   Book Appointment
                 </button>
               </div>

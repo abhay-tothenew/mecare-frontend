@@ -66,26 +66,31 @@ export default function Category({ params }: { params: any }) {
 
   return (
     <>
-    <div className={styles.container}>
       <SearchBar />
-      <div className={styles.doctorsContainer}>
-        <div className={styles.doctorsHeader}>
-          <h2>{filteredDoctors.length} doctors available</h2>
-          <p>
-            Book appointments with minimum wait-time & verified doctor details
-          </p>
-        </div>
 
-        <div className={styles.content}>
-          {/* Sidebar Filters */}
-          <div className={styles.filters}>
-            <div className={styles.filterContainer}> 
-            <h3 style ={{
-                color:"#0E2515",
-                fontFamily: "Montserrat, sans-serif",
-                fontWeight: "500",
-            }}>Filter By:</h3>
-            {/* <button
+      <div className={styles.container}>
+        <div className={styles.doctorsContainer}>
+          <div className={styles.doctorsHeader}>
+            <h2>{filteredDoctors.length} doctors available</h2>
+            <p>
+              Book appointments with minimum wait-time & verified doctor details
+            </p>
+          </div>
+
+          <div className={styles.content}>
+            {/* Sidebar Filters */}
+            <div className={styles.filters}>
+              <div className={styles.filterContainer}>
+                <h3
+                  style={{
+                    color: "#0E2515",
+                    fontFamily: "Montserrat, sans-serif",
+                    fontWeight: "500",
+                  }}
+                >
+                  Filter By:
+                </h3>
+                {/* <button
               onClick={() =>
                 setFilters({ rating: 0, experience: "all", gender: "all" })
               }
@@ -93,113 +98,126 @@ export default function Category({ params }: { params: any }) {
               Reset
             </button> */}
 
-            <span onClick={() => setFilters({ rating: 0, experience: "all", gender: "all" })}>Reset</span>
-            </div>
-
-            <div className={styles.filterSection}>
-              <h4>Rating</h4>
-              <label>
-                <input
-                  type="radio"
-                  name="rating"
-                  onChange={() =>
-                    setFilters((prev) => ({ ...prev, rating: 0 }))
+                <span
+                  onClick={() =>
+                    setFilters({ rating: 0, experience: "all", gender: "all" })
                   }
-                />{" "}
-                Show all
-              </label>
-              {[1, 2, 3, 4, 5].map((star) => (
-                <label key={star}>
+                >
+                  Reset
+                </span>
+              </div>
+
+              <div className={styles.filterSection}>
+                <h4>Rating</h4>
+                <label>
                   <input
                     type="radio"
                     name="rating"
                     onChange={() =>
-                      setFilters((prev) => ({ ...prev, rating: star }))
+                      setFilters((prev) => ({ ...prev, rating: 0 }))
                     }
                   />{" "}
-                  {star} star
+                  Show all
                 </label>
-              ))}
-            </div>
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <label key={star}>
+                    <input
+                      type="radio"
+                      name="rating"
+                      onChange={() =>
+                        setFilters((prev) => ({ ...prev, rating: star }))
+                      }
+                    />{" "}
+                    {star} star
+                  </label>
+                ))}
+              </div>
 
-            <div className={styles.filterSection}>
-              <h4>Experience</h4>
-              {["all", "15", "10", "5", "3", "1"].map((year) => (
-                <label key={year}>
+              <div className={styles.filterSection}>
+                <h4>Experience</h4>
+                {["all", "15", "10", "5", "3", "1"].map((year) => (
+                  <label key={year}>
+                    <input
+                      type="radio"
+                      name="experience"
+                      onChange={() =>
+                        setFilters((prev) => ({ ...prev, experience: year }))
+                      }
+                    />
+                    {year === "all" ? "Show all" : `≤ ${year} years`}
+                  </label>
+                ))}
+              </div>
+
+              <div className={styles.filterSection}>
+                <h4>Gender</h4>
+                <label>
                   <input
                     type="radio"
-                    name="experience"
+                    name="gender"
                     onChange={() =>
-                      setFilters((prev) => ({ ...prev, experience: year }))
+                      setFilters((prev) => ({ ...prev, gender: "all" }))
                     }
-                  />
-                  {year === "all" ? "Show all" : `≤ ${year} years`}
+                  />{" "}
+                  Show all
                 </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="gender"
+                    onChange={() =>
+                      setFilters((prev) => ({ ...prev, gender: "male" }))
+                    }
+                  />{" "}
+                  Male
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="gender"
+                    onChange={() =>
+                      setFilters((prev) => ({ ...prev, gender: "female" }))
+                    }
+                  />{" "}
+                  Female
+                </label>
+              </div>
+            </div>
+
+            {/* Doctors Grid */}
+            <div className={styles.doctorGrid}>
+              {filteredDoctors.map((doctor) => (
+                <div key={doctor.id} className={styles.doctorCard}>
+                  <img
+                    src={doctor.image}
+                    alt={doctor.name}
+                    className={styles.doctorImage}
+                  />
+                  <h3>{doctor.name}</h3>
+                  <p>
+                    {category} | {doctor.experience}
+                  </p>
+                  <p
+                    style={{
+                      marginBottom: "15px",
+                    }}
+                  >
+                    {" "}
+                    Ratings: {doctor.ratings} Stars
+                  </p>
+                  <button
+                    className={styles.bookButton}
+                    onClick={() => router.push("/appointment/ScheduleSlot")}
+                  >
+                    Book Appointment
+                  </button>
+                </div>
               ))}
             </div>
-
-            <div className={styles.filterSection}>
-              <h4>Gender</h4>
-              <label>
-                <input
-                  type="radio"
-                  name="gender"
-                  onChange={() =>
-                    setFilters((prev) => ({ ...prev, gender: "all" }))
-                  }
-                />{" "}
-                Show all
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="gender"
-                  onChange={() =>
-                    setFilters((prev) => ({ ...prev, gender: "male" }))
-                  }
-                />{" "}
-                Male
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="gender"
-                  onChange={() =>
-                    setFilters((prev) => ({ ...prev, gender: "female" }))
-                  }
-                />{" "}
-                Female
-              </label>
-            </div>
-          </div>
-
-          {/* Doctors Grid */}
-          <div className={styles.doctorGrid}>
-            {filteredDoctors.map((doctor) => (
-              <div key={doctor.id} className={styles.doctorCard}>
-                <img
-                  src={doctor.image}
-                  alt={doctor.name}
-                  className={styles.doctorImage}
-                />
-                <h3>{doctor.name}</h3>
-                <p>
-                   {category} | {doctor.experience}
-                </p>
-                <p style = {{
-                    marginBottom: "15px",
-                }}> Ratings: {doctor.ratings} Stars</p>
-                <button className={styles.bookButton} onClick={()=> router.push("/appointment/ScheduleSlot")}>Book Appointment</button>
-              </div>
-            ))}
           </div>
         </div>
-
-
       </div>
-
-    </div>
-    <Footer/>
+      <Footer />
     </>
   );
 }

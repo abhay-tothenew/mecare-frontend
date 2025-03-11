@@ -14,6 +14,7 @@
 
 .hero {
   color: white;
+  margin-top: 20px;
 }
 
 .heroSection {
@@ -137,7 +138,7 @@
 }
 
 .topDoctorCard {
-  background: #F8FCF9;
+  background: #f8fcf9;
   padding: 20px;
   border-radius: 12px;
   width: 200px;
@@ -171,22 +172,22 @@
 
 .specialty {
   font-size: 14px;
-  color: #8C8C8C;
+  color: #8c8c8c;
   margin-bottom: 30px;
 }
 
 .ratings {
   font-size: 14px;
-  color: #8C8C8C;
+  color: #8c8c8c;
   margin-bottom: 12px;
 }
 
 .appointmentButton {
-  background-color: #F8FCF9;
+  background-color: #f8fcf9;
   color: #0e2515;
   padding: 10px;
   width: 100%;
-  border: 1px solid #DEDEDE;
+  border: 1px solid #dedede;
   border-radius: 8px;
   font-size: 14px;
   cursor: pointer;
@@ -194,7 +195,6 @@
   font-weight: 500;
   font-family: "Montserrat", sans-serif;
 }
-
 
 .viewAllButton {
   margin-top: 20px;

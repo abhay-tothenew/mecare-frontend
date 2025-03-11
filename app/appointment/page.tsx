@@ -28,7 +28,7 @@ export default function Appointment() {
   return (
     <>
     <div className={styles.container}>
-      <div className={styles.tabs}>
+      {/* <div className={styles.tabs}>
         <button
           onClick={() => setActiveTab("upcoming")}
           className={activeTab === "upcoming" ? styles.active : ""}
@@ -53,21 +53,21 @@ export default function Appointment() {
         >
           Manage
         </button>
-      </div>
-      <div className={styles.content}>
+      </div> */}
+      {/* <div className={styles.content}> */}
         {/* TODO: Add in the components for each tab */}
         {/* {activeTab === "upcoming" && <UpcomingAppointments />}
         {activeTab === "past" && <PastAppointments />}
         {activeTab === "book" && <BookAppointment />}
         {activeTab === "notifications" && <AppointmentNotifications />}
         {activeTab === "manage" && <ManageAppointments />} */}
-
+{/* 
         {activeTab === "upcoming" && <Reviews />}
         {activeTab === "past" && <Reviews />}
         {activeTab === "book" && <Reviews />}
         {activeTab === "notifications" && <Reviews />}
         {activeTab === "manage" && <Reviews />}
-      </div>
+      </div> */}
 
       {/* Browse Categories */}
 

@@ -1,0 +1,119 @@
+.navbar {
+  background-color: var(--background-light);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 4rem;
+  position: relative;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.menuButton {
+  display: block;
+  padding: 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.menuIcon {
+  display: block;
+  width: 1.5rem;
+  height: 2px;
+  background-color: var(--text-primary);
+  position: relative;
+}
+
+.menuIcon::before,
+.menuIcon::after {
+  content: '';
+  display: block;
+  width: 1.5rem;
+  height: 2px;
+  background-color: var(--text-primary);
+  position: absolute;
+  transition: transform 0.2s;
+}
+
+.menuIcon::before {
+  top: -6px;
+}
+
+.menuIcon::after {
+  bottom: -6px;
+}
+
+.navLinks {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: var(--background-light);
+  padding: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.navLinks.active {
+  display: flex;
+}
+
+.navLink {
+  color: var(--text-primary);
+  text-decoration: none;
+  padding: 0.5rem 0;
+}
+
+.navLink:hover {
+  color: var(--primary-color);
+}
+
+.signInButton {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: var(--primary-color);
+  color: white;
+  text-decoration: none;
+  border-radius: 0.375rem;
+  margin-top: 0.5rem;
+}
+
+.signInButton:hover {
+  background-color: var(--primary-hover);
+}
+
+/* Responsive Styles */
+@media (min-width: 768px) {
+  .menuButton {
+    display: none;
+  }
+
+  .navLinks {
+    display: flex !important;
+    position: static;
+    flex-direction: row;
+    align-items: center;
+    gap: 2rem;
+    padding: 0;
+    box-shadow: none;
+  }
+
+  .signInButton {
+    margin-top: 0;
+    margin-left: 1rem;
+  }
+} 
