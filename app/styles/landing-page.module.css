@@ -7,10 +7,12 @@
   justify-content: center;
   background-color: #1c4a2a;
   /* height: 100vh; */
-  overflow: hidden;
+  /* overflow: hidden; */
   width: 100%;
   height: auto;
   /* overflow-y: hidden;  */
+  margin-bottom: -20px;
+  margin-top: 20px;
 }
 
 .navbar {
@@ -132,6 +134,7 @@
   color: #ffffffb2;
   letter-spacing: -1%;
   line-height: 180%;
+  font-family: "Montserrat", sans-serif;
 }
 
 .heroText button {
@@ -163,10 +166,192 @@
   justify-content: center;
   width: 50%;
   height: auto;
+  z-index: 2;
+  position: relative;
 }
 
 .heroImage img {
   width: 100%;
   height: auto;
   object-fit: cover;
+}
+
+.bookingCard {
+  position: absolute;
+  width: 80%;
+  height: 95%;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px;
+}
+
+.cardHeader h2 {
+  font-size: 24px;
+  font-weight: 500;
+  font-family: "Montserrat", sans-serif;
+  color: #0e2515;
+  text-align: center;
+}
+
+.cardHeader button {
+  background-color: #1c4a2a;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  font-family: "Montserrat", sans-serif;
+}
+
+.cardToggle {
+  display: flex;
+  margin-left: 10px;
+}
+
+.bookVideo1 {
+  flex: 1;
+  padding: 8px 10px;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: "Montserrat", sans-serif;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.bookVideo2 {
+  flex: 1;
+  padding: 8px 10px;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: "Montserrat", sans-serif;
+  cursor: pointer;
+  transition: 0.3s ease;
+  margin-right: 10px;
+}
+
+.dateToggle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+  gap: 20px;
+}
+
+.dateToggle button {
+  background-color: #ffffff;
+  color: #d3d4db;
+  border: 1px solid #d3d4db;
+  padding: 5px 10px;
+  border-radius: 50%;
+  font-family: "Montserrat", sans-serif;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.dateToggle span {
+  font-size: 16px;
+  font-weight: 700;
+  font-family: "Montserrat", sans-serif;
+  color: #0e2515;
+}
+
+.dateSlider {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 5px;
+  padding: 10px;
+  margin-top: -15px;
+}
+
+.dateDivs {
+  font-size: 16px;
+  font-weight: 700;
+  font-family: "Montserrat", sans-serif;
+  color: #0e2515;
+  border: 1px solid #d3d4db;
+  padding: 10px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.slotsContainer {
+  background-color: #ffffff;
+  box-shadow: 1px 3px 3px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  height: 20%;
+}
+
+.slot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #d3d4db;
+}
+
+.slotSpan {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: "Montserrat", sans-serif;
+  color: #0e2515;
+}
+
+.slotCount {
+  display: flex;
+  align-items: center;
+  border: 1px solid #edebff;
+  padding: 7px 15px;
+  border-radius: 45px;
+  font-size: 16px;
+  width: 60px;
+  justify-content: center;
+  font-weight: 700;
+  font-family: "Montserrat", sans-serif;
+  color: #0e2515;
+  background-color: #faf5ff;
+}
+
+.slotButton {
+  background-color: #f8fcf9;
+  padding: 6px;
+  border-radius: 8px;
+  border: 1px solid #d3d4db;
+  font-size: 16px;
+  cursor: pointer;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  font-family: "Montserrat", sans-serif;
+}
+
+.nextButton {
+  background-color: #1c4a2a;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  margin: 0px 10px;
 }

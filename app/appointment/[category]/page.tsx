@@ -4,6 +4,7 @@ import styles from "../../styles/categoryDoctor.module.css";
 import Categories from "../../../public/data/categories.json";
 import Footer from "@/app/components/Footer";
 import SearchBar from "@/app/components/SearchBar";
+import { useRouter } from "next/navigation";
 
 interface Doctor {
   id: number;
@@ -24,6 +25,8 @@ export default function Category({ params }: { params: any }) {
     experience: "all",
     gender: "all",
   });
+
+  const router = useRouter();
 
   useEffect(() => {
     const selectedCategory = Categories.find(
@@ -186,7 +189,7 @@ export default function Category({ params }: { params: any }) {
                 <p style = {{
                     marginBottom: "15px",
                 }}> Ratings: {doctor.ratings} Stars</p>
-                <button className={styles.bookButton}>Book Appointment</button>
+                <button className={styles.bookButton} onClick={()=> router.push("/appointment/ScheduleSlot")}>Book Appointment</button>
               </div>
             ))}
           </div>
