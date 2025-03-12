@@ -1,0 +1,357 @@
+/* landing page css */
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #1c4a2a;
+    /* height: 100vh; */
+    /* overflow: hidden; */
+    width: 100%;
+    height: auto;
+    /* overflow-y: hidden;  */
+    margin-bottom: -20px;
+    margin-top: 20px;
+  }
+  
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    background-color: #fff;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    width: 100%;
+  }
+  
+  .nav_container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding-left: 10px;
+  }
+  
+  .nav_container h1 {
+    color: #1c4a2a;
+    font-size: 28px;
+    font-weight: 500;
+  }
+  
+  .logo {
+    display: flex;
+    font-size: 1.5rem;
+    font-weight: bold;
+    flex-direction: row;
+    gap: 10px;
+  }
+  
+  .navLinks {
+    display: flex;
+    align-items: center;
+    list-style: none;
+  }
+  
+  .navLinks li {
+    margin-right: 1rem;
+    font-size: 18px;
+    font-family: "Montserrat", sans-serif;
+    gap: 40px;
+    font-weight: 500;
+    color: #8c8c8c;
+  }
+  
+  .navLinks li:hover {
+    color: #1c4a2a;
+    cursor: pointer;
+  }
+  
+  .authButtons {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-right: 10px;
+  }
+  
+  .login {
+    background-color: #fff;
+    color: #0e2515;
+    padding: 12px 20px;
+    border: 1px solid #e0e8e0;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: 500;
+    font-family: "Montserrat", sans-serif;
+  }
+  
+  .register {
+    background-color: #1c4a2a;
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  
+  .hero {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100vw;
+    background-color: #1c4a2a;
+    padding: 0 10%;
+  }
+  
+  .heroText {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    text-align: left;
+    padding: 2rem;
+    color: #fff;
+    font-family: "Montserrat", sans-serif;
+    width: 50%;
+    height: 100%;
+  }
+  
+  .heroText h1 {
+    font-size: 60px;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+  
+  .heroText p {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: "2rem";
+    line-height: 180%;
+    /* max-width: "80%"; */
+    color: #ffffffb2;
+    letter-spacing: -1%;
+    line-height: 180%;
+    font-family: "Montserrat", sans-serif;
+  }
+  
+  .heroText button {
+    margin-top: 80px;
+    background-color: #fff;
+    color: #1c4a2a;
+    padding: 14px 24px;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: 0.3s ease;
+  }
+  .getStarted {
+    background-color: #fff;
+    color: #1c4a2a;
+    padding: 10px 24px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: "20px";
+  }
+  
+  .heroImage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    height: auto;
+    z-index: 2;
+    position: relative;
+  }
+  
+  .heroImage img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+  
+  .bookingCard {
+    position: absolute;
+    width: 80%;
+    height: 95%;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px;
+  }
+  
+  .cardHeader h2 {
+    font-size: 24px;
+    font-weight: 500;
+    font-family: "Montserrat", sans-serif;
+    color: #0e2515;
+    text-align: center;
+  }
+  
+  .cardHeader button {
+    background-color: #1c4a2a;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    font-family: "Montserrat", sans-serif;
+  }
+  
+  .cardToggle {
+    display: flex;
+    margin-left: 10px;
+  }
+  
+  .bookVideo1 {
+    flex: 1;
+    padding: 8px 10px;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: "Montserrat", sans-serif;
+    cursor: pointer;
+    transition: 0.3s ease;
+  }
+  
+  .bookVideo2 {
+    flex: 1;
+    padding: 8px 10px;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: "Montserrat", sans-serif;
+    cursor: pointer;
+    transition: 0.3s ease;
+    margin-right: 10px;
+  }
+  
+  .dateToggle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    gap: 20px;
+  }
+  
+  .dateToggle button {
+    background-color: #ffffff;
+    color: #d3d4db;
+    border: 1px solid #d3d4db;
+    padding: 5px 10px;
+    border-radius: 50%;
+    font-family: "Montserrat", sans-serif;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .dateToggle span {
+    font-size: 16px;
+    font-weight: 700;
+    font-family: "Montserrat", sans-serif;
+    color: #0e2515;
+  }
+  
+  .dateSlider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px;
+    padding: 10px;
+    margin-top: -15px;
+  }
+  
+  .dateDivs {
+    font-size: 16px;
+    font-weight: 700;
+    font-family: "Montserrat", sans-serif;
+    color: #0e2515;
+    border: 1px solid #d3d4db;
+    padding: 10px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .slotsContainer {
+    background-color: #ffffff;
+    box-shadow: 1px 3px 3px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    height: 20%;
+  }
+  
+  .slot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #d3d4db;
+  }
+  
+  .slotSpan {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: "Montserrat", sans-serif;
+    color: #0e2515;
+  }
+  
+  .slotCount {
+    display: flex;
+    align-items: center;
+    border: 1px solid #edebff;
+    padding: 7px 15px;
+    border-radius: 45px;
+    font-size: 16px;
+    width: 60px;
+    justify-content: center;
+    font-weight: 700;
+    font-family: "Montserrat", sans-serif;
+    color: #0e2515;
+    background-color: #faf5ff;
+  }
+  
+  .slotButton {
+    background-color: #f8fcf9;
+    padding: 6px;
+    border-radius: 8px;
+    border: 1px solid #d3d4db;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    font-family: "Montserrat", sans-serif;
+  }
+  
+  .nextButton {
+    background-color: #1c4a2a;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    margin: 0px 10px;
+  }

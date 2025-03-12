@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import styles from "@/app/styles/landing-page.module.css";
+import styles from "@/app/styles/schedule-card.module.css";
 import { useState } from "react";
 import Footer from "@/app/components/Footer";
 

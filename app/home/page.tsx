@@ -7,12 +7,9 @@ import Doctors from "../../public/data/doctors.json";
 import SearchBar from "../components/SearchBar";
 import { useRouter } from "next/navigation";
 import { auth0 } from "../lib/auth0";
-// import { FaSearch, FaUserMd, FaPills, FaHeartbeat, FaVial } from "react-icons/fa";
 
-const Home = async () => {
-  // console.log(Doctors)
+const Home = () => {
   const router = useRouter();
- 
 
   return (
     <div className={styles.container}>
@@ -23,42 +20,42 @@ const Home = async () => {
         <h2>Our Expertise</h2>
         <div className={styles.serviceGrid}>
           <div className={styles.serviceCard}>
-            {/* <FaUserMd className={styles.serviceIcon} /> */}
             <Image
               src="/assets/home-care.png"
               height={50}
               width={50}
               alt="Home Care"
+              priority
             />
             <p>HOME CARE SERVICES</p>
           </div>
           <div className={styles.serviceCard}>
-            {/* <FaPills className={styles.serviceIcon} /> */}
             <Image
               src="/assets/pharmacy.png"
               height={50}
               width={50}
               alt="Pharmacy"
+              priority
             />
             <p>PHARMACY SERVICES</p>
           </div>
           <div className={styles.serviceCard}>
-            {/* <FaHeartbeat className={styles.serviceIcon} /> */}
             <Image
               src="/assets/health-checkup.png"
               height={50}
               width={50}
               alt="health check"
+              priority
             />
             <p>HEALTH CHECKUP</p>
           </div>
           <div className={styles.serviceCard}>
-            {/* <FaVial className={styles.serviceIcon} /> */}
             <Image
               src="/assets/lab-test.png"
               height={50}
               width={50}
               alt="lab test"
+              priority
             />
             <p>DIAGNOSTICS / LAB TESTS</p>
           </div>
@@ -66,26 +63,13 @@ const Home = async () => {
       </section>
 
       {/* Top Doctors Section */}
-
       <section className={styles.topDoctors}>
         <h2>Our Top Doctors</h2>
         <div className={styles.topDoctorsGrid}>
           {Doctors.slice(0, 6).map((doctor, index) => (
             <div
               key={index}
-              style={{
-                backgroundColor: "#F8FCF9",
-                padding: "20px",
-                borderRadius: "12px",
-                width: "200px",
-                height: "330px",
-                border: "1px solid rgba(0, 0, 0, 0.1)",
-                transition: "transform 0.3s ease",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                margin: "10px",
-              }}
+              className={styles.topDoctorCard}
             >
               <div>
                 <div className={styles.imageContainer}>
@@ -99,7 +83,7 @@ const Home = async () => {
                 </div>
                 <p className={styles.doctorName}>{doctor.name}</p>
                 <p className={styles.specialty}>
-                  <span>🩺 {doctor.specialty}</span>{" "}
+                  <span>🩺 {doctor.specialty}</span>
                   <span>⏳ {doctor.experience}</span>
                 </p>
                 <p className={styles.ratings}>
@@ -108,9 +92,9 @@ const Home = async () => {
                 </p>
               </div>
               <div>
-                <button className={styles.appointmentButton}
-                                    onClick={() => router.push("/appointment/ScheduleSlot")}
-
+                <button 
+                  className={styles.appointmentButton}
+                  onClick={() => router.push("/appointment/ScheduleSlot")}
                 >
                   Book Appointment
                 </button>
