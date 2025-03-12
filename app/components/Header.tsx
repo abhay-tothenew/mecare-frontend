@@ -37,12 +37,63 @@ export default function Header() {
 
         {/* Navigation Links */}
         <ul className={`${styles.navLinks} ${isOpen ? styles.open : ""}`}>
-          <li onClick={() => { setIsOpen(false); router.push("/home"); }}>Home</li>
-          <li onClick={() => { setIsOpen(false); router.push("/appointment"); }}>Appointments</li>
-          <li onClick={() => { setIsOpen(false); router.push("/health-blog"); }}>Health Blog</li>
-          <li onClick={() => { setIsOpen(false); router.push("/reviews"); }}>Reviews</li>
+          <li
+            onClick={() => {
+              setIsOpen(false);
+              router.push("/home");
+            }}
+          >
+            Home
+          </li>
+          <li
+            onClick={() => {
+              setIsOpen(false);
+              router.push("/appointment");
+            }}
+          >
+            Appointments
+          </li>
+          <li
+            onClick={() => {
+              setIsOpen(false);
+              router.push("/health-blog");
+            }}
+          >
+            Health Blog
+          </li>
+          <li
+            onClick={() => {
+              setIsOpen(false);
+              router.push("/reviews");
+            }}
+          >
+            Reviews
+          </li>
+
+          {/* Auth Buttons for Mobile */}
+          <li className={styles.mobileAuthButtons}>
+            <button
+              className={styles.mobileLogin}
+              onClick={() => {
+                setIsOpen(false);
+                router.push("/auth/login");
+              }}
+            >
+              Login
+            </button>
+            <button
+              className={styles.mobileRegister}
+              onClick={() => {
+                setIsOpen(false);
+                router.push("/auth/register");
+              }}
+            >
+              Register
+            </button>
+          </li>
         </ul>
 
+        {/* Desktop Auth Buttons */}
         <div className={styles.authButtons}>
           <button
             className={styles.login}
