@@ -1,0 +1,106 @@
+.profileContainer {
+    max-width: 600px;
+    margin: auto;
+    padding: 2rem;
+    background: white;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    text-align: center;
+}
+
+.profileHeader {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.imageContainer img {
+    border-radius: 50%;
+    border: 3px solid #1c4a2a;
+}
+
+.info h1 {
+    font-size: 24px;
+    color: #1c4a2a;
+    margin-bottom: 0.5rem;
+}
+
+.specialty {
+    font-size: 18px;
+    font-weight: 500;
+    color: #4a774d;
+}
+
+.location {
+    font-size: 16px;
+    color: #555;
+}
+
+/* Availability Section */
+.availability {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.availability h2 {
+    font-size: 20px;
+    color: #1c4a2a;
+    margin-bottom: 1rem;
+}
+
+.schedule {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.dayButton {
+    background: #f0f8f3;
+    border: 1px solid #1c4a2a;
+    color: #1c4a2a;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dayButton:hover,
+.dayButton.active {
+    background: #1c4a2a;
+    color: white;
+}
+
+.timeSlot {
+    font-size: 18px;
+    font-weight: 500;
+    margin-top: 1rem;
+    color: #1c4a2a;
+}
+
+/* Book Appointment Button */
+.bookButton {
+    margin-top: 1.5rem;
+    background: #1c4a2a;
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.bookButton:hover {
+    background: #145a20;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+    .profileHeader {
+        flex-direction: column;
+    }
+}
