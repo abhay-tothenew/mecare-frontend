@@ -55,6 +55,7 @@
   flex-wrap: nowrap;
   position: relative;
   z-index: 1000;
+  box-sizing: border-box;
 }
 
 .searchBox input {
@@ -63,6 +64,9 @@
   font-size: 16px;
   padding: 12px;
   width: 100%;
+  box-sizing: border-box;
+  margin-right: 20px;
+  
 }
 
 .searchButton {
@@ -74,6 +78,7 @@
   white-space: nowrap;
   font-weight: 500;
   transition: background-color 0.3s ease;
+
 }
 
 .heroButtons {
@@ -256,6 +261,8 @@
   .searchButton {
     padding: 12px 15px;
     font-size: 14px;
+    margin-right: 20px;
+
   }
 
   .serviceGrid {
@@ -297,6 +304,8 @@
     width: 100%;
     border-radius: 8px;
     padding: 12px;
+    margin-right: 20px;
+
   }
 
   .specialty {
@@ -315,5 +324,10 @@
 
   .heroSection {
     padding: 20px 10px;
+  }
+
+  .searchButton{
+    margin-right: 20px;
+
   }
 }
