@@ -13,8 +13,8 @@ export default function Appointment() {
   const [location, setLocation] = useState("");
   const router = useRouter();
 
-  const handleCategory = (categoryName: string) => {
-    router.push(`/appointment/${categoryName}`);
+  const handleCategory = (categoryTag: string) => {
+    router.push(`/appointment/${categoryTag}`);
   };
 
   return (
@@ -28,7 +28,7 @@ export default function Appointment() {
               <div
                 className={styles.category}
                 key={index}
-                onClick={() => handleCategory(category.name)}
+                onClick={() => handleCategory(category.tag)}
               >
                 <Image
                   src={category.image}

@@ -3,14 +3,20 @@ import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import styles from "../styles/Header.module.css";
+import { useContext } from "react";
+import AuthContext from "../utils/api/context/Authcontext";
 
 export default function Header() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+  const { user, isAuthenticated, login, logout } = useContext(AuthContext);
 
+  console.log("user--->",user);
   const handleClick = () => {
     setIsOpen(!isOpen);
   };
+
+  const userData = JSON.stringify(user, null, 2);
 
   return (
     <div className={styles.headerContainer}>
@@ -94,6 +100,17 @@ export default function Header() {
         </ul>
 
         {/* Desktop Auth Buttons */}
+        {/* {userData ? (
+          <>
+            <span className="profileIcon" onClick={() => router.push("/profile")}>👤 {user}</span>
+            <button className="logout" onClick={logout}>Logout</button>
+          </>
+        ) : (
+          <>
+            <button className="login" onClick={() => router.push("/auth/login")}>Login</button>
+            <button className="register" onClick={() => router.push("/auth/register")}>Register</button>
+          </>
+        )} */}
         <div className={styles.authButtons}>
           <button
             className={styles.login}

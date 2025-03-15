@@ -88,6 +88,7 @@
   transform: translateY(-200%);
   opacity: 0;
   list-style: none;
+  z-index: 2000;
   /* margin-left: 40px; */
 }
 

@@ -5,12 +5,13 @@
 .doctorsContainer {
   margin-top: 50px;
 }
+
 .doctorsHeader {
   text-align: center;
 }
 
 .doctorsHeader h2 {
-  font-size: 44px;
+  font-size: clamp(24px, 5vw, 44px);
   font-weight: 500;
   margin-bottom: 15px;
   color: #0e2515;
@@ -36,13 +37,12 @@
   font-weight: 500;
 }
 
-.filterContainer span{
-    color: #1C4A2A;
-    font-family: "Montserrat", sans-serif;
-    font-weight: 700;
-    cursor: pointer;
+.filterContainer span {
+  color: #1c4a2a;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  cursor: pointer;
 }
-
 
 .filters {
   width: 250px;
@@ -53,13 +53,14 @@
 
 .filters h3 {
   font-size: 18px;
-  /* margin-bottom: 10px; */
 }
 
 .filterSection {
   background-color: #e0e8e0;
   border-radius: 10px;
+  margin-bottom: 10px;
 }
+
 .filterSection h4 {
   margin-top: 10px;
   padding: 10px;
@@ -123,4 +124,99 @@
   cursor: pointer;
   width: 70%;
   font-size: 15px;
+}
+
+.doctorInfo {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin: 12px 0;
+  width: 100%;
+}
+
+.infoItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.infoItem span {
+  font-size: 14px;
+  color: #333;
+}
+
+.infoItem img {
+  width: 20px;
+  height: 20px;
+}
+
+/* Mobile filters */
+.mobileFilters {
+  display: none;
+  width: 100%;
+  margin-bottom: 20px;
+  margin-top: 30px;
+}
+
+.filterDropdown {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.filterDropdown select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #e0e8e0;
+  background-color: white;
+  font-family: "Montserrat", sans-serif;
+  color: #0e2515;
+}
+
+/* Media queries for responsive design */
+@media screen and (max-width: 1024px) {
+  .doctorGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .content {
+    flex-direction: column;
+  }
+  
+  .filters {
+    display: none;
+  }
+  
+  .mobileFilters {
+    display: block;
+  }
+  
+  .doctorGrid {
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: 0;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .container {
+    padding: 10px;
+  }
+  
+  .doctorGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .doctorCard {
+    padding: 10px;
+  }
+  
+  .doctorHeader h2 {
+    font-size: 24px;
+  }
+  
+  .bookButton {
+    width: 90%;
+  }
 }

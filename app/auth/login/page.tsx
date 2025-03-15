@@ -1,9 +1,11 @@
 "use client";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Link from "next/link";
 import styles from "../../styles/login-page.module.css";
 import { AtSign, LockIcon } from "lucide-react";
 import { redirect } from "next/navigation";
+import AuthContext from "@/app/utils/api/context/Authcontext";
+import { log } from "console";
 
 interface LoginUser {
   email: string;
@@ -19,6 +21,8 @@ export default function Login() {
     password,
   };
 
+  const { login } = useContext(AuthContext);
+
   const handleSubmit = async () => {
     // e.preventDefault();
 
@@ -31,7 +35,11 @@ export default function Login() {
       body: JSON.stringify(user),
     });
 
+    const data = await response.json();
+    // console.log("response--->", data);
+
     if (response.status === 200) {
+      login(data.user);
       redirect("/home");
     }
 

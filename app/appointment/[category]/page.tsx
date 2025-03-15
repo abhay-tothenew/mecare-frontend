@@ -5,6 +5,7 @@ import Categories from "../../../public/data/categories.json";
 import Footer from "@/app/components/Footer";
 import SearchBar from "@/app/components/SearchBar";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface Doctor {
   id: number;
@@ -20,6 +21,7 @@ export default function Category({ params }: { params: any }) {
   const { category } = params;
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [filteredDoctors, setFilteredDoctors] = useState<Doctor[]>([]);
+  const [display_category, setDisplayCategory] = useState("");
   const [filters, setFilters] = useState({
     rating: 0,
     experience: "all",
@@ -30,11 +32,13 @@ export default function Category({ params }: { params: any }) {
 
   useEffect(() => {
     const selectedCategory = Categories.find(
-      (cat: any) => cat.name === category
+      (cat: any) => cat.tag === category
     );
     if (selectedCategory) {
       setDoctors(selectedCategory.doctors || []);
       setFilteredDoctors(selectedCategory.doctors || []);
+      setDisplayCategory(selectedCategory.name);
+      console.log(display_category);
     }
   }, [category]);
 
@@ -64,6 +68,14 @@ export default function Category({ params }: { params: any }) {
     setFilteredDoctors(updatedDoctors);
   }, [filters, doctors]);
 
+  // Handle filter changes
+  const handleFilterChange = (type: string, value: string | number) => {
+    setFilters((prev) => ({
+      ...prev,
+      [type]: value,
+    }));
+  };
+
   return (
     <>
       <SearchBar />
@@ -77,27 +89,68 @@ export default function Category({ params }: { params: any }) {
             </p>
           </div>
 
+          {/* Mobile filters - Dropdown version */}
+          <div className={styles.mobileFilters}>
+            <div className={styles.filterContainer}>
+              <h3>Filter By:</h3>
+              <span
+                onClick={() =>
+                  setFilters({ rating: 0, experience: "all", gender: "all" })
+                }
+              >
+                Reset
+              </span>
+            </div>
+
+            <div className={styles.filterDropdown}>
+              <select
+                onChange={(e) =>
+                  handleFilterChange("rating", parseInt(e.target.value))
+                }
+                value={filters.rating}
+              >
+                <option value="0">Rating: Show all</option>
+                <option value="1">Rating: 1 star</option>
+                <option value="2">Rating: 2 stars</option>
+                <option value="3">Rating: 3 stars</option>
+                <option value="4">Rating: 4 stars</option>
+                <option value="5">Rating: 5 stars</option>
+              </select>
+            </div>
+
+            <div className={styles.filterDropdown}>
+              <select
+                onChange={(e) =>
+                  handleFilterChange("experience", e.target.value)
+                }
+                value={filters.experience}
+              >
+                <option value="all">Experience: Show all</option>
+                <option value="15">Experience: ≤ 15 years</option>
+                <option value="10">Experience: ≤ 10 years</option>
+                <option value="5">Experience: ≤ 5 years</option>
+                <option value="3">Experience: ≤ 3 years</option>
+                <option value="1">Experience: ≤ 1 year</option>
+              </select>
+            </div>
+
+            <div className={styles.filterDropdown}>
+              <select
+                onChange={(e) => handleFilterChange("gender", e.target.value)}
+                value={filters.gender}
+              >
+                <option value="all">Gender: Show all</option>
+                <option value="male">Gender: Male</option>
+                <option value="female">Gender: Female</option>
+              </select>
+            </div>
+          </div>
+
           <div className={styles.content}>
-            {/* Sidebar Filters */}
+            {/* Desktop Sidebar Filters */}
             <div className={styles.filters}>
               <div className={styles.filterContainer}>
-                <h3
-                  style={{
-                    color: "#0E2515",
-                    fontFamily: "Montserrat, sans-serif",
-                    fontWeight: "500",
-                  }}
-                >
-                  Filter By:
-                </h3>
-                {/* <button
-              onClick={() =>
-                setFilters({ rating: 0, experience: "all", gender: "all" })
-              }
-            >
-              Reset
-            </button> */}
-
+                <h3>Filter By:</h3>
                 <span
                   onClick={() =>
                     setFilters({ rating: 0, experience: "all", gender: "all" })
@@ -113,9 +166,8 @@ export default function Category({ params }: { params: any }) {
                   <input
                     type="radio"
                     name="rating"
-                    onChange={() =>
-                      setFilters((prev) => ({ ...prev, rating: 0 }))
-                    }
+                    checked={filters.rating === 0}
+                    onChange={() => handleFilterChange("rating", 0)}
                   />{" "}
                   Show all
                 </label>
@@ -124,9 +176,8 @@ export default function Category({ params }: { params: any }) {
                     <input
                       type="radio"
                       name="rating"
-                      onChange={() =>
-                        setFilters((prev) => ({ ...prev, rating: star }))
-                      }
+                      checked={filters.rating === star}
+                      onChange={() => handleFilterChange("rating", star)}
                     />{" "}
                     {star} star
                   </label>
@@ -140,11 +191,10 @@ export default function Category({ params }: { params: any }) {
                     <input
                       type="radio"
                       name="experience"
-                      onChange={() =>
-                        setFilters((prev) => ({ ...prev, experience: year }))
-                      }
+                      checked={filters.experience === year}
+                      onChange={() => handleFilterChange("experience", year)}
                     />
-                    {year === "all" ? "Show all" : `≤ ${year} years`}
+                    {year === "all" ? " Show all" : ` ≤ ${year} years`}
                   </label>
                 ))}
               </div>
@@ -155,9 +205,8 @@ export default function Category({ params }: { params: any }) {
                   <input
                     type="radio"
                     name="gender"
-                    onChange={() =>
-                      setFilters((prev) => ({ ...prev, gender: "all" }))
-                    }
+                    checked={filters.gender === "all"}
+                    onChange={() => handleFilterChange("gender", "all")}
                   />{" "}
                   Show all
                 </label>
@@ -165,9 +214,8 @@ export default function Category({ params }: { params: any }) {
                   <input
                     type="radio"
                     name="gender"
-                    onChange={() =>
-                      setFilters((prev) => ({ ...prev, gender: "male" }))
-                    }
+                    checked={filters.gender === "male"}
+                    onChange={() => handleFilterChange("gender", "male")}
                   />{" "}
                   Male
                 </label>
@@ -175,9 +223,8 @@ export default function Category({ params }: { params: any }) {
                   <input
                     type="radio"
                     name="gender"
-                    onChange={() =>
-                      setFilters((prev) => ({ ...prev, gender: "female" }))
-                    }
+                    checked={filters.gender === "female"}
+                    onChange={() => handleFilterChange("gender", "female")}
                   />{" "}
                   Female
                 </label>
@@ -194,15 +241,34 @@ export default function Category({ params }: { params: any }) {
                     className={styles.doctorImage}
                   />
                   <h3>{doctor.name}</h3>
-                  <p>
-                    {category} | {doctor.experience}
-                  </p>
+
+                  <div className={styles.doctorInfo}>
+                    <div className={styles.infoItem}>
+                      <Image
+                        src="/assets/Stethoscope.svg"
+                        alt="Specialty"
+                        width={20}
+                        height={20}
+                      />
+                      <span>{display_category}</span>
+                    </div>
+
+                    <div className={styles.infoItem}>
+                      <Image
+                        src="/assets/Hourglass.svg"
+                        alt="Experience"
+                        width={20}
+                        height={20}
+                      />
+                      <span>{doctor.experience}</span>
+                    </div>
+                  </div>
+
                   <p
                     style={{
                       marginBottom: "15px",
                     }}
                   >
-                    {" "}
                     Ratings: {doctor.ratings} Stars
                   </p>
                   <button

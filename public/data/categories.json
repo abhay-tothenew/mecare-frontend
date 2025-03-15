@@ -1,6 +1,7 @@
 [
   {
     "id": 1,
+    "tag":"general_physician",
     "name": "General Physician",
     "image": "https://images.apollo247.in/specialty/615ebc75-4172-4f46-9ba0-b3688c053fcc-1721716587044.png?tr=q-80,f-webp,w-100,dpr-1,c-at_max",
     "doctors": [
@@ -35,6 +36,7 @@
   },
   {
     "id": 2,
+    "tag":"dentist",
     "name": "Dentist",
     "image": "https://images.apollo247.in/specialty/4ce59e16-e22b-4059-9cae-365408e34b8c-1718393604945.png?tr=q-80,f-webp,w-100,dpr-1,c-at_max",
     "doctors": [
@@ -69,6 +71,7 @@
   },
   {
     "id": 3,
+    "tag":"cardiologist",
     "name": "Cardiologist",
     "image": "https://images.apollo247.in/specialty/f325ede7-8710-49a6-b0ea-32ddc06f2b4c-1718393325515.png?tr=q-80,f-webp,w-100,dpr-1,c-at_max",
     "doctors": [
@@ -112,6 +115,7 @@
   },
   {
     "id": 4,
+    "tag":"neurologist",
     "name": "Neurologist",
     "image": "https://images.apollo247.in/specialty/7cedbc2f-1c04-46cb-8fc8-bcd2eca77802-1718362077372.png?tr=q-80,f-webp,w-100,dpr-1,c-at_max",
     "doctors": [
@@ -147,6 +151,7 @@
   },
   {
     "id": 5,
+    "tag":"orthopedic_surgeon",
     "name": "Orthopedic Surgeon",
     "image": "https://images.apollo247.in/specialty/07337088-ca54-4e67-8c53-6a5c03b07a7f-1718517850079.png?tr=q-80,f-webp,w-100,dpr-1,c-at_max",
     "doctors": [
@@ -184,6 +189,7 @@
   },
   {
     "id": 6,
+    "tag":"pediatrician",
     "name": "Pediatrician",
     "image": "https://images.apollo247.in/specialties/ic_paediatrics.png?tr=q-80,f-webp,w-100,dpr-1,c-at_max",
     "doctors": [
@@ -221,6 +227,7 @@
   },
   {
     "id": 7,
+    "tag":"dermatologist",
     "name": "Dermatologist",
     "image": "https://images.apollo247.in/specialty/73dae7a6-ec1f-45c4-98bd-0c8acb6e4eca-1718393652685.png?tr=q-80,f-webp,w-100,dpr-1,c-at_max",
     "doctors": [
@@ -258,6 +265,7 @@
   },
   {
     "id": 8,
+    "tag":"ent_specialist",
     "name": "ENT Specialist",
     "image": "https://images.apollo247.in/specialties/ic_ent.png?tr=q-80,f-webp,w-100,dpr-1,c-at_max",
     "doctors": [
@@ -295,6 +303,7 @@
   },
   {
     "id": 9,
+    "tag":"psychiatrist",
     "name": "Psychiatrist",
     "image": "https://images.apollo247.in/specialty/6147312b-0e6b-4b2e-a20c-991243a85625-1718394692716.png?tr=q-80,f-webp,w-100,dpr-1,c-at_max",
     "doctors": [
@@ -332,6 +341,7 @@
   },
   {
     "id": 10,
+    "tag":"diabetologist",
     "name": "Diabetologist",
     "image": "https://images.apollo247.in/specialty/556c709b-bde6-4b81-becd-3e809ec2d682-1718393677886.png?tr=q-80,f-webp,w-100,dpr-1,c-at_max",
     "doctors": [
