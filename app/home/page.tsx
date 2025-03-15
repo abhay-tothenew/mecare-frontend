@@ -6,7 +6,7 @@ import Footer from "../components/Footer";
 import Doctors from "../../public/data/doctors.json";
 import SearchBar from "../components/SearchBar";
 import { useRouter } from "next/navigation";
-import { auth0 } from "../lib/auth0";
+// import { auth0 } from "../lib/auth0";
 
 const Home = () => {
   const router = useRouter();
