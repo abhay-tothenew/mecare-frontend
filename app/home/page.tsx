@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect, use } from "react";
 import styles from "../styles/home.module.css";
 import Image from "next/image";
 import Footer from "../components/Footer";
@@ -8,8 +8,35 @@ import SearchBar from "../components/SearchBar";
 import { useRouter } from "next/navigation";
 // import { auth0 } from "../lib/auth0";
 
+interface Doctors {
+  id: number;
+  name: string;
+  experience: string;
+  ratings: number;
+  image: string;
+  location: string;
+  specialization: string;
+}
+
 const Home = () => {
   const router = useRouter();
+  const [topDoctors, setDoctors] = useState<Doctors[]>([]);
+
+  useEffect(() => {
+    const fetchTopDoctors = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/doctors/top6");
+        const data = await response.json();
+
+        console.log("Top Doctors", data);
+        setDoctors(data);
+      } catch (err) {
+        console.log("Error fetching doctors", err);
+      }
+    };
+
+    fetchTopDoctors();
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -66,15 +93,12 @@ const Home = () => {
       <section className={styles.topDoctors}>
         <h2>Our Top Doctors</h2>
         <div className={styles.topDoctorsGrid}>
-          {Doctors.slice(0, 6).map((doctor, index) => (
-            <div
-              key={index}
-              className={styles.topDoctorCard}
-            >
+          {topDoctors.map((doctor, index) => (
+            <div key={index} className={styles.topDoctorCard}>
               <div>
                 <div className={styles.imageContainer}>
                   <Image
-                    src={doctor.image}
+                    src={doctor.image || "/assets/Frame.png"}
                     height={120}
                     width={120}
                     alt={doctor.name}
@@ -83,7 +107,7 @@ const Home = () => {
                 </div>
                 <p className={styles.doctorName}>{doctor.name}</p>
                 <p className={styles.specialty}>
-                  <span>🩺 {doctor.specialty}</span>
+                  <span>🩺 {doctor.specialization}</span>
                   <span>⏳ {doctor.experience}</span>
                 </p>
                 <p className={styles.ratings}>
@@ -92,7 +116,7 @@ const Home = () => {
                 </p>
               </div>
               <div>
-                <button 
+                <button
                   className={styles.appointmentButton}
                   onClick={() => router.push("/appointment/ScheduleSlot")}
                 >
