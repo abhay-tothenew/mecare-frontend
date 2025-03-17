@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../styles/appointments.module.css";
 import Categories from "../../public/data/categories.json";
 import Blogs from "../../public/data/blogs.json";
@@ -7,12 +7,33 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Footer from "../components/Footer";
 
+interface Category {
+  image_url?: string;
+  id: string;
+  category_name: string;
+  category_tag: string;
+}
+
 export default function Appointment() {
-  const [activeTab, setActiveTab] = useState("upcoming");
+  // const [activeTab, setActiveTab] = useState("upcoming");
   const [date, setDate] = useState("");
   const [location, setLocation] = useState("");
   const router = useRouter();
+  const [categories, setCategories] = useState<Category[]>([]);
 
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/disease");
+        const data = await response.json();
+        setCategories(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
   const handleCategory = (categoryTag: string) => {
     router.push(`/appointment/${categoryTag}`);
   };
@@ -24,20 +45,19 @@ export default function Appointment() {
           <h2>Browse Categories</h2>
 
           <div className={styles.categories}>
-            {Categories.map((category, index) => (
+            {categories.map((category, index) => (
               <div
                 className={styles.category}
                 key={index}
-                onClick={() => handleCategory(category.tag)}
+                onClick={() => handleCategory(category.category_tag)}
               >
                 <Image
-                  src={category.image}
+                  src={category.image_url || "/assets/Frame.png"}
                   width={80}
                   height={80}
-                  alt={category.name}
-                  priority={index < 5}
+                  alt={category.category_name}
                 />
-                <h3>{category.name}</h3>
+                <p>{category.category_name}</p>
               </div>
             ))}
           </div>

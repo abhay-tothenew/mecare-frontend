@@ -42,6 +42,23 @@ export default function Category({ params }: { params: any }) {
     }
   }, [category]);
 
+  useEffect(()=>{
+    const fetchBySpecialty = async () => {
+      try {
+
+        const category_name = category.charAt(0).toUpperCase() + category.slice(1);
+        const response = await fetch(`http://localhost:5000/api/doctors/specialization/${category_name}`);
+        const data = await response.json();
+        console.log("data--->",data);
+        setDoctors(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchBySpecialty();
+  },[])
+
   // Filtering as per the selected filters
   useEffect(() => {
     let updatedDoctors = doctors;
@@ -236,7 +253,7 @@ export default function Category({ params }: { params: any }) {
               {filteredDoctors.map((doctor) => (
                 <div key={doctor.id} className={styles.doctorCard}>
                   <img
-                    src={doctor.image}
+                    src={doctor.image || '/assets/Frame.png'}
                     alt={doctor.name}
                     className={styles.doctorImage}
                   />
@@ -260,7 +277,7 @@ export default function Category({ params }: { params: any }) {
                         width={20}
                         height={20}
                       />
-                      <span>{doctor.experience}</span>
+                      <span>{doctor.experience} years</span>
                     </div>
                   </div>
 
@@ -269,7 +286,7 @@ export default function Category({ params }: { params: any }) {
                       marginBottom: "15px",
                     }}
                   >
-                    Ratings: {doctor.ratings} Stars
+                    Ratings: {doctor.ratings || "4.5"} Stars
                   </p>
                   <button
                     className={styles.bookButton}

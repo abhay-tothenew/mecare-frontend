@@ -22,6 +22,8 @@ const Home = () => {
   const router = useRouter();
   const [topDoctors, setDoctors] = useState<Doctors[]>([]);
 
+
+  //TODO: separate utils/api/doctors/top6.ts
   useEffect(() => {
     const fetchTopDoctors = async () => {
       try {
