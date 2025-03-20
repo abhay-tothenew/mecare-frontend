@@ -1,60 +1,107 @@
 "use client";
-import { useState } from "react";
+import { redirect, useParams } from "next/navigation";
 import Image from "next/image";
-import styles from "../../styles/doctors-profile.module.css";
+import styles from "../../styles/doctor-profile.module.css";
+
+// This would typically come from an API/database
+const mockDoctor = {
+  id: 1,
+  name: "Dr. Sarah Johnson",
+  specialty: "Cardiologist",
+  experience: "15+ years",
+  education: [
+    "MD - Johns Hopkins University",
+    "Cardiology Fellowship - Mayo Clinic",
+  ],
+  languages: ["English", "Spanish"],
+  rating: 4.8,
+  reviews: 127,
+  about:
+    "Dr. Sarah Johnson is a board-certified cardiologist with over 15 years of experience in treating various heart conditions. She specializes in preventive cardiology and heart failure management.",
+  availability: ["Mon-Fri: 9:00 AM - 5:00 PM", "Sat: 9:00 AM - 1:00 PM"],
+  location: "123 Medical Center Drive, Suite 200",
+  image: "/assets/doctor-placeholder.jpg",
+};
 
 export default function DoctorProfile() {
-    const [selectedDay, setSelectedDay] = useState("Monday");
+  const params = useParams();
+  // In a real app, you would fetch doctor data using the ID
+  // const doctorId = params.id;
 
-    //TODO: Fetch from json file
-    const doctor: {
-        name: string;
-        specialty: string;
-        location: string;
-        image: string;
-        availability: { [key: string]: string };
-    } = {
-        name: "Dr. Olivia Carter",
-        specialty: "Cardiologist",
-        location: "New York Medical Center",
-        image: "/assets/Frame.png",
-        availability: {
-            Monday: "9:00 AM - 2:00 PM",
-            Wednesday: "11:00 AM - 4:00 PM",
-            Friday: "10:00 AM - 3:00 PM",
-        },
-    };
 
-    return (
-        <div className={styles.profileContainer}>
-            <div className={styles.profileHeader}>
-                <div className={styles.imageContainer}>
-                    <Image src={doctor.image} alt={doctor.name} width={150} height={150} />
-                </div>
-                <div className={styles.info}>
-                    <h1>{doctor.name}</h1>
-                    <p className={styles.specialty}>{doctor.specialty}</p>
-                    <p className={styles.location}>{doctor.location}</p>
-                </div>
+  const handleBookButton = () => {
+    redirect("/appointment/ScheduleSlot");
+  };
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.profileHeader}>
+        <div className={styles.doctorInfo}>
+          <Image
+            src="/assets/Frame.png"
+            alt={mockDoctor.name}
+            width={200}
+            height={200}
+            className={styles.doctorImage}
+          />
+          <div className={styles.basicInfo}>
+            <h1>{mockDoctor.name}</h1>
+            <h2>{mockDoctor.specialty}</h2>
+            <div className={styles.rating}>
+              <span>⭐ {mockDoctor.rating}</span>
+              <span>({mockDoctor.reviews} reviews)</span>
             </div>
-
-            <div className={styles.availability}>
-                <h2>Availability Schedule</h2>
-                <div className={styles.schedule}>
-                    {Object.keys(doctor.availability).map((day) => (
-                        <button
-                            key={day}
-                            className={`${styles.dayButton} ${selectedDay === day ? styles.active : ""}`}
-                            onClick={() => setSelectedDay(day)}
-                        >
-                            {day}
-                        </button>
-                    ))}
-                </div>
-                <p className={styles.timeSlot}>{doctor.availability[selectedDay]}</p>
-            </div>
-
-            <button className={styles.bookButton}>Book Appointment</button>
+          </div>
         </div>
-    );
+        <button className={styles.bookAppointment} onClick={handleBookButton}>Book Appointment</button>
+      </div>
+
+      <div className={styles.profileContent}>
+        <section className={styles.section}>
+          <h3>About</h3>
+          <p>{mockDoctor.about}</p>
+        </section>
+
+        <section className={styles.section}>
+          <h3>Education & Experience</h3>
+          <div className={styles.experience}>
+            <p>
+              <strong>Experience:</strong> {mockDoctor.experience}
+            </p>
+            <strong>Education:</strong>
+            <ul>
+              {mockDoctor.education.map((edu, index) => (
+                <li key={index}>{edu}</li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        <section className={styles.section}>
+          <h3>Languages</h3>
+          <div className={styles.languages}>
+            {mockDoctor.languages.map((lang, index) => (
+              <span key={index} className={styles.language}>
+                {lang}
+              </span>
+            ))}
+          </div>
+        </section>
+
+        <section className={styles.section}>
+          <h3>Availability</h3>
+          <div className={styles.availability}>
+            {mockDoctor.availability.map((time, index) => (
+              <p key={index}>{time}</p>
+            ))}
+          </div>
+        </section>
+
+        <section className={styles.section}>
+          <h3>Location</h3>
+          <p>{mockDoctor.location}</p>
+        </section>
+      </div>
+    </div>
+  );
 }

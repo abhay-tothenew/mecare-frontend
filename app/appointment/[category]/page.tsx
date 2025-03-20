@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 interface Doctor {
+  doctor_id: string;
   id: number;
   name: string;
   experience: string;
@@ -35,21 +36,27 @@ export default function Category({ params }: { params: any }) {
       (cat: any) => cat.tag === category
     );
     if (selectedCategory) {
-      setDoctors(selectedCategory.doctors || []);
-      setFilteredDoctors(selectedCategory.doctors || []);
+      const doctorsWithId = selectedCategory.doctors.map((doctor: any) => ({
+        ...doctor,
+        doctor_id: doctor.doctor_id || doctor.id.toString(),
+      }));
+      setDoctors(doctorsWithId || []);
+      setFilteredDoctors(doctorsWithId || []);
       setDisplayCategory(selectedCategory.name);
       console.log(display_category);
     }
   }, [category]);
 
-  useEffect(()=>{
+  useEffect(() => {
     const fetchBySpecialty = async () => {
       try {
-
-        const category_name = category.charAt(0).toUpperCase() + category.slice(1);
-        const response = await fetch(`http://localhost:5000/api/doctors/specialization/${category_name}`);
+        const category_name =
+          category.charAt(0).toUpperCase() + category.slice(1);
+        const response = await fetch(
+          `http://localhost:5000/api/doctors/specialization/${category_name}`
+        );
         const data = await response.json();
-        console.log("data--->",data);
+        console.log("data--->", data);
         setDoctors(data);
       } catch (error) {
         console.log(error);
@@ -57,7 +64,7 @@ export default function Category({ params }: { params: any }) {
     };
 
     fetchBySpecialty();
-  },[])
+  }, []);
 
   // Filtering as per the selected filters
   useEffect(() => {
@@ -93,6 +100,7 @@ export default function Category({ params }: { params: any }) {
     }));
   };
 
+  console.log("filtered", filteredDoctors);
   return (
     <>
       <SearchBar />
@@ -253,7 +261,7 @@ export default function Category({ params }: { params: any }) {
               {filteredDoctors.map((doctor) => (
                 <div key={doctor.id} className={styles.doctorCard}>
                   <img
-                    src={doctor.image || '/assets/Frame.png'}
+                    src={doctor.image || "/assets/Frame.png"}
                     alt={doctor.name}
                     className={styles.doctorImage}
                   />
@@ -290,7 +298,12 @@ export default function Category({ params }: { params: any }) {
                   </p>
                   <button
                     className={styles.bookButton}
-                    onClick={() => router.push("/appointment/ScheduleSlot")}
+                    onClick={() => {
+                      console.log("select", doctor.doctor_id);
+                      router.push(
+                        `/appointment/ScheduleSlot/${doctor.doctor_id}`
+                      );
+                    }}
                   >
                     Book Appointment
                   </button>

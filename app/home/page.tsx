@@ -16,12 +16,12 @@ interface Doctors {
   image: string;
   location: string;
   specialization: string;
+  doctor_id: string;
 }
 
 const Home = () => {
   const router = useRouter();
   const [topDoctors, setDoctors] = useState<Doctors[]>([]);
-
 
   //TODO: separate utils/api/doctors/top6.ts
   useEffect(() => {
@@ -120,7 +120,9 @@ const Home = () => {
               <div>
                 <button
                   className={styles.appointmentButton}
-                  onClick={() => router.push("/appointment/ScheduleSlot")}
+                  onClick={() =>
+                    router.push(`/appointment/ScheduleSlot/${doctor.doctor_id}`)
+                  }
                 >
                   Book Appointment
                 </button>

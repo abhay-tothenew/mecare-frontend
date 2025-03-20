@@ -1,0 +1,124 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background-color: #f5f5f5;
+}
+
+.card {
+  background: white;
+  padding: 3rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 480px;
+  width: 100%;
+}
+
+.successIcon {
+  margin-bottom: 2rem;
+}
+
+.card h1 {
+  color: #333;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.card p {
+  color: #666;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.primaryButton,
+.secondaryButton {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.primaryButton {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+}
+
+.primaryButton:hover {
+  background-color: #45a049;
+}
+
+.secondaryButton {
+  background-color: transparent;
+  color: #4CAF50;
+  border: 2px solid #4CAF50;
+}
+
+.secondaryButton:hover {
+  background-color: rgba(76, 175, 80, 0.1);
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .container {
+    background-color: #1a1a1a;
+  }
+
+  .card {
+    background-color: #2d2d2d;
+  }
+
+  .card h1 {
+    color: #fff;
+  }
+
+  .card p {
+    color: #ccc;
+  }
+
+  .secondaryButton {
+    color: #6abf6e;
+    border-color: #6abf6e;
+  }
+
+  .secondaryButton:hover {
+    background-color: rgba(106, 191, 110, 0.1);
+  }
+}
+
+/* Responsive styles */
+@media (max-width: 576px) {
+  .card {
+    padding: 2rem;
+  }
+
+  .card h1 {
+    font-size: 1.75rem;
+  }
+
+  .card p {
+    font-size: 1rem;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    width: 100%;
+  }
+} 

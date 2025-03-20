@@ -47,9 +47,4 @@
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-bold: 700;
-}
-
-body{
-  box-sizing: border-box;
-  margin: 0;
-}
+} 

@@ -1,0 +1,130 @@
+.container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.profileHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.doctorInfo {
+  display: flex;
+  gap: 2rem;
+}
+
+.doctorImage {
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.basicInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.basicInfo h1 {
+  font-size: 2rem;
+  color: #333;
+  margin: 0;
+}
+
+.basicInfo h2 {
+  font-size: 1.2rem;
+  color: #666;
+  margin: 0;
+}
+
+.rating {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  color: #666;
+}
+
+.bookAppointment {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.bookAppointment:hover {
+  background-color: #0056b3;
+}
+
+.profileContent {
+  display: grid;
+  gap: 2rem;
+}
+
+.section {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.section h3 {
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.experience ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.experience li {
+  margin-bottom: 0.5rem;
+  color: #666;
+}
+
+.languages {
+  display: flex;
+  gap: 1rem;
+}
+
+.language {
+  background-color: #f0f0f0;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  color: #666;
+}
+
+.availability p {
+  margin: 0.5rem 0;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .profileHeader {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .doctorInfo {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .bookAppointment {
+    width: 100%;
+  }
+} 

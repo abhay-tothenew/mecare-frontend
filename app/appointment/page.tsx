@@ -1,11 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
 import styles from "../styles/appointments.module.css";
-import Categories from "../../public/data/categories.json";
 import Blogs from "../../public/data/blogs.json";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Footer from "../components/Footer";
+import SearchBar from "../components/SearchBar";
 
 interface Category {
   image_url?: string;
@@ -40,6 +40,8 @@ export default function Appointment() {
 
   return (
     <>
+      <SearchBar />
+
       <div className={styles.container}>
         <div className={styles.categoriesContainer}>
           <h2>Browse Categories</h2>
