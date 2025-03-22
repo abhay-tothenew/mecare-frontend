@@ -1,22 +1,52 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import styles from "../styles/Header.module.css";
-import { useContext } from "react";
-import AuthContext from "../utils/api/context/Authcontext";
+import { useAuth } from "../utils/context/Authcontext";
 
 export default function Header() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const { user, isAuthenticated, login, logout } = useContext(AuthContext);
+  const [userData, setUserData] = useState<{ name: string } | null>(null);
 
-  console.log("user--->",user);
+  let token = localStorage.getItem("token");
+  const { user, logout } = useAuth();
+
+  console.log("user", user);
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:5000/api/users/profile",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = await response.json();
+        // console.log("header user data", data);
+        setUserData(data.user);
+      } catch (err) {
+        console.log("Error fetching user data", err);
+      }
+    };
+
+    fetchUserData();
+  }, [token]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUserData(null);
+    router.push("/");
+  };
+
   const handleClick = () => {
     setIsOpen(!isOpen);
   };
-
-  const userData = JSON.stringify(user, null, 2);
 
   return (
     <div className={styles.headerContainer}>
@@ -100,30 +130,35 @@ export default function Header() {
         </ul>
 
         {/* Desktop Auth Buttons */}
-        {/* {userData ? (
-          <>
-            <span className="profileIcon" onClick={() => router.push("/profile")}>👤 {user}</span>
-            <button className="logout" onClick={logout}>Logout</button>
-          </>
-        ) : (
-          <>
-            <button className="login" onClick={() => router.push("/auth/login")}>Login</button>
-            <button className="register" onClick={() => router.push("/auth/register")}>Register</button>
-          </>
-        )} */}
         <div className={styles.authButtons}>
-          <button
-            className={styles.login}
-            onClick={() => router.push("/auth/login")}
-          >
-            Login
-          </button>
-          <button
-            className={styles.register}
-            onClick={() => router.push("/auth/register")}
-          >
-            Register
-          </button>
+          {userData ? (
+            <>
+              <span
+                className={styles.profileIcon}
+                onClick={() => router.push("/user-profile")}
+              >
+                👤 {userData.name}
+              </span>
+              <button className={styles.logout} onClick={handleLogout}>
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                className={styles.login}
+                onClick={() => router.push("/auth/login")}
+              >
+                Login
+              </button>
+              <button
+                className={styles.register}
+                onClick={() => router.push("/auth/register")}
+              >
+                Register
+              </button>
+            </>
+          )}
         </div>
       </nav>
     </div>

@@ -2,8 +2,8 @@
 import { useState } from "react";
 import Header from "./components/Header";
 import "./globals.css";
-import AuthContext from "./utils/api/context/Authcontext";
 import { redirect } from "next/navigation";
+import { AuthProvider } from "./utils/context/Authcontext";
 
 export default function RootLayout({
   children,
@@ -29,21 +29,13 @@ export default function RootLayout({
     return [];
   };
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        isAuthenticated,
-        isLoading,
-        login,
-        logout,
-      }}
-    >
+    <AuthProvider>
       <html lang="en">
         <body>
           <Header />
           {children}
         </body>
       </html>
-    </AuthContext.Provider>
+      </AuthProvider>
   );
 }

@@ -72,7 +72,6 @@ export default function ScheduleSlot({
     fetchDoctorById();
   }, [doctorId]);
 
-
   useEffect(() => {
     const year = currentMonth.getFullYear();
     const month = currentMonth.getMonth();
@@ -109,13 +108,18 @@ export default function ScheduleSlot({
         const response = await fetch(
           `http://localhost:5000/api/appointments/${doctorId}`
         );
+
+
         if (!response.ok) {
           throw new Error("Failed to fetch appointments");
         }
         const data = await response.json();
-        setAppointments(data);
+        console.log("response-----", data);
+
+        setAppointments(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error("Error fetching appointments:", error);
+        setAppointments([]); // Set empty array on error
       } finally {
         setLoading(false);
       }
@@ -124,12 +128,10 @@ export default function ScheduleSlot({
     fetchAppointments();
   }, [doctorId]);
 
-  // Generate time slots for morning and evening
   const generateTimeSlots = () => {
     const morningSlots = [];
     const eveningSlots = [];
 
-    // Morning slots (9 AM to 12 PM)
     for (let hour = 9; hour < 12; hour++) {
       for (let minute = 0; minute < 60; minute += 30) {
         const time = `${hour.toString().padStart(2, "0")}:${minute
@@ -139,7 +141,6 @@ export default function ScheduleSlot({
       }
     }
 
-    // Evening slots (2 PM to 6 PM)
     for (let hour = 14; hour < 18; hour++) {
       for (let minute = 0; minute < 60; minute += 30) {
         const time = `${hour.toString().padStart(2, "0")}:${minute
@@ -154,13 +155,34 @@ export default function ScheduleSlot({
 
   const { morningSlots, eveningSlots } = generateTimeSlots();
 
+  const formatDate = (date: Date) => {
+    return date.toISOString().split("T")[0];
+  };
+
+  const isDateAvailable = (date: Date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Prevent selecting past dates
+    if (date < today) return false;
+
+    const dateStr = formatDate(date);
+    // Show all future dates as available
+    return true;
+  };
+
+  const isCurrentMonth = (date: Date) => {
+    return date.getMonth() === currentMonth.getMonth();
+  };
+
   // Filter available slots based on selected date and time section
   const availableSlots = (morningSlots: string[], eveningSlots: string[]) => {
-    const confirmedAppointments = appointments
+    // Get all booked appointments for the selected date
+    const bookedAppointments = appointments
       .filter(
         (appt) =>
           appt.appointment_date.startsWith(selectedDate) &&
-          appt.status === "confirmed"
+          (appt.status === "confirmed" || appt.status === "pending")
       )
       .map((appt) => appt.appointment_time);
 
@@ -168,7 +190,7 @@ export default function ScheduleSlot({
 
     return slots.map((time) => ({
       time,
-      available: !confirmedAppointments.includes(time),
+      available: !bookedAppointments.includes(time),
     }));
   };
 
@@ -189,7 +211,6 @@ export default function ScheduleSlot({
     };
 
     // console.log("doctor--->", appointmentDetails);
-
 
     const encodedDetails = encodeURIComponent(
       JSON.stringify(appointmentDetails)
@@ -217,30 +238,6 @@ export default function ScheduleSlot({
 
     setCurrentMonth(newDate);
   };
-
-  const formatDate = (date: Date) => {
-    return date.toISOString().split("T")[0];
-  };
-
-  const isDateAvailable = (date: Date) => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    // Prevent selecting past dates
-    if (date < today) return false;
-
-    const dateStr = formatDate(date);
-    return appointments.some(
-      (appt) =>
-        appt.appointment_date.startsWith(dateStr) && appt.status === "pending"
-    );
-  };
-
-  const isCurrentMonth = (date: Date) => {
-    return date.getMonth() === currentMonth.getMonth();
-  };
-
-
 
   return (
     <>

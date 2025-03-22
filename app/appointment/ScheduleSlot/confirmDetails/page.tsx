@@ -82,9 +82,9 @@ export default function ConfirmDetails() {
       });
 
       const data = await response.json();
-      console.log('response--->',data );
+      console.log('response!!!!--->',data );
 
-     if(response.status === 201){
+     if(response.status === 200){
       console.log("Submitted appointment details", response);
       console.log("Full appointment data:", fullAppointmentData);
 

@@ -1,11 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
 import styles from "../../styles/categoryDoctor.module.css";
-import Categories from "../../../public/data/categories.json";
 import Footer from "@/app/components/Footer";
 import SearchBar from "@/app/components/SearchBar";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { use } from "react";
 
 interface Doctor {
   doctor_id: string;
@@ -18,8 +18,13 @@ interface Doctor {
   gender: string;
 }
 
-export default function Category({ params }: { params: any }) {
-  const { category } = params;
+export default function Category({
+  params,
+}: {
+  params: Promise<{ category: string }>;
+}) {
+  const resolvedParams = use(params);
+  const category = resolvedParams.category; //TODO: fixed the error Error: Cannot read properties of undefined (reading 'toLowerCase')
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [filteredDoctors, setFilteredDoctors] = useState<Doctor[]>([]);
   const [display_category, setDisplayCategory] = useState("");
@@ -30,22 +35,6 @@ export default function Category({ params }: { params: any }) {
   });
 
   const router = useRouter();
-
-  useEffect(() => {
-    const selectedCategory = Categories.find(
-      (cat: any) => cat.tag === category
-    );
-    if (selectedCategory) {
-      const doctorsWithId = selectedCategory.doctors.map((doctor: any) => ({
-        ...doctor,
-        doctor_id: doctor.doctor_id || doctor.id.toString(),
-      }));
-      setDoctors(doctorsWithId || []);
-      setFilteredDoctors(doctorsWithId || []);
-      setDisplayCategory(selectedCategory.name);
-      console.log(display_category);
-    }
-  }, [category]);
 
   useEffect(() => {
     const fetchBySpecialty = async () => {

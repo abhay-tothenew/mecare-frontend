@@ -4,8 +4,7 @@ import Link from "next/link";
 import styles from "../../styles/login-page.module.css";
 import { AtSign, LockIcon } from "lucide-react";
 import { redirect } from "next/navigation";
-import AuthContext from "@/app/utils/api/context/Authcontext";
-import { log } from "console";
+import { useAuth } from "@/app/utils/context/Authcontext";
 
 interface LoginUser {
   email: string;
@@ -15,13 +14,14 @@ interface LoginUser {
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { login } = useAuth();
 
   const user: LoginUser = {
     email,
     password,
   };
 
-  const { login } = useContext(AuthContext);
+  // const { login } = useContext(AuthContext);
 
   const handleSubmit = async () => {
     // e.preventDefault();
@@ -36,10 +36,16 @@ export default function Login() {
     });
 
     const data = await response.json();
-    // console.log("response--->", data);
+    console.log("response--->", data);
 
-    if (response.status === 200) {
-      login(data.user);
+    if (data.token) {
+      localStorage.setItem("token", data.token);
+      login({
+        id: data.user.id,
+        name: data.user.name,
+        email: data.user.email,
+        token: data.token,
+      });
       redirect("/home");
     }
 

@@ -153,14 +153,11 @@
 }
 
 .appointmentCard {
-  border: 1px solid #e2e8f0;
-  border-radius: 0.75rem;
-  padding: 1.25rem;
-  transition: transform 0.2s;
-}
-
-.appointmentCard:hover {
-  transform: translateY(-2px);
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .appointmentHeader {
@@ -170,40 +167,63 @@
   margin-bottom: 1rem;
 }
 
-.doctorInfo h3 {
-  font-size: 1.125rem;
-  color: #333;
-  margin: 0 0 0.25rem 0;
+.doctorInfo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
-.doctorInfo p {
-  color: #666;
+.doctorAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatarImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.defaultAvatar {
+  color: #6b7280;
+}
+
+.doctorDetails {
+  display: flex;
+  flex-direction: column;
+}
+
+.doctorDetails h3 {
   margin: 0;
+  font-size: 1rem;
+  color: #1f2937;
+}
+
+.specialization {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin: 0.25rem 0 0;
+  color: #6b7280;
   font-size: 0.875rem;
 }
 
-.badge {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  border-radius: 1rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  text-transform: capitalize;
+.doctorInfo h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #1f2937;
 }
 
-.badge.upcoming {
-  background-color: #e6f4ea;
-  color: #1e8e3e;
-}
-
-.badge.completed {
-  background-color: #e8f0fe;
-  color: #1a73e8;
-}
-
-.badge.cancelled {
-  background-color: #fce8e6;
-  color: #d93025;
+.doctorInfo p {
+  margin: 0.25rem 0 0;
+  color: #6b7280;
+  font-size: 0.9rem;
 }
 
 .appointmentDetails {
@@ -217,22 +237,20 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #666;
-  font-size: 0.875rem;
+  color: #4b5563;
+  font-size: 0.9rem;
 }
 
 .appointmentActions {
   display: flex;
-  gap: 1rem;
+  gap: 0.75rem;
   margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid #e2e8f0;
 }
 
 .rescheduleButton,
 .cancelButton {
   padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
+  border-radius: 4px;
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
@@ -240,23 +258,58 @@
 }
 
 .rescheduleButton {
-  background-color: #1C4A2A;
-  color: white;
+  background-color: #f3f4f6;
+  color: #374151;
   border: none;
 }
 
 .rescheduleButton:hover {
-  background-color: #153d21;
+  background-color: #e5e7eb;
 }
 
 .cancelButton {
-  background-color: transparent;
-  color: #d93025;
-  border: 1px solid #d93025;
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: none;
 }
 
 .cancelButton:hover {
-  background-color: #fce8e6;
+  background-color: #fecaca;
+}
+
+.badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.pending {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.confirmed {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.completed {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.cancelled {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.noAppointments {
+  text-align: center;
+  padding: 2rem;
+  color: #6b7280;
+  font-size: 1rem;
 }
 
 /* Dark mode support */
@@ -299,6 +352,22 @@
 
   .appointmentActions {
     border-color: #404040;
+  }
+
+  .doctorAvatar {
+    background-color: #404040;
+  }
+
+  .defaultAvatar {
+    color: #9ca3af;
+  }
+
+  .doctorDetails h3 {
+    color: #fff;
+  }
+
+  .specialization {
+    color: #9ca3af;
   }
 }
 
