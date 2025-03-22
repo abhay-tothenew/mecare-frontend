@@ -186,7 +186,6 @@ export default function ScheduleSlot({
       },
     };
 
-    // console.log("doctor--->", appointmentDetails);
 
     const encodedDetails = encodeURIComponent(
       JSON.stringify(appointmentDetails)
