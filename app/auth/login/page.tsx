@@ -36,7 +36,7 @@ export default function Login() {
     });
 
     const data = await response.json();
-    console.log("response--->", data);
+    // console.log("response--->", data);
 
     if (data.token) {
       localStorage.setItem("token", data.token);
@@ -45,6 +45,7 @@ export default function Login() {
         name: data.user.name,
         email: data.user.email,
         token: data.token,
+        user_id: data.user.user_id,
       });
       redirect("/home");
     }

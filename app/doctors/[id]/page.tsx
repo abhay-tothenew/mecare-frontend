@@ -1,107 +1,240 @@
 "use client";
-import { redirect, useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import styles from "../../styles/doctor-profile.module.css";
+import Footer from "@/app/components/Footer";
+import { colors, spacing, borderRadius } from "@/app/constants/theme";
+import { 
+  GraduationCap, 
+  Clock, 
+  MapPin, 
+  Languages, 
+  Calendar, 
+  Phone, 
+  DollarSign,
+  Award,
+  Stethoscope,
+  Star
+} from "lucide-react";
 
-// This would typically come from an API/database
-const mockDoctor = {
-  id: 1,
-  name: "Dr. Sarah Johnson",
-  specialty: "Cardiologist",
-  experience: "15+ years",
-  education: [
-    "MD - Johns Hopkins University",
-    "Cardiology Fellowship - Mayo Clinic",
-  ],
-  languages: ["English", "Spanish"],
-  rating: 4.8,
-  reviews: 127,
-  about:
-    "Dr. Sarah Johnson is a board-certified cardiologist with over 15 years of experience in treating various heart conditions. She specializes in preventive cardiology and heart failure management.",
-  availability: ["Mon-Fri: 9:00 AM - 5:00 PM", "Sat: 9:00 AM - 1:00 PM"],
-  location: "123 Medical Center Drive, Suite 200",
-  image: "/assets/doctor-placeholder.jpg",
-};
+interface Doctor {
+  id: string;
+  name: string;
+  specialization: string;
+  experience: string;
+  qualification: string;
+  location: string;
+  image?: string;
+  doctor_id: string;
+  phone: string;
+  about?: string;
+  education?: string[];
+  languages?: string[];
+  availability?: string[];
+  consultation_fee?: number;
+  achievements?: string[];
+}
 
 export default function DoctorProfile() {
   const params = useParams();
-  // In a real app, you would fetch doctor data using the ID
-  // const doctorId = params.id;
+  const router = useRouter();
+  const [doctor, setDoctor] = useState<Doctor | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    const fetchDoctorDetails = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/api/doctors/${params.id}`);
+        const data = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(data.message || 'Failed to fetch doctor details');
+        }
 
-  const handleBookButton = () => {
-    redirect("/appointment/ScheduleSlot");
+        setDoctor(data.doctor);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (params.id) {
+      fetchDoctorDetails();
+    }
+  }, [params.id]);
+
+  const handleBookAppointment = () => {
+    if (doctor) {
+      router.push(`/appointment/ScheduleSlot/${doctor.doctor_id}`);
+    }
   };
 
+  if (loading) {
+    return (
+      <div className={styles.container}>
+        <div style={{ textAlign: 'center', padding: spacing.xl }}>
+          <p>Loading doctor details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !doctor) {
+    return (
+      <div className={styles.container}>
+        <div style={{ textAlign: 'center', padding: spacing.xl }}>
+          <p style={{ color: colors.status.error }}>{error || 'Doctor not found'}</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className={styles.container}>
-      <div className={styles.profileHeader}>
-        <div className={styles.doctorInfo}>
-          <Image
-            src="/assets/Frame.png"
-            alt={mockDoctor.name}
-            width={200}
-            height={200}
-            className={styles.doctorImage}
-          />
-          <div className={styles.basicInfo}>
-            <h1>{mockDoctor.name}</h1>
-            <h2>{mockDoctor.specialty}</h2>
-            <div className={styles.rating}>
-              <span>⭐ {mockDoctor.rating}</span>
-              <span>({mockDoctor.reviews} reviews)</span>
+    <>
+      <div className={styles.container}>
+        <div className={styles.profileHeader}>
+          <div className={styles.doctorInfo}>
+            <Image
+              src={doctor.image || "/assets/Frame.png"}
+              alt={doctor.name}
+              width={200}
+              height={200}
+              className={styles.doctorImage}
+            />
+            <div className={styles.basicInfo}>
+              <h1>{doctor.name}</h1>
+              <h2>
+                <Stethoscope size={20} style={{ marginRight: spacing.xs }} />
+                {doctor.specialization}
+              </h2>
+              <div className={styles.rating}>
+                <Star size={16} fill="#FFD700" style={{ marginRight: spacing.xs }} />
+                <span>4.5</span>
+                <span>(127 reviews)</span>
+              </div>
+              {doctor.consultation_fee && (
+                <div className={styles.consultationFee}>
+                  <DollarSign size={16} style={{ marginRight: spacing.xs }} />
+                  <span>Consultation Fee: ${doctor.consultation_fee}</span>
+                </div>
+              )}
             </div>
           </div>
+          <button 
+            className={styles.bookAppointment} 
+            onClick={handleBookAppointment}
+            style={{
+              backgroundColor: colors.primary.main,
+              color: colors.text.white,
+              padding: `${spacing.md} ${spacing.xl}`,
+              borderRadius: borderRadius.md,
+            }}
+          >
+            Book Appointment
+          </button>
         </div>
-        <button className={styles.bookAppointment} onClick={handleBookButton}>Book Appointment</button>
+
+        <div className={styles.profileContent}>
+          {doctor.about && (
+            <section className={styles.section}>
+              <h3>
+                <Award size={24} style={{ marginRight: spacing.sm }} />
+                About
+              </h3>
+              <p>{doctor.about}</p>
+            </section>
+          )}
+
+          <section className={styles.section}>
+            <h3>
+              <GraduationCap size={24} style={{ marginRight: spacing.sm }} />
+              Education & Experience
+            </h3>
+            <div className={styles.experience}>
+              <p>
+                <strong>Experience:</strong> {doctor.experience}
+              </p>
+              <p>
+                <strong>Qualification:</strong> {doctor.qualification}
+              </p>
+              {doctor.education && (
+                <>
+                  <strong>Education:</strong>
+                  <ul>
+                    {doctor.education.map((edu, index) => (
+                      <li key={index}>{edu}</li>
+                    ))}
+                  </ul>
+                </>
+              )}
+              {doctor.achievements && doctor.achievements.length > 0 && (
+                <>
+                  <strong>Achievements:</strong>
+                  <ul>
+                    {doctor.achievements.map((achievement, index) => (
+                      <li key={index}>{achievement}</li>
+                    ))}
+                  </ul>
+                </>
+              )}
+            </div>
+          </section>
+
+          {doctor.languages && doctor.languages.length > 0 && (
+            <section className={styles.section}>
+              <h3>
+                <Languages size={24} style={{ marginRight: spacing.sm }} />
+                Languages
+              </h3>
+              <div className={styles.languages}>
+                {doctor.languages.map((lang, index) => (
+                  <span key={index} className={styles.language}>
+                    {lang}
+                  </span>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {doctor.availability && doctor.availability.length > 0 && (
+            <section className={styles.section}>
+              <h3>
+                <Clock size={24} style={{ marginRight: spacing.sm }} />
+                Availability
+              </h3>
+              <div className={styles.availability}>
+                {doctor.availability.map((time, index) => (
+                  <p key={index}>
+                    <Calendar size={16} style={{ marginRight: spacing.xs }} />
+                    {time}
+                  </p>
+                ))}
+              </div>
+            </section>
+          )}
+
+          <section className={styles.section}>
+            <h3>
+              <MapPin size={24} style={{ marginRight: spacing.sm }} />
+              Location & Contact
+            </h3>
+            <div className={styles.contactInfo}>
+              <p>
+                <MapPin size={16} style={{ marginRight: spacing.xs }} />
+                {doctor.location}
+              </p>
+              <p>
+                <Phone size={16} style={{ marginRight: spacing.xs }} />
+                {doctor.phone}
+              </p>
+            </div>
+          </section>
+        </div>
       </div>
-
-      <div className={styles.profileContent}>
-        <section className={styles.section}>
-          <h3>About</h3>
-          <p>{mockDoctor.about}</p>
-        </section>
-
-        <section className={styles.section}>
-          <h3>Education & Experience</h3>
-          <div className={styles.experience}>
-            <p>
-              <strong>Experience:</strong> {mockDoctor.experience}
-            </p>
-            <strong>Education:</strong>
-            <ul>
-              {mockDoctor.education.map((edu, index) => (
-                <li key={index}>{edu}</li>
-              ))}
-            </ul>
-          </div>
-        </section>
-
-        <section className={styles.section}>
-          <h3>Languages</h3>
-          <div className={styles.languages}>
-            {mockDoctor.languages.map((lang, index) => (
-              <span key={index} className={styles.language}>
-                {lang}
-              </span>
-            ))}
-          </div>
-        </section>
-
-        <section className={styles.section}>
-          <h3>Availability</h3>
-          <div className={styles.availability}>
-            {mockDoctor.availability.map((time, index) => (
-              <p key={index}>{time}</p>
-            ))}
-          </div>
-        </section>
-
-        <section className={styles.section}>
-          <h3>Location</h3>
-          <p>{mockDoctor.location}</p>
-        </section>
-      </div>
-    </div>
+      <Footer />
+    </>
   );
 }

@@ -97,7 +97,7 @@ const Home = () => {
         <div className={styles.topDoctorsGrid}>
           {topDoctors.map((doctor, index) => (
             <div key={index} className={styles.topDoctorCard}>
-              <div>
+              <div onClick={() => router.push(`/doctors/${doctor.doctor_id}`)}>
                 <div className={styles.imageContainer}>
                   <Image
                     src={doctor.image || "/assets/Frame.png"}

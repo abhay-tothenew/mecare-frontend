@@ -5,30 +5,7 @@ import { useState, useEffect } from "react";
 import Footer from "@/app/components/Footer";
 import { redirect, useRouter } from "next/navigation";
 import { use } from "react";
-
-interface Appointment {
-  appointment_date: string;
-  appointment_time: string;
-  status: string;
-  appointment_type: string;
-}
-
-interface Doctor {
-  id: string;
-  name: string;
-  specialization: string;
-  qualification: string;
-  location: string;
-  image?: string;
-  doctor_id: string;
-  phone: string;
-}
-
-interface PageParams {
-  doctorId: string;
-  doctorDetails: Doctor;
-  appointmentDetails: Appointment;
-}
+import { Appointment, Doctor, PageParams } from "./type";
 
 export default function ScheduleSlot({
   params,
@@ -108,7 +85,6 @@ export default function ScheduleSlot({
         const response = await fetch(
           `http://localhost:5000/api/appointments/${doctorId}`
         );
-
 
         if (!response.ok) {
           throw new Error("Failed to fetch appointments");

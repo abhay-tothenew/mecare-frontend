@@ -10,24 +10,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [user, setUser] = useState<any>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const login = (user: any): never[] => {
-    setUser(user);
-    setIsAuthenticated(true);
-    setUser(null);
-    setIsLoading(false);
-    return [];
-  };
-
-  const logout = (): never[] => {
-    setUser(null);
-    setIsAuthenticated(false);
-    redirect('/');
-    return [];
-  };
   return (
     <AuthProvider>
       <html lang="en">
@@ -36,6 +18,6 @@ export default function RootLayout({
           {children}
         </body>
       </html>
-      </AuthProvider>
+    </AuthProvider>
   );
 }

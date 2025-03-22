@@ -8,6 +8,14 @@ import Input from "@/app/components/common/Input";
 import Select from "@/app/components/common/Select";
 import TextArea from "@/app/components/common/TextArea";
 import Card from "@/app/components/common/Card";
+import Modal from "@/app/components/common/Modal";
+import {
+  validateFullName,
+  validateAge,
+  validatePhoneNumber,
+  validateEmail,
+} from "@/app/utils/validation";
+import { useAuth } from "@/app/utils/context/Authcontext";
 
 interface AppointmentDetails {
   doctor: {
@@ -27,6 +35,8 @@ interface AppointmentDetails {
 
 export default function ConfirmDetails() {
   const router = useRouter();
+  const { user } = useAuth();
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const [appointmentDetails, setAppointmentDetails] =
     useState<AppointmentDetails | null>(null);
   const [formData, setFormData] = useState({
@@ -38,6 +48,13 @@ export default function ConfirmDetails() {
     healthProblem: "",
   });
 
+  const [errors, setErrors] = useState({
+    fullName: "",
+    age: "",
+    phoneNumber: "",
+    email: "",
+  });
+
   const searchParams = useSearchParams();
   const details = searchParams.get("details");
   let detailsObject = null;
@@ -45,6 +62,39 @@ export default function ConfirmDetails() {
     detailsObject = JSON.parse(details);
     console.log("details-->", detailsObject);
   }
+
+  const validateForm = () => {
+    let valid = true;
+    const newErrors = {
+      fullName: "",
+      age: "",
+      phoneNumber: "",
+      email: "",
+    };
+
+    if (!validateFullName(formData.fullName)) {
+      newErrors.fullName = "Full Name is required.";
+      valid = false;
+    }
+
+    if (!validateAge(formData.age)) {
+      newErrors.age = "Please enter a valid age.";
+      valid = false;
+    }
+
+    if (!validatePhoneNumber(formData.phoneNumber)) {
+      newErrors.phoneNumber = "Please enter a valid 10-digit phone number.";
+      valid = false;
+    }
+
+    if (!validateEmail(formData.email)) {
+      newErrors.email = "Please enter a valid email address.";
+      valid = false;
+    }
+
+    setErrors(newErrors);
+    return valid;
+  };
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -58,61 +108,30 @@ export default function ConfirmDetails() {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!user) {
+      setShowLoginModal(true);
+      return;
+    }
+
+    if (!validateForm()) {
+      return;
+    }
 
     const fullAppointmentData = {
       ...appointmentDetails,
       patient: formData,
     };
 
-    try {
-      const response = await fetch("http://localhost:5000/api/appointments", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          user_id: '384c86d0-8b8a-4e6e-ad98-fb6c158d1cb4',
-          doctor_id: detailsObject.id,
-          appointment_type: detailsObject.type === "Video Consultation" ? "online" : "in-person",
-          appointment_date: detailsObject.date,
-          appointment_time: detailsObject.time,
-        }),
-      });
+    console.log("Full appointment data:", fullAppointmentData);
 
-      const data = await response.json();
-      console.log('response!!!!--->',data );
-
-     if(response.status === 200){
-      console.log("Submitted appointment details", response);
-      console.log("Full appointment data:", fullAppointmentData);
-
-      router.push("/appointment/success");
-     }else{
-      throw new Error("Failed to submit appointment details");
-     }
-    } catch (error) {
-      console.log("Error submitting appointment details", error);
-    }
+    router.push("/appointment/success");
   };
 
   if (!details) {
-    return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          width: "100vw",
-          backgroundColor: "#1c4a2a",
-          color: "white",
-        }}
-      >
-        Loading...
-      </div>
-    );
+    return <div>Loading...</div>;
   }
 
   const genderOptions = [
@@ -167,6 +186,7 @@ export default function ConfirmDetails() {
               onChange={handleInputChange}
               required
               fullWidth
+              error={errors.fullName}
             />
 
             <div className={styles.formRow}>
@@ -178,6 +198,7 @@ export default function ConfirmDetails() {
                 value={formData.age}
                 onChange={handleInputChange}
                 required
+                error={errors.age}
               />
               <Select
                 label="Gender"
@@ -198,6 +219,7 @@ export default function ConfirmDetails() {
               onChange={handleInputChange}
               required
               fullWidth
+              error={errors.phoneNumber}
             />
 
             <Input
@@ -209,6 +231,7 @@ export default function ConfirmDetails() {
               onChange={handleInputChange}
               required
               fullWidth
+              error={errors.email}
             />
 
             <TextArea
@@ -233,6 +256,20 @@ export default function ConfirmDetails() {
           </form>
         </div>
       </div>
+
+      <Modal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)}>
+        <h2>Login Required</h2>
+        <p>Please login to book an appointment.</p>
+        <div className={styles.modalButtons}>
+          <Button variant="text" onClick={() => setShowLoginModal(false)}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={() => router.push("/auth/login")}>
+            Login
+          </Button>
+        </div>
+      </Modal>
+
       <Footer />
     </>
   );

@@ -89,7 +89,7 @@ export default function Category({
     }));
   };
 
-  console.log("filtered", filteredDoctors);
+  // console.log("filtered", filteredDoctors);
   return (
     <>
       <SearchBar />
@@ -248,7 +248,7 @@ export default function Category({
             {/* Doctors Grid */}
             <div className={styles.doctorGrid}>
               {filteredDoctors.map((doctor) => (
-                <div key={doctor.id} className={styles.doctorCard}>
+                <div key={doctor.id} className={styles.doctorCard} onClick={() => router.push(`/doctors/${doctor.doctor_id}`)}>
                   <img
                     src={doctor.image || "/assets/Frame.png"}
                     alt={doctor.name}

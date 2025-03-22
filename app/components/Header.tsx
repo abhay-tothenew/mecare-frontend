@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import styles from "../styles/Header.module.css";
 import { useAuth } from "../utils/context/Authcontext";
 
@@ -13,7 +13,6 @@ export default function Header() {
   let token = localStorage.getItem("token");
   const { user, logout } = useAuth();
 
-  console.log("user", user);
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -38,10 +37,8 @@ export default function Header() {
   }, [token]);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setUserData(null);
-    router.push("/");
+    logout();
+    redirect("/");
   };
 
   const handleClick = () => {
