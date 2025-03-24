@@ -16,6 +16,7 @@ interface Doctor {
   image: string;
   location: string;
   gender: string;
+  specialization: string;
 }
 
 export default function Category({
@@ -248,7 +249,8 @@ export default function Category({
             {/* Doctors Grid */}
             <div className={styles.doctorGrid}>
               {filteredDoctors.map((doctor) => (
-                <div key={doctor.id} className={styles.doctorCard} onClick={() => router.push(`/doctors/${doctor.doctor_id}`)}>
+                <div key={doctor.id} className={styles.doctorCard}>
+                  <div onClick={() => router.push(`/doctors/${doctor.doctor_id}`)}>
                   <img
                     src={doctor.image || "/assets/Frame.png"}
                     alt={doctor.name}
@@ -264,7 +266,7 @@ export default function Category({
                         width={20}
                         height={20}
                       />
-                      <span>{display_category}</span>
+                      <span>{doctor.specialization}</span>
                     </div>
 
                     <div className={styles.infoItem}>
@@ -285,6 +287,7 @@ export default function Category({
                   >
                     Ratings: {doctor.ratings || "4.5"} Stars
                   </p>
+                  </div>
                   <button
                     className={styles.bookButton}
                     onClick={() => {

@@ -61,6 +61,7 @@ export default function ConfirmDetails() {
   if (details) {
     detailsObject = JSON.parse(details);
     console.log("details-->", detailsObject);
+    // setAppointmentDetails(detailsObject);
   }
 
   const validateForm = () => {
@@ -107,8 +108,9 @@ export default function ConfirmDetails() {
       [name]: value,
     }));
   };
+  console.log("--->", user?.token);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!user) {
@@ -121,13 +123,45 @@ export default function ConfirmDetails() {
     }
 
     const fullAppointmentData = {
-      ...appointmentDetails,
       patient: formData,
     };
 
     console.log("Full appointment data:", fullAppointmentData);
 
-    router.push("/appointment/success");
+    try {
+      const response = await fetch("http://localhost:5000/api/appointments", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          user_id: user.user_id,
+          doctor_id: detailsObject.id,
+          appointment_date: detailsObject.date,
+          appointment_time: detailsObject.time,
+          appointment_type:
+            detailsObject.type === "Video Consultation"
+              ? "online"
+              : "in-person",
+          patient_name: formData.fullName,
+          patient_gender: formData.gender,
+          patient_age: formData.age,
+          phone_number: formData.phoneNumber,
+          patient_email: formData.email,
+          health_description: formData.healthProblem,
+        }),
+      });
+
+      const data = await response.json();
+      console.log("Appointment data:", data);
+
+      if (data.success) {
+        router.push("/appointment/success");
+      }
+    } catch (error) {
+      console.log("Error submitting appointment:", error);
+    }
   };
 
   if (!details) {

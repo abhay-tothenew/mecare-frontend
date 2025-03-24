@@ -3,7 +3,7 @@ import Image from "next/image";
 import styles from "@/app/styles/schedule-card.module.css";
 import { useState, useEffect } from "react";
 import Footer from "@/app/components/Footer";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { use } from "react";
 import { Appointment, Doctor, PageParams } from "./type";
 
@@ -29,6 +29,52 @@ export default function ScheduleSlot({
   const [activeTimeSection, setActiveTimeSection] = useState<
     "morning" | "evening"
   >("morning");
+  const [unavailableDates, setUnavailableDates] = useState<Map<string,Set<string>>>(new Map());
+
+  const formatDate = (date: Date) => {
+    return date.toISOString().split("T")[0];
+  };
+
+  useEffect(() => {
+    const fetchSlots = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:5000/api/slots/${doctorId}`
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch slots");
+        }
+
+        const data = await response.json();
+        const unavailableMap = new Map<string, Set<string>>();
+
+        data.slots.forEach((slot:any)=>{
+          if(!slot.availability_status && slot.slot_date && slot.start_time){
+            const date_formatted = formatDate(slot.slot_date);
+
+            if(!unavailableMap.has(date_formatted)){
+              unavailableMap.set(date_formatted, new Set());
+            }
+
+            unavailableMap.get(date_formatted)?.add(slot.start_time);
+          
+          }
+        });
+
+        // console.log("unavailable dates", unavailableMap);
+
+        setUnavailableDates(unavailableMap);
+
+      } catch (error) {
+        console.log("Error fetching slots", error);
+      }
+    };
+
+    fetchSlots();
+  }, [doctorId]);
+
+  // console.log("unavailable dates", unavailableDates);
 
   useEffect(() => {
     const fetchDoctorById = async () => {
@@ -36,6 +82,10 @@ export default function ScheduleSlot({
         const response = await fetch(
           `http://localhost:5000/api/doctors/${doctorId}`
         );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch doctor details");
+        }
         const data = await response.json();
         console.log("doctor details", data);
         setDoctorDetails(data.doctor);
@@ -104,6 +154,11 @@ export default function ScheduleSlot({
     fetchAppointments();
   }, [doctorId]);
 
+
+  const isTimeSlotAvailable = (date:string,time:string) => {
+    return !unavailableDates.get(date)?.has(time);
+  }
+
   const generateTimeSlots = () => {
     const morningSlots = [];
     const eveningSlots = [];
@@ -113,7 +168,10 @@ export default function ScheduleSlot({
         const time = `${hour.toString().padStart(2, "0")}:${minute
           .toString()
           .padStart(2, "0")}`;
-        morningSlots.push(time);
+
+          if (isTimeSlotAvailable(selectedDate,time)) {
+            morningSlots.push(time);
+          }
       }
     }
 
@@ -122,7 +180,9 @@ export default function ScheduleSlot({
         const time = `${hour.toString().padStart(2, "0")}:${minute
           .toString()
           .padStart(2, "0")}`;
-        eveningSlots.push(time);
+          if (isTimeSlotAvailable(selectedDate,time)) {
+            eveningSlots.push(time);
+          }
       }
     }
 
@@ -131,18 +191,17 @@ export default function ScheduleSlot({
 
   const { morningSlots, eveningSlots } = generateTimeSlots();
 
-  const formatDate = (date: Date) => {
-    return date.toISOString().split("T")[0];
-  };
+ 
 
   const isDateAvailable = (date: Date) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
     // Prevent selecting past dates
-    if (date < today) return false;
 
     const dateStr = formatDate(date);
+    if (date < today) return false;
+
     // Show all future dates as available
     return true;
   };
@@ -186,7 +245,6 @@ export default function ScheduleSlot({
       },
     };
 
-
     const encodedDetails = encodeURIComponent(
       JSON.stringify(appointmentDetails)
     );
@@ -201,7 +259,6 @@ export default function ScheduleSlot({
     const newDate = new Date(currentMonth);
     newDate.setMonth(newDate.getMonth() + increment);
 
-    // Prevent going back before current month
     const today = new Date();
     if (
       increment < 0 &&
