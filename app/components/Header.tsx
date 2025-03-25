@@ -104,26 +104,44 @@ export default function Header() {
           </li>
 
           {/* Auth Buttons for Mobile */}
-          <li className={styles.mobileAuthButtons}>
-            <button
-              className={styles.mobileLogin}
-              onClick={() => {
-                setIsOpen(false);
-                router.push("/auth/login");
-              }}
-            >
-              Login
-            </button>
-            <button
-              className={styles.mobileRegister}
-              onClick={() => {
-                setIsOpen(false);
-                router.push("/auth/register");
-              }}
-            >
-              Register
-            </button>
-          </li>
+          {userData ? (
+            <li className={styles.mobileAuthButtons}>
+              <button
+                className={styles.mobileLogin}
+                onClick={() => {
+                  setIsOpen(false);
+                  router.push("/user-profile");
+                }}
+              >
+                My Profile
+              </button>
+
+              <button className={styles.logout} onClick={handleLogout}>
+                Logout
+              </button>
+            </li>
+          ) : (
+            <li className={styles.mobileAuthButtons}>
+              <button
+                className={styles.mobileLogin}
+                onClick={() => {
+                  setIsOpen(false);
+                  router.push("/auth/login");
+                }}
+              >
+                Login
+              </button>
+              <button
+                className={styles.mobileRegister}
+                onClick={() => {
+                  setIsOpen(false);
+                  router.push("/auth/register");
+                }}
+              >
+                Register
+              </button>
+            </li>
+          )}
         </ul>
 
         {/* Desktop Auth Buttons */}

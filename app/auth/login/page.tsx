@@ -36,7 +36,7 @@ export default function Login() {
     });
 
     const data = await response.json();
-    // console.log("response--->", data);
+    console.log("response--->", data);
 
     if (data.token) {
       localStorage.setItem("token", data.token);

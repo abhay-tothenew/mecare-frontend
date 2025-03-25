@@ -16,22 +16,7 @@ import {
   validateEmail,
 } from "@/app/utils/validation";
 import { useAuth } from "@/app/utils/context/Authcontext";
-
-interface AppointmentDetails {
-  doctor: {
-    name: string;
-    specialty: string;
-  };
-  appointment: {
-    date: string;
-    time: string;
-    type: string;
-    location: {
-      name: string;
-      address: string;
-    };
-  };
-}
+import { AppointmentDetails } from "./types";
 
 export default function ConfirmDetails() {
   const router = useRouter();
@@ -113,6 +98,8 @@ export default function ConfirmDetails() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    console.log("user in confirm details", user,"details", detailsObject);
+
     if (!user) {
       setShowLoginModal(true);
       return;
@@ -144,12 +131,12 @@ export default function ConfirmDetails() {
             detailsObject.type === "Video Consultation"
               ? "online"
               : "in-person",
-          patient_name: formData.fullName,
-          patient_gender: formData.gender,
-          patient_age: formData.age,
-          phone_number: formData.phoneNumber,
-          patient_email: formData.email,
-          health_description: formData.healthProblem,
+          patient_name: fullAppointmentData.patient.fullName,
+          patient_gender: fullAppointmentData.patient.gender,
+          patient_age: fullAppointmentData.patient.age,
+          phone_number: fullAppointmentData.patient.phoneNumber,
+          patient_email: fullAppointmentData.patient.email,
+          health_description: fullAppointmentData.patient.healthProblem,
         }),
       });
 

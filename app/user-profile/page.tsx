@@ -11,11 +11,17 @@ import {
   Stethoscope,
 } from "lucide-react";
 import { UserData, Appointment, Doctor } from "./types";
+import { useAuth } from "@/app/utils/context/Authcontext";
+import Modal from "../components/common/Modal";
+import Button from "../components/Button";
+import { useRouter } from "next/navigation";
 
 export default function UserProfile() {
   const [activeTab, setActiveTab] = useState("pending");
   const [userData, setUserData] = useState<UserData>();
   const [userAppointments, setUserAppointments] = useState<Appointment[]>([]);
+  const { user } = useAuth();
+  const router = useRouter();
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -86,6 +92,7 @@ export default function UserProfile() {
 
   useEffect(() => {
     const fetchUserAppointments = async () => {
+      console.log(userData);
       try {
         const token = localStorage.getItem("token");
         const response = await fetch(
@@ -123,6 +130,34 @@ export default function UserProfile() {
     }
   }, [userData]);
 
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const handleReschedule = (appointmentId: string) => {
+    alert(appointmentId);
+  };
+
+  const handleCancel = async (appointmentId: string) => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/appointments/${appointmentId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        setShowDeleteModal(true);
+      }
+    } catch (error) {
+      console.log("Error cancelling appointment:", error);
+    }
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.profileHeader}>
@@ -141,7 +176,18 @@ export default function UserProfile() {
             <p>{userData?.phone}</p>
           </div>
         </div>
-        <button className={styles.editButton}>Edit Profile</button>
+        <button 
+          className={styles.editButton} 
+          onClick={() => {
+            if (userData) {
+              const searchParams = new URLSearchParams();
+              searchParams.set('userData', JSON.stringify(userData));
+              router.push(`/user-profile/editProfile?${searchParams.toString()}`);
+            }
+          }}
+        >
+          Edit Profile
+        </button>
       </div>
 
       <div className={styles.content}>
@@ -173,15 +219,15 @@ export default function UserProfile() {
             <div className={styles.infoGrid}>
               <div className={styles.infoItem}>
                 <label>Name</label>
-                <p>{userData?.emergency_contact?.name}</p>
+                <p>{userData?.emergency_name}</p>
               </div>
               <div className={styles.infoItem}>
                 <label>Relation</label>
-                <p>{userData?.emergency_contact?.relation}</p>
+                <p>{userData?.emergency_relation}</p>
               </div>
               <div className={styles.infoItem}>
                 <label>Phone</label>
-                <p>{userData?.emergency_contact?.phone}</p>
+                <p>{userData?.emergency_phone}</p>
               </div>
             </div>
           </div>
@@ -294,10 +340,20 @@ export default function UserProfile() {
                   {(appointment.status === "pending" ||
                     appointment.status === "confirmed") && (
                     <div className={styles.appointmentActions}>
-                      <button className={styles.rescheduleButton}>
+                      <button
+                        className={styles.rescheduleButton}
+                        onClick={() =>
+                          handleReschedule(appointment.appointment_id)
+                        }
+                      >
                         Reschedule
                       </button>
-                      <button className={styles.cancelButton}>Cancel</button>
+                      <button
+                        className={styles.cancelButton}
+                        onClick={() => handleCancel(appointment.appointment_id)}
+                      >
+                        Cancel
+                      </button>
                     </div>
                   )}
                 </div>
@@ -306,6 +362,23 @@ export default function UserProfile() {
           </div>
         </div>
       </div>
+      <Modal isOpen={showDeleteModal} onClose={() => setShowDeleteModal(false)}>
+        <h2>Appointment Deleted</h2>
+        <p>
+          Your appointment has been successfully deleted. You can now book a new
+          appointment.
+        </p>
+        <div className={styles.modalButtons}>
+          <Button
+            text="Close"
+            variant="secondary"
+            onClick={() => {
+              setShowDeleteModal(false);
+              window.location.reload();
+            }}
+          />
+        </div>
+      </Modal>
     </div>
   );
 }

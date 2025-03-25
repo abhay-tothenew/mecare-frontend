@@ -36,9 +36,7 @@ export interface UserData {
   gender: string;
   blood_group: string;
   address: string;
-  emergency_contact: {
-    name: string;
-    relation: string;
-    phone: string;
-  };
+  emergency_name: string;
+  emergency_relation: string;
+  emergency_phone: string;
 }

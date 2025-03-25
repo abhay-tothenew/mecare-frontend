@@ -47,12 +47,13 @@ export default function ScheduleSlot({
         }
 
         const data = await response.json();
+        console.log("slots----->>>", data.slots);
         const unavailableMap = new Map<string, Set<string>>();
 
         data.slots.forEach((slot:any)=>{
           if(!slot.availability_status && slot.slot_date && slot.start_time){
             const date_formatted = formatDate(slot.slot_date);
-
+            console.log("date_formatted",date_formatted,slot.slot_date);
             if(!unavailableMap.has(date_formatted)){
               unavailableMap.set(date_formatted, new Set());
             }
@@ -62,7 +63,6 @@ export default function ScheduleSlot({
           }
         });
 
-        // console.log("unavailable dates", unavailableMap);
 
         setUnavailableDates(unavailableMap);
 
@@ -74,7 +74,7 @@ export default function ScheduleSlot({
     fetchSlots();
   }, [doctorId]);
 
-  // console.log("unavailable dates", unavailableDates);
+  console.log("unavailable dates", unavailableDates);
 
   useEffect(() => {
     const fetchDoctorById = async () => {
@@ -270,6 +270,8 @@ export default function ScheduleSlot({
 
     setCurrentMonth(newDate);
   };
+
+  console.log("selectedDate", selectedDate,unavailableDates);
 
   return (
     <>

@@ -6,18 +6,7 @@ import SearchBar from "@/app/components/SearchBar";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { use } from "react";
-
-interface Doctor {
-  doctor_id: string;
-  id: number;
-  name: string;
-  experience: string;
-  ratings: number;
-  image: string;
-  location: string;
-  gender: string;
-  specialization: string;
-}
+import { Doctor } from "./type";
 
 export default function Category({
   params,
@@ -34,6 +23,12 @@ export default function Category({
     experience: "all",
     gender: "all",
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const first_index = (currentPage - 1) * 6;
+  const last_index = currentPage * 6;
+  const currentDoctors = filteredDoctors.slice(first_index, last_index);
 
   const router = useRouter();
 
@@ -46,8 +41,9 @@ export default function Category({
           `http://localhost:5000/api/doctors/specialization/${category_name}`
         );
         const data = await response.json();
-        console.log("data--->", data);
-        setDoctors(data);
+        // console.log("data--->", data);
+        setDoctors(data.doctors);
+        setTotalPages(data.Pagination.total_pages);
       } catch (error) {
         console.log(error);
       }
@@ -88,6 +84,18 @@ export default function Category({
       ...prev,
       [type]: value,
     }));
+  };
+
+  const handleNext = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+    }
   };
 
   // console.log("filtered", filteredDoctors);
@@ -248,45 +256,47 @@ export default function Category({
 
             {/* Doctors Grid */}
             <div className={styles.doctorGrid}>
-              {filteredDoctors.map((doctor) => (
+              {currentDoctors.map((doctor) => (
                 <div key={doctor.id} className={styles.doctorCard}>
-                  <div onClick={() => router.push(`/doctors/${doctor.doctor_id}`)}>
-                  <img
-                    src={doctor.image || "/assets/Frame.png"}
-                    alt={doctor.name}
-                    className={styles.doctorImage}
-                  />
-                  <h3>{doctor.name}</h3>
-
-                  <div className={styles.doctorInfo}>
-                    <div className={styles.infoItem}>
-                      <Image
-                        src="/assets/Stethoscope.svg"
-                        alt="Specialty"
-                        width={20}
-                        height={20}
-                      />
-                      <span>{doctor.specialization}</span>
-                    </div>
-
-                    <div className={styles.infoItem}>
-                      <Image
-                        src="/assets/Hourglass.svg"
-                        alt="Experience"
-                        width={20}
-                        height={20}
-                      />
-                      <span>{doctor.experience} years</span>
-                    </div>
-                  </div>
-
-                  <p
-                    style={{
-                      marginBottom: "15px",
-                    }}
+                  <div
+                    onClick={() => router.push(`/doctors/${doctor.doctor_id}`)}
                   >
-                    Ratings: {doctor.ratings || "4.5"} Stars
-                  </p>
+                    <img
+                      src={doctor.image || "/assets/Frame.png"}
+                      alt={doctor.name}
+                      className={styles.doctorImage}
+                    />
+                    <h3>{doctor.name}</h3>
+
+                    <div className={styles.doctorInfo}>
+                      <div className={styles.infoItem}>
+                        <Image
+                          src="/assets/Stethoscope.svg"
+                          alt="Specialty"
+                          width={20}
+                          height={20}
+                        />
+                        <span>{doctor.specialization}</span>
+                      </div>
+
+                      <div className={styles.infoItem}>
+                        <Image
+                          src="/assets/Hourglass.svg"
+                          alt="Experience"
+                          width={20}
+                          height={20}
+                        />
+                        <span>{doctor.experience} years</span>
+                      </div>
+                    </div>
+
+                    <p
+                      style={{
+                        marginBottom: "15px",
+                      }}
+                    >
+                      Ratings: {doctor.ratings || "4.5"} Stars
+                    </p>
                   </div>
                   <button
                     className={styles.bookButton}
@@ -303,6 +313,59 @@ export default function Category({
               ))}
             </div>
           </div>
+        </div>
+
+        {/* Pagination Controls */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "20px",
+            gap: "10px",
+            marginBottom: "20px",
+            alignItems: "center",
+          }}
+        >
+          <button
+            onClick={handlePrev}
+            disabled={currentPage === 1}
+            style={{
+              backgroundColor: "transparent",
+              border: "none",
+              cursor: "pointer",
+              color: "black",
+              fontSize: "16px",
+              fontWeight: "bold",
+              padding: "0",
+            }}
+          >
+            Prev
+          </button>
+          <span
+            style={{
+              fontSize: "16px",
+              fontWeight: "bold",
+              color: "black",
+              padding: "0",
+            }}
+          >
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={handleNext}
+            disabled={currentPage === totalPages}
+            style={{
+              backgroundColor: "transparent",
+              border: "none",
+              cursor: "pointer",
+              color: "black",
+              fontSize: "16px",
+              fontWeight: "bold",
+              padding: "0",
+            }}
+          >
+            Next
+          </button>
         </div>
       </div>
       <Footer />

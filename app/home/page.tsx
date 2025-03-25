@@ -3,21 +3,13 @@ import React, { useState, useEffect, use } from "react";
 import styles from "../styles/home.module.css";
 import Image from "next/image";
 import Footer from "../components/Footer";
-import Doctors from "../../public/data/doctors.json";
+// import Doctors from "../../public/data/doctors.json";
 import SearchBar from "../components/SearchBar";
 import { useRouter } from "next/navigation";
 // import { auth0 } from "../lib/auth0";
+import { Doctors } from "./type";
 
-interface Doctors {
-  id: number;
-  name: string;
-  experience: string;
-  ratings: number;
-  image: string;
-  location: string;
-  specialization: string;
-  doctor_id: string;
-}
+
 
 const Home = () => {
   const router = useRouter();
@@ -31,7 +23,7 @@ const Home = () => {
         const data = await response.json();
 
         console.log("Top Doctors", data);
-        setDoctors(data);
+        setDoctors(data.doctors);
       } catch (err) {
         console.log("Error fetching doctors", err);
       }
@@ -97,7 +89,7 @@ const Home = () => {
         <div className={styles.topDoctorsGrid}>
           {topDoctors.map((doctor, index) => (
             <div key={index} className={styles.topDoctorCard}>
-              <div onClick={() => router.push(`/doctors/${doctor.doctor_id}`)}>
+              <div>
                 <div className={styles.imageContainer}>
                   <Image
                     src={doctor.image || "/assets/Frame.png"}

@@ -3,15 +3,11 @@ import { useState } from "react";
 import Link from "next/link";
 import styles from "../../styles/register-page.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faLock,
-  faEnvelope,
-  faUser,
-  faPhone,
-} from "@fortawesome/free-solid-svg-icons";
+
 
 import { registerUser } from "../../utils/api/auth/auth";
 import { redirect } from "next/navigation";
+import { useAuth } from "@/app/utils/context/Authcontext";
 
 interface RegisterUser {
   displayName: string;
@@ -29,7 +25,7 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [userType, setUserType] = useState("patient");
-
+  const {login } = useAuth();
   const user: RegisterUser = {
     displayName: name,
     name,
@@ -59,9 +55,25 @@ export default function Register() {
       }),
     });
 
-    if (response.status === 201) {
+    const data = await response.json();
+
+    if (!data.success) {
+      throw new Error("Failed to register user");
+    }
+
+    if (data.token) {
+      localStorage.setItem("token", data.token);
+      login({
+        id: data.user.id,
+        name: data.user.name,
+        email: data.user.email,
+        token: data.token,
+        user_id: data.user.user_id,
+      });
       redirect("/home");
     }
+
+    redirect("/home");
   };
 
   return (
