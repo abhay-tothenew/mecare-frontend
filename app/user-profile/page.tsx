@@ -15,6 +15,7 @@ import { useAuth } from "@/app/utils/context/Authcontext";
 import Modal from "../components/common/Modal";
 import Button from "../components/Button";
 import { useRouter } from "next/navigation";
+import RescheduleModal from "../components/RescheduleModal";
 
 export default function UserProfile() {
   const [activeTab, setActiveTab] = useState("pending");
@@ -22,6 +23,9 @@ export default function UserProfile() {
   const [userAppointments, setUserAppointments] = useState<Appointment[]>([]);
   const { user } = useAuth();
   const router = useRouter();
+  const [showRescheduleModal, setShowRescheduleModal] = useState(false);
+  const [selectedAppointmentId, setSelectedAppointmentId] =
+    useState<string>("");
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -63,6 +67,37 @@ export default function UserProfile() {
     }
   };
 
+  const fetchUserAppointments = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `http://localhost:5000/api/appointments/${userData?.user_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+      console.log("user appointments", data);
+
+      const appointmentsWithDoctors = await Promise.all(
+        data.appointments.map(async (appointment: Appointment) => {
+          const doctorDetails = await fetchDoctorDetails(appointment.doctor_id);
+          return {
+            ...appointment,
+            doctor: doctorDetails,
+          };
+        })
+      );
+
+      setUserAppointments(appointmentsWithDoctors);
+    } catch (err) {
+      console.log("Error fetching user appointments", err);
+    }
+  };
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -91,40 +126,6 @@ export default function UserProfile() {
   }, []);
 
   useEffect(() => {
-    const fetchUserAppointments = async () => {
-      console.log(userData);
-      try {
-        const token = localStorage.getItem("token");
-        const response = await fetch(
-          `http://localhost:5000/api/appointments/${userData?.user_id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        const data = await response.json();
-        console.log("user appointments", data);
-
-        const appointmentsWithDoctors = await Promise.all(
-          data.appointments.map(async (appointment: Appointment) => {
-            const doctorDetails = await fetchDoctorDetails(
-              appointment.doctor_id
-            );
-            return {
-              ...appointment,
-              doctor: doctorDetails,
-            };
-          })
-        );
-
-        setUserAppointments(appointmentsWithDoctors);
-      } catch (err) {
-        console.log("Error fetching user appointments", err);
-      }
-    };
-
     if (userData?.user_id) {
       fetchUserAppointments();
     }
@@ -133,18 +134,32 @@ export default function UserProfile() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const handleReschedule = (appointmentId: string) => {
-    alert(appointmentId);
+    setSelectedAppointmentId(appointmentId);
+    setShowRescheduleModal(true);
+  };
+
+  const handleRescheduleSuccess = () => {
+    // Refresh appointments after successful reschedule
+    if (userData?.user_id) {
+      fetchUserAppointments();
+    }
   };
 
   const handleCancel = async (appointmentId: string) => {
+    console.log("0000", appointmentId);
     try {
       const response = await fetch(
         `http://localhost:5000/api/appointments/${appointmentId}`,
         {
-          method: "DELETE",
+          method: "PUT",
           headers: {
+            "Content-Type": "application/json",
             Authorization: `Bearer ${user?.token}`,
           },
+
+          body: JSON.stringify({
+            status: "cancelled",
+          }),
         }
       );
 
@@ -176,13 +191,15 @@ export default function UserProfile() {
             <p>{userData?.phone}</p>
           </div>
         </div>
-        <button 
-          className={styles.editButton} 
+        <button
+          className={styles.editButton}
           onClick={() => {
             if (userData) {
               const searchParams = new URLSearchParams();
-              searchParams.set('userData', JSON.stringify(userData));
-              router.push(`/user-profile/editProfile?${searchParams.toString()}`);
+              searchParams.set("userData", JSON.stringify(userData));
+              router.push(
+                `/user-profile/editProfile?${searchParams.toString()}`
+              );
             }
           }}
         >
@@ -363,10 +380,10 @@ export default function UserProfile() {
         </div>
       </div>
       <Modal isOpen={showDeleteModal} onClose={() => setShowDeleteModal(false)}>
-        <h2>Appointment Deleted</h2>
+        <h2>Appointment Cancelled</h2>
         <p>
-          Your appointment has been successfully deleted. You can now book a new
-          appointment.
+          Your appointment has been successfully cancelled. You can now book a
+          new appointment.
         </p>
         <div className={styles.modalButtons}>
           <Button
@@ -379,6 +396,13 @@ export default function UserProfile() {
           />
         </div>
       </Modal>
+      <RescheduleModal
+        isOpen={showRescheduleModal}
+        onClose={() => setShowRescheduleModal(false)}
+        userId={userData?.user_id || ""}
+        appointmentId={selectedAppointmentId || ""}
+        onSuccess={handleRescheduleSuccess}
+      />
     </div>
   );
 }

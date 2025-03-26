@@ -22,11 +22,11 @@ export const AuthContext = createContext<AuthContext | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-//   const router = useRouter();
+  //   const router = useRouter();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
+    if (token && user === null) {
       setUser({
         id: token,
         name: "John Doe",
@@ -35,7 +35,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         user_id: "384c86d0-8b8a-4e6e-ad98-fb6c158d1cb4",
       });
     }
-  }, []);
+  }, [user]);
 
   const login = (userData: User) => {
     localStorage.setItem("token", userData.token);

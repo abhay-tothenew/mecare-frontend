@@ -93,12 +93,14 @@ export default function ConfirmDetails() {
       [name]: value,
     }));
   };
-  console.log("--->", user?.token);
 
+
+  const user_id = localStorage.getItem("userID");
+  console.log("user_id", user_id);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    console.log("user in confirm details", user,"details", detailsObject);
+    // console.log("user in confirm details", user,"details", detailsObject);
 
     if (!user) {
       setShowLoginModal(true);
@@ -123,7 +125,7 @@ export default function ConfirmDetails() {
           Authorization: `Bearer ${user.token}`,
         },
         body: JSON.stringify({
-          user_id: user.user_id,
+          user_id: user_id,
           doctor_id: detailsObject.id,
           appointment_date: detailsObject.date,
           appointment_time: detailsObject.time,

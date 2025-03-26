@@ -53,6 +53,10 @@ export default function Login() {
     // console.log("Response-->", response);
   };
 
+  const handleGoogleLogin = () => {
+    redirect("http://localhost:5000/auth/google");
+  };
+
   const handleReset = () => {
     setEmail("");
     setPassword("");
@@ -90,7 +94,38 @@ export default function Login() {
         <button className={styles.resetButton} onClick={handleReset}>
           Reset
         </button>
-        <p className={styles.forgotPassword}>Forgot Password?</p>
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: 5,
+            alignItems: "center",
+            textAlign: "center",
+            width: "100%",
+          }}
+        >
+          <p
+            style={{
+              fontSize: 14,
+              color: "#8c8c8c",
+            }}
+          >
+            OR
+          </p>
+        </div>
+        {/* Continue with Google */}
+        <button className={styles.googleButton} onClick={handleGoogleLogin}>
+          <img
+            src={"/assets/google_logo.svg"}
+            style={{
+              width: 20,
+              height: 20,
+              marginRight: 10,
+            }}
+          />
+          Continue with Google
+        </button>
       </div>
     </div>
   );

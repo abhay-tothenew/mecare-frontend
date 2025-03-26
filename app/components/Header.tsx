@@ -8,11 +8,25 @@ import { useAuth } from "../utils/context/Authcontext";
 export default function Header() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const [userData, setUserData] = useState<{ name: string } | null>(null);
+  const [userData, setUserData] = useState<{
+    name: string;
+    email: string;
+    user_id: string;
+  } | null>(null);
 
   let token = localStorage.getItem("token");
-  const { user, logout } = useAuth();
+  const { user, logout, login } = useAuth();
 
+  // const handleAuthData = (data: any, token: string) => {
+  //   console.log("handleAuthData", data);
+  //   login({
+  //     id: token,
+  //     name: userData?.name || "",
+  //     email: userData?.email || "",
+  //     token: token,
+  //     user_id: userData?.user_id || "",
+  //   });
+  // };
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -26,7 +40,14 @@ export default function Header() {
           }
         );
         const data = await response.json();
-        // console.log("header user data", data);
+        console.log("header user data", data);
+        if (localStorage.getItem("userID") != data.user.user_id) {
+          localStorage.setItem("userID", data.user.user_id);
+        }
+
+        // if (token) {
+        //   handleAuthData(data, token);
+        // }
         setUserData(data.user);
       } catch (err) {
         console.log("Error fetching user data", err);
@@ -35,6 +56,12 @@ export default function Header() {
 
     fetchUserData();
   }, [token]);
+
+  useEffect(() => {
+    const google_login = localStorage.getItem("google_login");
+
+    console.log("google_login", google_login);
+  }, []);
 
   const handleLogout = () => {
     logout();

@@ -15,7 +15,7 @@
   );
   backdrop-filter: blur(10px);
   width: 360px;
-  height: 387px;
+  height: 487px;
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
@@ -100,6 +100,25 @@
   transition: all 0.3s ease;
   width: 100%;
   margin-top: 20px;
+}
+
+.googleButton{
+  background-color: #fff;
+  color: #1c4a2a;
+  padding: 12px 24px;
+  border: 1px solid #e0e8e0;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  justify-content: center;
 }
 
 .loginButton:hover {
