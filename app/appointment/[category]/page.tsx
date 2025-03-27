@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import styles from "../../styles/categoryDoctor.module.css";
 import Footer from "@/app/components/Footer";
-import SearchBar from "@/app/components/SearchBar";
+// import SearchBar from "@/app/components/SearchBar";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { use } from "react";
@@ -25,6 +25,7 @@ export default function Category({
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const first_index = (currentPage - 1) * 6;
   const last_index = currentPage * 6;
@@ -35,13 +36,17 @@ export default function Category({
   useEffect(() => {
     const fetchBySpecialty = async () => {
       try {
-        const category_name =
-          category.charAt(0).toUpperCase() + category.slice(1);
+        const categoryName = category.split("_").join(" ");
+        // console.log("category_name", categoryName);
+          // category.charAt(0).toUpperCase() + category.slice(1);
+          const category_name = categoryName.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+          
+          console.log("category_name", category_name);
         const response = await fetch(
           `http://localhost:5000/api/doctors/specialization/${category_name}`
         );
         const data = await response.json();
-        // console.log("data--->", data);
+        console.log("data category--->", data);
         setDoctors(data.doctors);
         setTotalPages(data.Pagination.total_pages);
       } catch (error) {
@@ -52,10 +57,25 @@ export default function Category({
     fetchBySpecialty();
   }, []);
 
-  // Filtering as per the selected filters
+
+  console.log("doctos0000",doctors);
+
+  // Add search functionality
   useEffect(() => {
     let updatedDoctors = doctors;
 
+    // Apply search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      updatedDoctors = updatedDoctors.filter(
+        (doctor) =>
+          doctor.name.toLowerCase().includes(query) ||
+          doctor.specialization.toLowerCase().includes(query) ||
+          (doctor.location && doctor.location.toLowerCase().includes(query))
+      );
+    }
+
+    // Apply other filters
     if (filters.rating > 0) {
       updatedDoctors = updatedDoctors.filter(
         (doctor) => doctor.ratings === filters.rating
@@ -76,7 +96,7 @@ export default function Category({
     }
 
     setFilteredDoctors(updatedDoctors);
-  }, [filters, doctors]);
+  }, [filters, doctors, searchQuery]);
 
   // Handle filter changes
   const handleFilterChange = (type: string, value: string | number) => {
@@ -101,7 +121,18 @@ export default function Category({
   // console.log("filtered", filteredDoctors);
   return (
     <>
-      <SearchBar />
+      {/* <SearchBar /> */}
+
+      {/* Add Search Box */}
+          <div className={styles.searchBox}>
+            <input
+              type="text"
+              placeholder="Search by name, specialization, or location..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className={styles.searchInput}
+            />
+          </div>
 
       <div className={styles.container}>
         <div className={styles.doctorsContainer}>
@@ -111,6 +142,8 @@ export default function Category({
               Book appointments with minimum wait-time & verified doctor details
             </p>
           </div>
+
+          
 
           {/* Mobile filters - Dropdown version */}
           <div className={styles.mobileFilters}>
@@ -163,8 +196,8 @@ export default function Category({
                 value={filters.gender}
               >
                 <option value="all">Gender: Show all</option>
-                <option value="male">Gender: Male</option>
-                <option value="female">Gender: Female</option>
+                <option value="Male">Gender: Male</option>
+                <option value="Female">Gender: Female</option>
               </select>
             </div>
           </div>
@@ -295,7 +328,7 @@ export default function Category({
                         marginBottom: "15px",
                       }}
                     >
-                      Ratings: {doctor.ratings || "4.5"} Stars
+                      Ratings: {doctor.ratings || "4"} Stars
                     </p>
                   </div>
                   <button

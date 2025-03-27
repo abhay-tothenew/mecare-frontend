@@ -40,7 +40,7 @@ export default function Appointment() {
 
   return (
     <>
-      <SearchBar />
+      {/* <SearchBar /> */}
 
       <div className={styles.container}>
         <div className={styles.categoriesContainer}>
@@ -51,7 +51,7 @@ export default function Appointment() {
               <div
                 className={styles.category}
                 key={index}
-                onClick={() => handleCategory(category.category_tag)}
+                onClick={() => handleCategory(category.category_name)}
               >
                 <Image
                   src={category.image_url || "/assets/Frame.png"}

@@ -15,7 +15,7 @@
   );
   backdrop-filter: blur(10px);
   width: 360px;
-  height: 487px;
+  min-height: 487px;
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
@@ -23,6 +23,7 @@
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 16px;
   padding: 32px 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .loginContainer h1 {
@@ -36,6 +37,7 @@
 .loginContainer p {
   color: #8c8c8c;
   font-family: "Montserrat", sans-serif;
+  margin: 0;
 }
 
 .loginContainer a {
@@ -43,13 +45,18 @@
   text-decoration: none;
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
+  transition: color 0.2s ease;
 }
+
+.loginContainer a:hover {
+  color: #165122;
+}
+
 .inputContainer {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  /* background-color: red; */
-  width: 95%;
+  width: 100%;
   margin-top: 20px;
 }
 
@@ -62,6 +69,20 @@
   border-radius: 8px;
   padding: 10px;
   background: white;
+  transition: all 0.3s ease;
+}
+
+.inputWrapper:focus-within {
+  border-color: #1c4a2a;
+  box-shadow: 0 0 0 2px rgba(28, 74, 42, 0.1);
+}
+
+.inputWrapper.inputError {
+  border-color: #dc2626;
+}
+
+.inputWrapper.inputError:focus-within {
+  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1);
 }
 
 .icon {
@@ -69,6 +90,10 @@
   left: 12px;
   color: #1c4a2a;
   font-size: 15px;
+}
+
+.inputWrapper.inputError .icon {
+  color: #dc2626;
 }
 
 .inputWrapper input {
@@ -83,9 +108,28 @@
 
 .inputContainer p {
   margin-top: 10px;
+  font-weight: 500;
+  color: #4a4a4a;
 }
-.inputContainer input:focus {
-  outline: none;
+
+.errorText {
+  color: #dc2626;
+  font-size: 12px;
+  margin-top: 4px;
+  font-family: "Montserrat", sans-serif;
+}
+
+.errorMessage {
+  background-color: #fee2e2;
+  color: #dc2626;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  text-align: center;
+  width: 100%;
+  font-family: "Montserrat", sans-serif;
+  border: 1px solid #fecaca;
 }
 
 .loginButton {
@@ -100,9 +144,88 @@
   transition: all 0.3s ease;
   width: 100%;
   margin-top: 20px;
+  font-family: "Montserrat", sans-serif;
 }
 
-.googleButton{
+.loginButton:disabled {
+  background-color: #8c8c8c;
+  cursor: not-allowed;
+}
+
+.loginButton:not(:disabled):hover {
+  background-color: #165122;
+  transform: translateY(-1px);
+}
+
+.loginButton.loading {
+  position: relative;
+  color: transparent;
+}
+
+.loginButton.loading::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 50%;
+  left: 50%;
+  margin: -10px 0 0 -10px;
+  border: 2px solid #ffffff;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.resetButton {
+  background-color: #c6b09a;
+  color: #fff;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  margin-top: 10px;
+  font-family: "Montserrat", sans-serif;
+}
+
+.resetButton:hover:not(:disabled) {
+  background-color: #b39b85;
+  transform: translateY(-1px);
+}
+
+.resetButton:disabled {
+  background-color: #8c8c8c;
+  cursor: not-allowed;
+}
+
+.divider {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 20px 0;
+  position: relative;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: #e0e0e0;
+}
+
+.divider p {
+  padding: 0 16px;
+  font-size: 14px;
+  color: #8c8c8c;
+  font-weight: 500;
+}
+
+.googleButton {
   background-color: #fff;
   color: #1c4a2a;
   padding: 12px 24px;
@@ -115,39 +238,37 @@
   width: 100%;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
   margin-top: 10px;
   margin-bottom: 20px;
-  justify-content: center;
+  font-family: "Montserrat", sans-serif;
 }
 
-.loginButton:hover {
-  background-color: #165122;
-}
-.forgotPassword {
-  color: #1c4a2a;
-  width: 100%;
-  font-weight: 500;
-  text-align: center;
-  margin-top: 10px;
+.googleButton:hover {
+  background-color: #f8f8f8;
+  border-color: #1c4a2a;
+  transform: translateY(-1px);
 }
 
-.resetButton {
-  background-color: #c6b09a;
-  color: #fff;
-  padding: 12px 24px;
-  border: 1px solid #e0e8e0;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  width: 100%;
-  margin-top: 10px;
-  /* margin: 10px 10px 5px 10px; */
-  margin-top: 10px;
+.googleIcon {
+  width: 20px;
+  height: 20px;
 }
 
-.resetButton:hover {
-  /* background-color: #F3F3F3; */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 480px) {
+  .loginContainer {
+    width: 90%;
+    margin: 0 20px;
+    padding: 24px 16px;
+  }
 }

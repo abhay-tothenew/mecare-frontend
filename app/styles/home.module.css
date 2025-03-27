@@ -41,6 +41,23 @@
   font-family: "Montserrat", sans-serif;
 }
 
+.results {
+  margin-top: 20px;
+}
+
+.doctorCard {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  background: #fff;
+}
+
+.noResults {
+  color: red;
+  margin-top: 10px;
+}
+
 .searchBox {
   display: flex;
   justify-content: center;

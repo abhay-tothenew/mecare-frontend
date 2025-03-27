@@ -11,9 +11,17 @@ interface LoginUser {
   password: string;
 }
 
+interface ValidationErrors {
+  email?: string;
+  password?: string;
+}
+
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState<ValidationErrors>({});
+  const [apiError, setApiError] = useState("");
   const { login } = useAuth();
 
   const user: LoginUser = {
@@ -23,34 +31,113 @@ export default function Login() {
 
   // const { login } = useContext(AuthContext);
 
-  const handleSubmit = async () => {
-    // e.preventDefault();
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
-    //TODO: use utils/api/auth/auth.ts
-    const response = await fetch("http://localhost:5000/api/users/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
-    });
+  const validatePassword = (password: string) => {
+    if (password.length < 6)
+      return "Password must be at least 6 characters long";
+    // if (!/[A-Z]/.test(password)) return "Password must contain at least one uppercase letter";
+    if (!/[a-z]/.test(password))
+      return "Password must contain at least one lowercase letter";
+    if (!/[0-9]/.test(password))
+      return "Password must contain at least one number";
+    return "";
+  };
 
-    const data = await response.json();
-    console.log("response--->", data);
+  const validateForm = () => {
+    const newErrors: ValidationErrors = {};
 
-    if (data.token) {
-      localStorage.setItem("token", data.token);
-      login({
-        id: data.user.id,
-        name: data.user.name,
-        email: data.user.email,
-        token: data.token,
-        user_id: data.user.user_id,
-      });
-      redirect("/home");
+    if (!email) {
+      newErrors.email = "Email is required";
+    } else if (!validateEmail(email)) {
+      newErrors.email = "Please enter a valid email address";
     }
 
-    // console.log("Response-->", response);
+    if (!password) {
+      newErrors.password = "Password is required";
+    } else {
+      const passwordError = validatePassword(password);
+      if (passwordError) {
+        newErrors.password = passwordError;
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async () => {
+    if (!validateForm()) return;
+
+    setIsLoading(true);
+    setApiError("");
+
+    try {
+      const response = await fetch("http://localhost:5000/api/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Login failed");
+      }
+
+      if (data.token && data.success) {
+        localStorage.setItem("token", data.token);
+        login({
+          id: data.user.id,
+          name: data.user.name,
+          email: data.user.email,
+          token: data.token,
+          user_id: data.user.user_id,
+        });
+        redirect("/home");
+      }
+    } catch (err: any) {
+      setApiError(err.message || "An error occurred during login");
+    } finally {
+      if (localStorage.getItem("token")) {
+        redirect("/home");
+      }
+      setIsLoading(false);
+    }
+  };
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: "email" | "password"
+  ) => {
+    const value = e.target.value;
+    if (field === "email") {
+      setEmail(value);
+      if (value && !validateEmail(value)) {
+        setErrors((prev) => ({
+          ...prev,
+          email: "Please enter a valid email address",
+        }));
+      } else {
+        setErrors((prev) => ({ ...prev, email: undefined }));
+      }
+    } else {
+      setPassword(value);
+      if (value) {
+        const passwordError = validatePassword(value);
+        setErrors((prev) => ({
+          ...prev,
+          password: passwordError || undefined,
+        }));
+      } else {
+        setErrors((prev) => ({ ...prev, password: undefined }));
+      }
+    }
   };
 
   const handleGoogleLogin = () => {
@@ -60,6 +147,8 @@ export default function Login() {
   const handleReset = () => {
     setEmail("");
     setPassword("");
+    setErrors({});
+    setApiError("");
   };
   return (
     <div className={styles.container}>
@@ -68,61 +157,74 @@ export default function Login() {
         <p>
           Are you a new member? <Link href="/auth/register">Sign up here</Link>
         </p>
+
+        {apiError && <div className={styles.errorMessage}>{apiError}</div>}
+
         <div className={styles.inputContainer}>
           <p>Email</p>
-          <div className={styles.inputWrapper}>
+          <div
+            className={`${styles.inputWrapper} ${
+              errors.email ? styles.inputError : ""
+            }`}
+          >
             <AtSign className={styles.icon} size={18} />
             <input
-              type="text"
+              type="email"
               placeholder="Email"
-              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+              onChange={(e) => handleInputChange(e, "email")}
+              disabled={isLoading}
             />
           </div>
+          {errors.email && (
+            <span className={styles.errorText}>{errors.email}</span>
+          )}
+
           <p>Password</p>
-          <div className={styles.inputWrapper}>
+          <div
+            className={`${styles.inputWrapper} ${
+              errors.password ? styles.inputError : ""
+            }`}
+          >
             <LockIcon className={styles.icon} size={18} />
             <input
               type="password"
               placeholder="Password"
-              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              onChange={(e) => handleInputChange(e, "password")}
+              disabled={isLoading}
             />
           </div>
+          {errors.password && (
+            <span className={styles.errorText}>{errors.password}</span>
+          )}
         </div>
-        <button className={styles.loginButton} onClick={handleSubmit}>
-          Login
+
+        <button
+          className={`${styles.loginButton} ${isLoading ? styles.loading : ""}`}
+          onClick={handleSubmit}
+          // disabled={isLoading || Object.keys(errors).length > 0}
+        >
+          {isLoading ? "Logging in..." : "Login"}
         </button>
-        <button className={styles.resetButton} onClick={handleReset}>
+
+        <button
+          className={styles.resetButton}
+          onClick={handleReset}
+          disabled={isLoading}
+        >
           Reset
         </button>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: 5,
-            alignItems: "center",
-            textAlign: "center",
-            width: "100%",
-          }}
-        >
-          <p
-            style={{
-              fontSize: 14,
-              color: "#8c8c8c",
-            }}
-          >
-            OR
-          </p>
+        <div className={styles.divider}>
+          <p>OR</p>
         </div>
-        {/* Continue with Google */}
+
         <button className={styles.googleButton} onClick={handleGoogleLogin}>
           <img
             src={"/assets/google_logo.svg"}
-            style={{
-              width: 20,
-              height: 20,
-              marginRight: 10,
-            }}
+            alt="Google Logo"
+            className={styles.googleIcon}
           />
           Continue with Google
         </button>

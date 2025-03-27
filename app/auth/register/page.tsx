@@ -2,9 +2,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import styles from "../../styles/register-page.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-
+import { AtSign, LockIcon, User, Phone } from "lucide-react";
 import { registerUser } from "../../utils/api/auth/auth";
 import { redirect } from "next/navigation";
 import { useAuth } from "@/app/utils/context/Authcontext";
@@ -15,129 +13,326 @@ interface RegisterUser {
   email: string;
   password: string;
   phone: string;
-  userType: string;
+}
+
+interface ValidationErrors {
+  name?: string;
+  email?: string;
+  password?: string;
+  phone?: string;
 }
 
 export default function Register() {
-  // const [displayName, setDisplayName] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
-  const [userType, setUserType] = useState("patient");
-  const {login } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState<ValidationErrors>({});
+  const [apiError, setApiError] = useState("");
+  const { login } = useAuth();
+
   const user: RegisterUser = {
     displayName: name,
     name,
     email,
     password,
     phone,
-    userType,
+  };
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePassword = (password: string) => {
+    if (password.length < 6)
+      return "Password must be at least 6 characters long";
+    if (!/[A-Z]/.test(password))
+      return "Password must contain at least one uppercase letter";
+    if (!/[a-z]/.test(password))
+      return "Password must contain at least one lowercase letter";
+    if (!/[0-9]/.test(password))
+      return "Password must contain at least one number";
+    return "";
+  };
+
+  const validatePhone = (phone: string) => {
+    const phoneRegex = /^\d{10}$/;
+    return phoneRegex.test(phone);
+  };
+
+  const validateName = (name: string) => {
+    if (name.length < 2) return "Name must be at least 2 characters long";
+    if (!/^[a-zA-Z\s]*$/.test(name))
+      return "Name can only contain letters and spaces";
+    return "";
+  };
+
+  const validateForm = () => {
+    const newErrors: ValidationErrors = {};
+
+    if (!name) {
+      newErrors.name = "Name is required";
+    } else {
+      const nameError = validateName(name);
+      if (nameError) newErrors.name = nameError;
+    }
+
+    if (!email) {
+      newErrors.email = "Email is required";
+    } else if (!validateEmail(email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
+    if (!password) {
+      newErrors.password = "Password is required";
+    } else {
+      const passwordError = validatePassword(password);
+      if (passwordError) newErrors.password = passwordError;
+    }
+
+    if (!phone) {
+      newErrors.phone = "Phone number is required";
+    } else if (!validatePhone(phone)) {
+      newErrors.phone = "Please enter a valid 10-digit phone number";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async () => {
-    // e.preventDefault();
-    // const response = await registerUser(user);
+    if (!validateForm()) return;
 
-    //TODO: use utils/api/auth/auth.ts
-    const response = await fetch("http://localhost:5000/api/users/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        user_type: user.userType,
-        display_name: user.displayName,
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        password: user.password,
-      }),
-    });
+    setIsLoading(true);
+    setApiError("");
 
-    const data = await response.json();
-
-    if (!data.success) {
-      throw new Error("Failed to register user");
-    }
-
-    if (data.token) {
-      localStorage.setItem("token", data.token);
-      login({
-        id: data.user.id,
-        name: data.user.name,
-        email: data.user.email,
-        token: data.token,
-        user_id: data.user.user_id,
+    try {
+      const response = await fetch("http://localhost:5000/api/users/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_type: "patient",
+          display_name: user.displayName,
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
+          password: user.password,
+        }),
       });
-      redirect("/home");
-    }
 
-    redirect("/home");
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Registration failed");
+      }
+
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        login({
+          id: data.user.id,
+          name: data.user.name,
+          email: data.user.email,
+          token: data.token,
+          user_id: data.user.user_id,
+        });
+        redirect("/home");
+      }
+    } catch (err: any) {
+      setApiError(err.message || "An error occurred during registration");
+    } finally {
+      if (localStorage.getItem("token")) {
+        redirect("/home");
+      }
+      setIsLoading(false);
+    }
+  };
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: keyof ValidationErrors
+  ) => {
+    const value = e.target.value;
+
+    switch (field) {
+      case "name":
+        setName(value);
+        if (value) {
+          const nameError = validateName(value);
+          setErrors((prev) => ({ ...prev, name: nameError || undefined }));
+        } else {
+          setErrors((prev) => ({ ...prev, name: undefined }));
+        }
+        break;
+
+      case "email":
+        setEmail(value);
+        if (value && !validateEmail(value)) {
+          setErrors((prev) => ({
+            ...prev,
+            email: "Please enter a valid email address",
+          }));
+        } else {
+          setErrors((prev) => ({ ...prev, email: undefined }));
+        }
+        break;
+
+      case "password":
+        setPassword(value);
+        if (value) {
+          const passwordError = validatePassword(value);
+          setErrors((prev) => ({
+            ...prev,
+            password: passwordError || undefined,
+          }));
+        } else {
+          setErrors((prev) => ({ ...prev, password: undefined }));
+        }
+        break;
+
+      case "phone":
+        setPhone(value);
+        if (value && !validatePhone(value)) {
+          setErrors((prev) => ({
+            ...prev,
+            phone: "Please enter a valid 10-digit phone number",
+          }));
+        } else {
+          setErrors((prev) => ({ ...prev, phone: undefined }));
+        }
+        break;
+    }
+  };
+
+  const handleReset = () => {
+    setName("");
+    setEmail("");
+    setPassword("");
+    setPhone("");
+    setErrors({});
+    setApiError("");
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.registerContainer}>
-        <h1>Register</h1>
-        <p>
-          Already a member? <Link href="/auth/login">Login</Link>
-        </p>
+        <div className={styles.header}>
+          <h1>Create Account</h1>
+          <p>
+            Already have an account? <Link href="/auth/login">Sign in</Link>
+          </p>
+        </div>
+
+        {apiError && <div className={styles.errorMessage}>{apiError}</div>}
+
         <div className={styles.inputContainer}>
-          <p>Role</p>
-          <select
-            className={styles.roleDropdown}
-            onChange={(e) => setUserType(e.target.value)}
-          >
-            <option>Select Role</option>
-            <option value="patient">Patient</option>
-            <option value="admin">Admin</option>
-            <option value="doctor">Doctor</option>
-          </select>
-          <p>Name</p>
-          <div className={styles.inputWrapper}>
-            {/* <FontAwesomeIcon icon={faUser} className={styles.icon} /> */}
-            <input
-              type="text"
-              placeholder="Full Name"
-              onChange={(e) => setName(e.target.value)}
-            />
+          <div className={styles.inputGroup}>
+            <label>Full Name</label>
+            <div
+              className={`${styles.inputWrapper} ${
+                errors.name ? styles.inputError : ""
+              }`}
+            >
+              <User className={styles.icon} size={18} />
+              <input
+                type="text"
+                placeholder="Enter your full name"
+                value={name}
+                onChange={(e) => handleInputChange(e, "name")}
+                disabled={isLoading}
+              />
+            </div>
+            {errors.name && (
+              <span className={styles.errorText}>{errors.name}</span>
+            )}
           </div>
 
-          <p>Email</p>
-          <div className={styles.inputWrapper}>
-            {/* <FontAwesomeIcon icon={faEnvelope} className={styles.icon} /> */}
-            <input
-              type="text"
-              placeholder="Email"
-              onChange={(e) => setEmail(e.target.value)}
-            />
+          <div className={styles.inputGroup}>
+            <label>Email Address</label>
+            <div
+              className={`${styles.inputWrapper} ${
+                errors.email ? styles.inputError : ""
+              }`}
+            >
+              <AtSign className={styles.icon} size={18} />
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => handleInputChange(e, "email")}
+                disabled={isLoading}
+              />
+            </div>
+            {errors.email && (
+              <span className={styles.errorText}>{errors.email}</span>
+            )}
           </div>
 
-          <p>Phone</p>
-          <div className={styles.inputWrapper}>
-            {/* <FontAwesomeIcon icon={faPhone} className={styles.icon} /> */}
-            <input
-              type="text"
-              placeholder="Phone Number"
-              onChange={(e) => setPhone(e.target.value)}
-            />
+          <div className={styles.inputGroup}>
+            <label>Phone Number</label>
+            <div
+              className={`${styles.inputWrapper} ${
+                errors.phone ? styles.inputError : ""
+              }`}
+            >
+              <Phone className={styles.icon} size={18} />
+              <input
+                type="tel"
+                placeholder="Enter your phone number"
+                value={phone}
+                onChange={(e) => handleInputChange(e, "phone")}
+                disabled={isLoading}
+              />
+            </div>
+            {errors.phone && (
+              <span className={styles.errorText}>{errors.phone}</span>
+            )}
           </div>
 
-          <p>Password</p>
-          <div className={styles.inputWrapper}>
-            {/* <FontAwesomeIcon icon={faLock} className={styles.icon} /> */}
-            <input
-              type="password"
-              placeholder="Password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
+          <div className={styles.inputGroup}>
+            <label>Password</label>
+            <div
+              className={`${styles.inputWrapper} ${
+                errors.password ? styles.inputError : ""
+              }`}
+            >
+              <LockIcon className={styles.icon} size={18} />
+              <input
+                type="password"
+                placeholder="Create a password"
+                value={password}
+                onChange={(e) => handleInputChange(e, "password")}
+                disabled={isLoading}
+              />
+            </div>
+            {errors.password && (
+              <span className={styles.errorText}>{errors.password}</span>
+            )}
           </div>
         </div>
-        <button className={styles.registerButton} onClick={handleSubmit}>
-          Submit
-        </button>
-        <button className={styles.resetButton}>Reset</button>
+
+        <div className={styles.buttonGroup}>
+          <button
+            className={`${styles.registerButton} ${
+              isLoading ? styles.loading : ""
+            }`}
+            onClick={handleSubmit}
+            // disabled={isLoading || Object.keys(errors).length > 0}
+          >
+            {isLoading ? "Creating Account..." : "Create Account"}
+          </button>
+
+          <button
+            className={styles.resetButton}
+            onClick={handleReset}
+            disabled={isLoading}
+          >
+            Clear Form
+          </button>
+        </div>
       </div>
     </div>
   );

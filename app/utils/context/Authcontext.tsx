@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useEffect } from "react";
 
-// import {useRouter } from "next/navigation";
+import {useRouter } from "next/navigation";
 
 interface User {
   id: string;
@@ -22,7 +22,7 @@ export const AuthContext = createContext<AuthContext | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  //   const router = useRouter();
+    const router = useRouter();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -40,13 +40,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = (userData: User) => {
     localStorage.setItem("token", userData.token);
     setUser(userData);
-    // router.refresh();
+    router.refresh();
   };
 
   const logout = () => {
     localStorage.removeItem("token");
     setUser(null);
-    // router.refresh();
+    router.refresh();
   };
 
   return (

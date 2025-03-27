@@ -32,7 +32,10 @@ export default function ScheduleSlot({
   const [unavailableDates, setUnavailableDates] = useState<Map<string,Set<string>>>(new Map());
 
   const formatDate = (date: Date) => {
-    return date.toISOString().split("T")[0];
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   };
 
   useEffect(() => {
@@ -50,22 +53,17 @@ export default function ScheduleSlot({
         console.log("slots----->>>", data.slots);
         const unavailableMap = new Map<string, Set<string>>();
 
-        data.slots.forEach((slot:any)=>{
+        data.slots.forEach((slot:{availability_status:boolean,slot_date:string,start_time:string})=>{
           if(!slot.availability_status && slot.slot_date && slot.start_time){
-            const date_formatted = formatDate(slot.slot_date);
-            console.log("date_formatted",date_formatted,slot.slot_date);
+            const date_formatted = formatDate(new Date(slot.slot_date));
             if(!unavailableMap.has(date_formatted)){
               unavailableMap.set(date_formatted, new Set());
             }
-
             unavailableMap.get(date_formatted)?.add(slot.start_time);
-          
           }
         });
 
-
         setUnavailableDates(unavailableMap);
-
       } catch (error) {
         console.log("Error fetching slots", error);
       }
@@ -145,7 +143,7 @@ export default function ScheduleSlot({
         setAppointments(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error("Error fetching appointments:", error);
-        setAppointments([]); // Set empty array on error
+        setAppointments([]);
       } finally {
         setLoading(false);
       }
@@ -154,10 +152,11 @@ export default function ScheduleSlot({
     fetchAppointments();
   }, [doctorId]);
 
-
-  const isTimeSlotAvailable = (date:string,time:string) => {
-    return !unavailableDates.get(date)?.has(time);
-  }
+  // const isTimeSlotAvailable = (date:string, time:string) => {
+  //   console.log("->>>",date);
+  //   const unavailableSlots = unavailableDates.get(date);
+  //   return !unavailableSlots?.has(time);
+  // }
 
   const generateTimeSlots = () => {
     const morningSlots = [];
@@ -169,9 +168,14 @@ export default function ScheduleSlot({
           .toString()
           .padStart(2, "0")}`;
 
-          if (isTimeSlotAvailable(selectedDate,time)) {
-            morningSlots.push(time);
-          }
+        const isUnavailable = Array.from(unavailableDates.values()).some(
+          (times) => times.has(time)
+        );
+
+        morningSlots.push({
+          time,
+          available: !isUnavailable
+        });
       }
     }
 
@@ -180,9 +184,16 @@ export default function ScheduleSlot({
         const time = `${hour.toString().padStart(2, "0")}:${minute
           .toString()
           .padStart(2, "0")}`;
-          if (isTimeSlotAvailable(selectedDate,time)) {
-            eveningSlots.push(time);
-          }
+        
+        // Check if this time is unavailable for any date
+        const isUnavailable = Array.from(unavailableDates.values()).some(
+          (times) => times.has(time)
+        );
+
+        eveningSlots.push({
+          time,
+          available: !isUnavailable
+        });
       }
     }
 
@@ -190,8 +201,6 @@ export default function ScheduleSlot({
   };
 
   const { morningSlots, eveningSlots } = generateTimeSlots();
-
- 
 
   const isDateAvailable = (date: Date) => {
     const today = new Date();
@@ -211,7 +220,7 @@ export default function ScheduleSlot({
   };
 
   // Filter available slots based on selected date and time section
-  const availableSlots = (morningSlots: string[], eveningSlots: string[]) => {
+  const availableSlots = (morningSlots: {time: string, available: boolean}[], eveningSlots: {time: string, available: boolean}[]) => {
     // Get all booked appointments for the selected date
     const bookedAppointments = appointments
       .filter(
@@ -223,9 +232,9 @@ export default function ScheduleSlot({
 
     const slots = activeTimeSection === "morning" ? morningSlots : eveningSlots;
 
-    return slots.map((time) => ({
-      time,
-      available: !bookedAppointments.includes(time),
+    return slots.map((slot) => ({
+      time: slot.time,
+      available: slot.available && !bookedAppointments.includes(slot.time),
     }));
   };
 
@@ -390,7 +399,7 @@ export default function ScheduleSlot({
                           onClick={() => setSelectedSlot(slot.time)}
                           className={`${styles.timeSlot} ${
                             selectedSlot === slot.time ? styles.selected : ""
-                          }`}
+                          } ${!slot.available ? styles.disabled : ""}`}
                           disabled={!slot.available}
                         >
                           {slot.time}

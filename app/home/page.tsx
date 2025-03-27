@@ -8,12 +8,17 @@ import SearchBar from "../components/SearchBar";
 import { useRouter } from "next/navigation";
 // import { auth0 } from "../lib/auth0";
 import { Doctors } from "./type";
-
-
+// import { cookies } from "next/headers";
 
 const Home = () => {
   const router = useRouter();
   const [topDoctors, setDoctors] = useState<Doctors[]>([]);
+  // const cookieStore = cookies();
+  // const token = cookieStore.then((cookies) => cookies.get("token")?.value);
+  // const user = cookieStore.then((cookies) => cookies.get("user")?.value);
+
+  // console.log("Token:", token);
+  // console.log("User:", user);
 
   //TODO: separate utils/api/doctors/top6.ts
   useEffect(() => {
