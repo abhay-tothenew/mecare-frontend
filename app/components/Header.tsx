@@ -65,8 +65,8 @@ export default function Header() {
 
   const handleLogout = () => {
     logout();
-    redirect("/");
     location.reload();
+    redirect("/");
   };
 
   const handleClick = () => {

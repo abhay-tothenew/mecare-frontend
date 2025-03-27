@@ -75,6 +75,17 @@ export default function Login() {
     setIsLoading(true);
     setApiError("");
 
+
+    const allowedDomains = ["gmail.com","tothenew.com"];
+    const domain = user.email.split("@")[1];
+    if(!allowedDomains.includes(domain)){
+      setApiError("Invalid email domain");
+      setIsLoading(false);
+      return;
+    }
+
+
+
     try {
       const response = await fetch("http://localhost:5000/api/users/login", {
         method: "POST",
