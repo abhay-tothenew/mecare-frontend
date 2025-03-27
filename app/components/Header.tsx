@@ -63,9 +63,15 @@ export default function Header() {
     console.log("google_login", google_login);
   }, []);
 
+  useEffect(() => {
+    if (!token) {
+      router.push("/auth/login");
+    }
+  }, [token]);
+
   const handleLogout = () => {
     logout();
-    location.reload();
+    // location.reload();
     redirect("/");
   };
 

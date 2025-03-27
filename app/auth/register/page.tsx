@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import styles from "../../styles/register-page.module.css";
+import styles from "@/app/styles/register-page.module.css";
 import { AtSign, LockIcon, User, Phone } from "lucide-react";
-import { registerUser } from "../../utils/api/auth/auth";
+// import { registerUser } from "../../utils/api/auth/auth";
 import { redirect } from "next/navigation";
 import { useAuth } from "@/app/utils/context/Authcontext";
 

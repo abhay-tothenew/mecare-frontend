@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { use } from "react";
 import { Doctor } from "./type";
+import DoctorCard from "@/app/components/DoctorCard";
 
 export default function Category({
   params,
@@ -290,59 +291,11 @@ export default function Category({
             {/* Doctors Grid */}
             <div className={styles.doctorGrid}>
               {currentDoctors.map((doctor) => (
-                <div key={doctor.id} className={styles.doctorCard}>
-                  <div
-                    onClick={() => router.push(`/doctors/${doctor.doctor_id}`)}
-                  >
-                    <img
-                      src={doctor.image || "/assets/Frame.png"}
-                      alt={doctor.name}
-                      className={styles.doctorImage}
-                    />
-                    <h3>{doctor.name}</h3>
-
-                    <div className={styles.doctorInfo}>
-                      <div className={styles.infoItem}>
-                        <Image
-                          src="/assets/Stethoscope.svg"
-                          alt="Specialty"
-                          width={20}
-                          height={20}
-                        />
-                        <span>{doctor.specialization}</span>
-                      </div>
-
-                      <div className={styles.infoItem}>
-                        <Image
-                          src="/assets/Hourglass.svg"
-                          alt="Experience"
-                          width={20}
-                          height={20}
-                        />
-                        <span>{doctor.experience} years</span>
-                      </div>
-                    </div>
-
-                    <p
-                      style={{
-                        marginBottom: "15px",
-                      }}
-                    >
-                      Ratings: {doctor.ratings || "4"} Stars
-                    </p>
-                  </div>
-                  <button
-                    className={styles.bookButton}
-                    onClick={() => {
-                      console.log("select", doctor.doctor_id);
-                      router.push(
-                        `/appointment/ScheduleSlot/${doctor.doctor_id}`
-                      );
-                    }}
-                  >
-                    Book Appointment
-                  </button>
-                </div>
+                <DoctorCard
+                  key={doctor.doctor_id}
+                  doctor={doctor}
+                  variant="category"
+                />
               ))}
             </div>
           </div>

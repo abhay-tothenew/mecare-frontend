@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 // import { auth0 } from "../lib/auth0";
 import { Doctors } from "./type";
 // import { cookies } from "next/headers";
+import DoctorCard from "../components/DoctorCard";
 
 const Home = () => {
   const router = useRouter();
@@ -39,7 +40,7 @@ const Home = () => {
 
   return (
     <div className={styles.container}>
-      <SearchBar />
+      {/* <SearchBar /> */}
 
       {/* Services Section */}
       <section className={styles.services}>
@@ -92,39 +93,12 @@ const Home = () => {
       <section className={styles.topDoctors}>
         <h2>Our Top Doctors</h2>
         <div className={styles.topDoctorsGrid}>
-          {topDoctors.map((doctor, index) => (
-            <div key={index} className={styles.topDoctorCard}>
-              <div>
-                <div className={styles.imageContainer}>
-                  <Image
-                    src={doctor.image || "/assets/Frame.png"}
-                    height={120}
-                    width={120}
-                    alt={doctor.name}
-                    className={styles.doctorImage}
-                  />
-                </div>
-                <p className={styles.doctorName}>{doctor.name}</p>
-                <p className={styles.specialty}>
-                  <span>🩺 {doctor.specialization}</span>
-                  <span>⏳ {doctor.experience}</span>
-                </p>
-                <p className={styles.ratings}>
-                  Ratings: <span>4.5</span> <span>5</span> <span>4.8</span>{" "}
-                  <span>4.9</span>
-                </p>
-              </div>
-              <div>
-                <button
-                  className={styles.appointmentButton}
-                  onClick={() =>
-                    router.push(`/appointment/ScheduleSlot/${doctor.doctor_id}`)
-                  }
-                >
-                  Book Appointment
-                </button>
-              </div>
-            </div>
+          {topDoctors.map((doctor) => (
+            <DoctorCard
+              key={doctor.doctor_id}
+              doctor={doctor}
+              variant="home"
+            />
           ))}
         </div>
         <button className={styles.viewAllButton}>View All</button>

@@ -122,9 +122,10 @@
   width: 100%;
 }
 
+
 .services h2 {
-  font-size: clamp(1.25rem, 3vw, 1.5rem);
-  color: #0e2515;
+  font-size: clamp(1.25rem, 3vw, 1.75rem); 
+  color: #1c4a2a;
   margin-bottom: 20px;
 }
 

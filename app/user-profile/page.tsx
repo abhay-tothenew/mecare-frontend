@@ -16,6 +16,7 @@ import Modal from "../components/common/Modal";
 import Button from "../components/Button";
 import { useRouter } from "next/navigation";
 import RescheduleModal from "../components/RescheduleModal";
+import ReviewModal from "../components/ReviewModal";
 
 export default function UserProfile() {
   const [activeTab, setActiveTab] = useState("pending");
@@ -26,6 +27,8 @@ export default function UserProfile() {
   const [showRescheduleModal, setShowRescheduleModal] = useState(false);
   const [selectedAppointmentId, setSelectedAppointmentId] =
     useState<string>("");
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [selectedDoctorId, setSelectedDoctorId] = useState<string>("");
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -170,6 +173,19 @@ export default function UserProfile() {
       }
     } catch (error) {
       console.log("Error cancelling appointment:", error);
+    }
+  };
+
+  const handleReview = (doctorId: string, appointmentId: string) => {
+    setSelectedDoctorId(doctorId);
+    setSelectedAppointmentId(appointmentId);
+    setShowReviewModal(true);
+  };
+
+  const handleReviewSuccess = () => {
+    // Refresh appointments after successful review
+    if (userData?.user_id) {
+      fetchUserAppointments();
     }
   };
 
@@ -373,6 +389,21 @@ export default function UserProfile() {
                       </button>
                     </div>
                   )}
+                  {appointment.status === "completed" && (
+                    <div className={styles.appointmentActions}>
+                      <button
+                        className={styles.reviewButton}
+                        onClick={() =>
+                          handleReview(
+                            appointment.doctor_id,
+                            appointment.appointment_id
+                          )
+                        }
+                      >
+                        Give Review
+                      </button>
+                    </div>
+                  )}
                 </div>
               ))
             )}
@@ -402,6 +433,13 @@ export default function UserProfile() {
         userId={userData?.user_id || ""}
         appointmentId={selectedAppointmentId || ""}
         onSuccess={handleRescheduleSuccess}
+      />
+      <ReviewModal
+        isOpen={showReviewModal}
+        onClose={() => setShowReviewModal(false)}
+        doctorId={selectedDoctorId}
+        appointmentId={selectedAppointmentId}
+        onSuccess={handleReviewSuccess}
       />
     </div>
   );

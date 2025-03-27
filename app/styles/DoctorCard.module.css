@@ -1,0 +1,132 @@
+.doctorCard {
+  background: #f8fcf9;
+  padding: 20px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  min-height: 330px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.doctorCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cardContent {
+  text-align: center;
+}
+
+.imageContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.doctorImage {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.doctorName {
+  font-size: clamp(1rem, 2vw, 1.125rem);
+  font-weight: 500;
+  color: #1c4a2a;
+  margin-bottom: 13px;
+  font-family: "Montserrat", sans-serif;
+}
+
+.doctorInfo {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin: 12px 0;
+  width: 100%;
+}
+
+.infoItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.infoItem span {
+  font-size: 14px;
+  color: #333;
+}
+
+.infoItem img {
+  width: 20px;
+  height: 20px;
+}
+
+.ratings {
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
+  color: #8c8c8c;
+  margin-bottom: 12px;
+}
+
+.bookButton {
+  background-color: #f8fcf9;
+  color: #0e2515;
+  padding: 10px;
+  width: 100%;
+  border: 1px solid #dedede;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-weight: 500;
+  font-family: "Montserrat", sans-serif;
+}
+
+.bookButton:hover {
+  background-color: #f1f9f3;
+}
+
+/* Variant styles */
+.home {
+  max-width: 200px;
+  min-height: 300px;
+}
+
+.category {
+  max-width: 300px;
+  min-height: 330px;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .doctorCard {
+    max-width: 100%;
+  }
+  
+  .doctorInfo {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .infoItem {
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .doctorCard {
+    padding: 15px;
+  }
+  
+  .doctorName {
+    font-size: 1rem;
+  }
+  
+  .infoItem span {
+    font-size: 12px;
+  }
+} 
