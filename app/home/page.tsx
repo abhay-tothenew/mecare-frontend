@@ -100,7 +100,7 @@ const Home = () => {
             />
           ))}
         </div>
-        <button className={styles.viewAllButton}>View All</button>
+        {/* <button className={styles.viewAllButton}>View All</button> */}
       </section>
       <Footer />
     </div>

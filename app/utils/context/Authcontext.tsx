@@ -9,7 +9,7 @@ interface User {
   name: string;
   email: string;
   token: string;
-  user_id: string;
+  user_id?: string;
 }
 
 interface AuthContext {

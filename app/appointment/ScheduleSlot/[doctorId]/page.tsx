@@ -418,13 +418,13 @@ export default function ScheduleSlot({
                 Next
               </button>
             </div>
-
+{/* 
             <Image
               src="/assets/slot-book.svg"
               alt="Doctor with Patient"
               width={500}
               height={500}
-            />
+            /> */}
           </div>
         </section>
       </div>
