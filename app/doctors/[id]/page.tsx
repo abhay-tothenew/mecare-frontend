@@ -5,57 +5,66 @@ import Image from "next/image";
 import styles from "../../styles/doctor-profile.module.css";
 import Footer from "@/app/components/Footer";
 import { colors, spacing, borderRadius } from "@/app/constants/theme";
-import { 
-  GraduationCap, 
-  Clock, 
-  MapPin, 
-  Languages, 
-  Calendar, 
-  Phone, 
+import {
+  GraduationCap,
+  Clock,
+  MapPin,
+  Languages,
+  Calendar,
+  Phone,
   DollarSign,
   Award,
   Stethoscope,
-  Star
+  Star,
 } from "lucide-react";
+import { Doctor, Review } from "./type";
 
-interface Doctor {
-  id: string;
-  name: string;
-  specialization: string;
-  experience: string;
-  qualification: string;
-  location: string;
-  image?: string;
-  doctor_id: string;
-  phone: string;
-  about?: string;
-  education?: string[];
-  languages?: string[];
-  availability?: string[];
-  consultation_fee?: number;
-  achievements?: string[];
-}
+import { useAuth } from "@/app/utils/context/Authcontext";
 
 export default function DoctorProfile() {
   const params = useParams();
   const router = useRouter();
   const [doctor, setDoctor] = useState<Doctor | null>(null);
+  const [reviews, setReviews] = useState<Review[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
+  const [rating, setRating] = useState(0);
+  const { user } = useAuth();
   useEffect(() => {
     const fetchDoctorDetails = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/doctors/${params.id}`);
+        const response = await fetch(
+          `http://localhost:5000/api/doctors/${params.id}`
+        );
+        const review_response = await fetch(
+          `http://localhost:5000/api/reviews/${params.id}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${user?.token}`,
+            },
+          }
+        );
         const data = await response.json();
-        
+        const review_data = await review_response.json();
+
         if (!response.ok) {
-          throw new Error(data.message || 'Failed to fetch doctor details');
+          throw new Error(data.message || "Failed to fetch doctor details");
         }
+
+        if (!review_response.ok) {
+          throw new Error(
+            review_data.message || "Failed to fetch doctor reviews"
+          );
+        }
+
+        setReviews(review_data.review);
+        setRating(review_data.average_rating);
+        console.log("review data", review_data.average_rating);
 
         setDoctor(data.doctor);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
+        setError(err instanceof Error ? err.message : "An error occurred");
       } finally {
         setLoading(false);
       }
@@ -75,7 +84,7 @@ export default function DoctorProfile() {
   if (loading) {
     return (
       <div className={styles.container}>
-        <div style={{ textAlign: 'center', padding: spacing.xl }}>
+        <div style={{ textAlign: "center", padding: spacing.xl }}>
           <p>Loading doctor details...</p>
         </div>
       </div>
@@ -85,8 +94,10 @@ export default function DoctorProfile() {
   if (error || !doctor) {
     return (
       <div className={styles.container}>
-        <div style={{ textAlign: 'center', padding: spacing.xl }}>
-          <p style={{ color: colors.status.error }}>{error || 'Doctor not found'}</p>
+        <div style={{ textAlign: "center", padding: spacing.xl }}>
+          <p style={{ color: colors.status.error }}>
+            {error || "Doctor not found"}
+          </p>
         </div>
       </div>
     );
@@ -111,9 +122,13 @@ export default function DoctorProfile() {
                 {doctor.specialization}
               </h2>
               <div className={styles.rating}>
-                <Star size={16} fill="#FFD700" style={{ marginRight: spacing.xs }} />
-                <span>4.5</span>
-                <span>(127 reviews)</span>
+                <Star
+                  size={16}
+                  fill="#FFD700"
+                  style={{ marginRight: spacing.xs }}
+                />
+                <span>{Number(rating).toFixed(1) || 0}</span>
+                <span>({reviews?.length || 0} reviews)</span>
               </div>
               {doctor.consultation_fee && (
                 <div className={styles.consultationFee}>
@@ -123,8 +138,8 @@ export default function DoctorProfile() {
               )}
             </div>
           </div>
-          <button 
-            className={styles.bookAppointment} 
+          <button
+            className={styles.bookAppointment}
             onClick={handleBookAppointment}
             style={{
               backgroundColor: colors.primary.main,
@@ -136,6 +151,36 @@ export default function DoctorProfile() {
             Book Appointment
           </button>
         </div>
+
+        {/* Reviews Section */}
+
+        <section className={styles.section}>
+          <h3>
+            <Star size={24} style={{ marginRight: spacing.sm }} />
+            Reviews & Ratings
+          </h3>
+          {reviews && reviews.length > 0 ? (
+            <div className={styles.reviewsContainer}>
+              {reviews.map((review, index) => (
+                <div key={index} className={styles.review}>
+                  <div className={styles.rating}>
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        size={16}
+                        fill={i < review.rating ? "#FFD700" : "gray"}
+                        stroke="none"
+                      />
+                    ))}
+                  </div>
+                  <p className={styles.reviewText}>{review.review_text}</p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p>No reviews yet. Be the first to leave one!</p>
+          )}
+        </section>
 
         <div className={styles.profileContent}>
           {doctor.about && (

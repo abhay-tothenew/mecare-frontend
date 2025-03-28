@@ -15,7 +15,7 @@ export default function Category({
   params: Promise<{ category: string }>;
 }) {
   const resolvedParams = use(params);
-  const category = resolvedParams.category; //TODO: fixed the error Error: Cannot read properties of undefined (reading 'toLowerCase')
+  const category = resolvedParams.category;
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [filteredDoctors, setFilteredDoctors] = useState<Doctor[]>([]);
   const [display_category, setDisplayCategory] = useState("");
@@ -46,6 +46,8 @@ export default function Category({
         const response = await fetch(
           `http://localhost:5000/api/doctors/specialization/${category_name}`
         );
+
+        
         const data = await response.json();
         console.log("data category--->", data);
         setDoctors(data.doctors);
@@ -61,11 +63,9 @@ export default function Category({
 
   console.log("doctos0000",doctors);
 
-  // Add search functionality
   useEffect(() => {
     let updatedDoctors = doctors;
 
-    // Apply search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim();
       updatedDoctors = updatedDoctors.filter(
@@ -76,7 +76,6 @@ export default function Category({
       );
     }
 
-    // Apply other filters
     if (filters.rating > 0) {
       updatedDoctors = updatedDoctors.filter(
         (doctor) => doctor.ratings === filters.rating

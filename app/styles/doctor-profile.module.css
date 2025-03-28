@@ -162,6 +162,112 @@
   margin: 0;
 }
 
+.reviewsSection {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 2rem;
+}
+
+.reviewsSection h3 {
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.noReviews {
+  color: #666;
+  text-align: center;
+  padding: 2rem;
+  font-style: italic;
+}
+
+.reviewsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.reviewCard {
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.reviewHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.reviewerInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.reviewerName {
+  font-weight: 600;
+  color: #333;
+}
+
+.reviewDate {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.reviewComment {
+  color: #444;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Reviews Section */
+.reviewsContainer {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.review {
+  background-color: #f9f9f9;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.reviewHeader {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.reviewerName {
+  margin-left: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.reviewText {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.4;
+}
+
 @media (max-width: 768px) {
   .profileHeader {
     flex-direction: column;
@@ -207,6 +313,19 @@
   .contactInfo p {
     justify-content: center;
   }
+
+  .reviewsSection {
+    padding: 1.5rem;
+  }
+
+  .reviewHeader {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .reviewDate {
+    font-size: 0.85rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -238,4 +357,16 @@
   .section h3 {
     font-size: 1.25rem;
   }
-} 
+
+  .reviewsSection {
+    padding: 1rem;
+  }
+
+  .reviewsSection h3 {
+    font-size: 1.25rem;
+  }
+
+  .reviewCard {
+    padding: 1rem;
+  }
+}

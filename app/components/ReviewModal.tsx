@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Modal from "./common/Modal";
 import Button from "./Button";
 import styles from "@/app/styles/ReviewModal.module.css";
+import { useAuth } from "@/app/utils/context/Authcontext";
 
 interface ReviewModalProps {
   isOpen: boolean;
@@ -21,10 +22,14 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
   const [rating, setRating] = useState(5);
   const [review, setReview] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { user } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+
+    console.log("review", review);
+    console.log("rating", rating);
 
     try {
       const token = localStorage.getItem("token");
@@ -35,14 +40,15 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
+          user_id: user?.user_id,
           doctor_id: doctorId,
-          appointment_id: appointmentId,
           rating,
-          review,
+          review_text: review,
         }),
       });
 
       const data = await response.json();
+      console.log("review data", data);
 
       if (data.success) {
         onSuccess();

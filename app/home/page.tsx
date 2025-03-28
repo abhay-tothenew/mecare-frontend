@@ -21,7 +21,6 @@ const Home = () => {
   // console.log("Token:", token);
   // console.log("User:", user);
 
-  //TODO: separate utils/api/doctors/top6.ts
   useEffect(() => {
     const fetchTopDoctors = async () => {
       try {

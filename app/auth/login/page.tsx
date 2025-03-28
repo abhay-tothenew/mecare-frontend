@@ -169,7 +169,7 @@ export default function Login() {
           Are you a new member? <Link href="/auth/register">Sign up here</Link>
         </p>
 
-        {apiError && <div className={styles.errorMessage}>{apiError}</div>}
+        {apiError!== 'NEXT_REDIRECT' && <p className={styles.error}>{apiError}</p>}
 
         <div className={styles.inputContainer}>
           <p>Email</p>

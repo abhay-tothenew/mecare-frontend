@@ -50,6 +50,16 @@
   width: 100%;
 }
 
+.ratingSection {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  flex-direction: row;
+  justify-content: center;
+}
+
 .infoItem {
   display: flex;
   align-items: center;
@@ -106,12 +116,12 @@
   .doctorCard {
     max-width: 100%;
   }
-  
+
   .doctorInfo {
     flex-direction: column;
     gap: 8px;
   }
-  
+
   .infoItem {
     justify-content: center;
   }
@@ -121,12 +131,12 @@
   .doctorCard {
     padding: 15px;
   }
-  
+
   .doctorName {
     font-size: 1rem;
   }
-  
+
   .infoItem span {
     font-size: 12px;
   }
-} 
+}
