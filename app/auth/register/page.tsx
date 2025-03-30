@@ -149,8 +149,12 @@ export default function Register() {
         });
         redirect("/home");
       }
-    } catch (err: any) {
-      setApiError(err.message || "An error occurred during registration");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setApiError(err.message);
+      } else {
+        setApiError("An unknown error occurred");
+      }
     } finally {
       if (localStorage.getItem("token")) {
         redirect("/home");

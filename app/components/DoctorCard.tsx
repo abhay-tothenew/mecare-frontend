@@ -54,7 +54,7 @@ export default function DoctorCard({
     };
 
     fetchDoctorRatings();
-  }, [doctor.doctor_id]);
+  }, [doctor.doctor_id,user?.token]);
 
   const handleBookAppointment = (e: React.MouseEvent) => {
     e.stopPropagation();

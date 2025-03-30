@@ -9,7 +9,7 @@ interface ReviewModalProps {
   isOpen: boolean;
   onClose: () => void;
   doctorId: string;
-  appointmentId: string;
+  appointmentId?: string;
   onSuccess: () => void;
 }
 
@@ -24,9 +24,9 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
   const [review, setReview] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { user } = useAuth();
+  console.log(appointmentId);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     setIsSubmitting(true);
 
     console.log("review", review);
@@ -73,7 +73,9 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
               <button
                 key={star}
                 type="button"
-                className={`${styles.star} ${star <= rating ? styles.active : ""}`}
+                className={`${styles.star} ${
+                  star <= rating ? styles.active : ""
+                }`}
                 onClick={() => setRating(star)}
               >
                 ★
@@ -108,4 +110,4 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
   );
 };
 
-export default ReviewModal; 
+export default ReviewModal;

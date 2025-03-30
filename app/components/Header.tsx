@@ -14,45 +14,38 @@ export default function Header() {
     email: string;
     user_id: string;
   } | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+  const { logout, user } = useAuth();
 
-  let token = localStorage.getItem("token");
-  const { user, logout, login } = useAuth();
+  useEffect(() => {
+    // Access localStorage only on the client side
+    const storedToken = localStorage.getItem("token");
+    setToken(storedToken);
+  }, [user]);
 
-  // const handleAuthData = (data: any, token: string) => {
-  //   console.log("handleAuthData", data);
-  //   login({
-  //     id: token,
-  //     name: userData?.name || "",
-  //     email: userData?.email || "",
-  //     token: token,
-  //     user_id: userData?.user_id || "",
-  //   });
-  // };
   useEffect(() => {
     const fetchUserData = async () => {
+      if (!token) {
+        setUserData(null);
+        return;
+      }
+
       try {
-        const response = await fetch(
-          // "http://localhost:5000/api/users/profile",
-          API_ENDPOINTS.PROFILE,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await fetch(API_ENDPOINTS.PROFILE, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const data = await response.json();
         console.log("header user data", data);
         if (localStorage.getItem("userID") != data.user.user_id) {
           localStorage.setItem("userID", data.user.user_id);
         }
-
-        // if (token) {
-        //   handleAuthData(data, token);
-        // }
         setUserData(data.user);
       } catch (err) {
         console.log("Error fetching user data", err);
+        setUserData(null);
       }
     };
 
@@ -61,15 +54,14 @@ export default function Header() {
 
   useEffect(() => {
     const google_login = localStorage.getItem("google_login");
-
     console.log("google_login", google_login);
   }, []);
 
-  useEffect(() => {
-    if (!token) {
-      router.push("/auth/login");
-    }
-  }, [token]);
+  // useEffect(() => {
+  //   if (!token) {
+  //     router.push("/auth/login");
+  //   }
+  // }, [token, router]);
 
   const handleLogout = () => {
     logout();

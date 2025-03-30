@@ -1,7 +1,7 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
 import styles from "@/app/styles/confirm-details.module.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Footer from "@/app/components/Footer";
 import Button from "@/app/components/common/Button";
 import Input from "@/app/components/common/Input";
@@ -16,15 +16,15 @@ import {
   validateEmail,
 } from "@/app/utils/validation";
 import { useAuth } from "@/app/utils/context/Authcontext";
-import { AppointmentDetails } from "./types";
 import { API_ENDPOINTS } from "@/app/utils/api/config";
 
-export default function ConfirmDetails() {
+function ConfirmDetailsContent() {
   const router = useRouter();
   const { user } = useAuth();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [userId, setUserId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     fullName: "",
     age: "",
@@ -47,8 +47,17 @@ export default function ConfirmDetails() {
   if (details) {
     detailsObject = JSON.parse(details);
     console.log("details-->", detailsObject);
-    // setAppointmentDetails(detailsObject);
   }
+
+  useEffect(() => {
+    // Only access localStorage on the client side
+    if (typeof window !== 'undefined') {
+      const storedUserId = localStorage.getItem("userID");
+      if (storedUserId) {
+        setUserId(storedUserId);
+      }
+    }
+  }, []);
 
   const validateForm = () => {
     let valid = true;
@@ -95,12 +104,8 @@ export default function ConfirmDetails() {
     }));
   };
 
-  const user_id = localStorage.getItem("userID");
-  console.log("user_id", user_id);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // console.log("user in confirm details", user,"details", detailsObject);
 
     if (!user) {
       setShowLoginModal(true);
@@ -125,12 +130,12 @@ export default function ConfirmDetails() {
           Authorization: `Bearer ${user.token}`,
         },
         body: JSON.stringify({
-          user_id: user_id,
-          doctor_id: detailsObject.id,
-          appointment_date: detailsObject.date,
-          appointment_time: detailsObject.time,
+          user_id: userId || '', // Handle case where userId might be null
+          doctor_id: detailsObject?.id,
+          appointment_date: detailsObject?.date,
+          appointment_time: detailsObject?.time,
           appointment_type:
-            detailsObject.type === "Video Consultation"
+            detailsObject?.type === "Video Consultation"
               ? "online"
               : "in-person",
           patient_name: fullAppointmentData.patient.fullName,
@@ -309,5 +314,13 @@ export default function ConfirmDetails() {
 
       <Footer />
     </>
+  );
+}
+
+export default function ConfirmDetails() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ConfirmDetailsContent />
+    </Suspense>
   );
 }

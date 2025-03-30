@@ -28,9 +28,6 @@ export interface UserData {
   phone: string;
   user_type: string;
   user_id: string;
-  past_appointments: any;
-  future_appointments: any;
-  teams: any;
   avatar?: string;
   age: number;
   gender: string;

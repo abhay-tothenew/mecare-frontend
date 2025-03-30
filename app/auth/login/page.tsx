@@ -1,11 +1,12 @@
 "use client";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import styles from "../../styles/login-page.module.css";
 import { AtSign, LockIcon } from "lucide-react";
 import { redirect } from "next/navigation";
 import { useAuth } from "@/app/utils/context/Authcontext";
 import { API_ENDPOINTS } from "@/app/utils/api/config";
+import Image from "next/image";
 
 interface LoginUser {
   email: string;
@@ -76,16 +77,13 @@ export default function Login() {
     setIsLoading(true);
     setApiError("");
 
-
-    const allowedDomains = ["gmail.com","tothenew.com"];
+    const allowedDomains = ["gmail.com", "tothenew.com"];
     const domain = user.email.split("@")[1];
-    if(!allowedDomains.includes(domain)){
+    if (!allowedDomains.includes(domain)) {
       setApiError("Invalid email domain");
       setIsLoading(false);
       return;
     }
-
-
 
     try {
       const response = await fetch(API_ENDPOINTS.LOGIN, {
@@ -104,6 +102,7 @@ export default function Login() {
 
       if (data.token && data.success) {
         localStorage.setItem("token", data.token);
+        
         login({
           id: data.user.id,
           name: data.user.name,
@@ -111,10 +110,15 @@ export default function Login() {
           token: data.token,
           user_id: data.user.user_id,
         });
-        redirect("/home");
+
+        console.log("user data", data);
       }
-    } catch (err: any) {
-      setApiError(err.message || "An error occurred during login");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setApiError(err.message || "An error occurred during login");
+      } else {
+        setApiError("An error occurred during login");
+      }
     } finally {
       if (localStorage.getItem("token")) {
         redirect("/home");
@@ -170,7 +174,9 @@ export default function Login() {
           Are you a new member? <Link href="/auth/register">Sign up here</Link>
         </p>
 
-        {apiError!== 'NEXT_REDIRECT' && <p className={styles.error}>{apiError}</p>}
+        {apiError !== "NEXT_REDIRECT" && (
+          <p className={styles.error}>{apiError}</p>
+        )}
 
         <div className={styles.inputContainer}>
           <p>Email</p>
@@ -233,9 +239,11 @@ export default function Login() {
         </div>
 
         <button className={styles.googleButton} onClick={handleGoogleLogin}>
-          <img
-            src={"/assets/google_logo.svg"}
+          <Image
+            src="/assets/google_logo.svg"
             alt="Google Logo"
+            width={40}
+            height={40}
             className={styles.googleIcon}
           />
           Continue with Google

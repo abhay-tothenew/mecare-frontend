@@ -1,4 +1,4 @@
-// "use client";
+"use client";
 
 import { createContext, useContext, useState, useEffect } from "react";
 
@@ -25,6 +25,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const router = useRouter();
 
   useEffect(() => {
+    // Access localStorage only on the client side
     const token = localStorage.getItem("token");
     if (token && user === null) {
       setUser({
@@ -38,15 +39,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [user]);
 
   const login = (userData: User) => {
+    // Store token in both localStorage and cookie
     localStorage.setItem("token", userData.token);
+    document.cookie = `token=${userData.token}; path=/`;
     setUser(userData);
+    router.push("/home");
     router.refresh();
   };
 
   const logout = () => {
+    // Remove token from both localStorage and cookie
     localStorage.removeItem("token");
+    document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
     setUser(null);
-    location.reload();
+    router.push("/");
+    router.refresh();
   };
 
   return (

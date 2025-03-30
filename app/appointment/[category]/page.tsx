@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import styles from "../../styles/categoryDoctor.module.css";
 import Footer from "@/app/components/Footer";
 // import SearchBar from "@/app/components/SearchBar";
-import { useRouter } from "next/navigation";
 // import Image from "next/image";
 import { use } from "react";
 import { Doctor } from "./type";
@@ -66,7 +65,7 @@ export default function Category({
     };
 
     fetchBySpecialty();
-  }, []);
+  }, [category]);
 
   // console.log("doctos0000", doctors);
 

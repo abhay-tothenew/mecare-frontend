@@ -5,7 +5,6 @@ import Blogs from "../../public/data/blogs.json";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Footer from "../components/Footer";
-import SearchBar from "../components/SearchBar";
 import { API_ENDPOINTS } from "../utils/api/config";
 
 interface Category {

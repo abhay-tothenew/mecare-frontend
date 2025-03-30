@@ -80,7 +80,7 @@ export default function DoctorProfile() {
     if (params.id) {
       fetchDoctorDetails();
     }
-  }, [params.id]);
+  }, [params.id,user?.token]);
 
   const handleBookAppointment = () => {
     if (doctor) {

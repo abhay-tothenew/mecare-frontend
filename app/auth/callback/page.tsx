@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 import { useAuth } from "@/app/utils/context/Authcontext";
+import { Suspense } from "react";
 
 interface JwtPayload {
   id: string;
@@ -14,7 +15,7 @@ interface JwtPayload {
   exp?: number;
 }
 
-export default function AuthCallback() {
+function AuthCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { login } = useAuth();
@@ -38,8 +39,12 @@ export default function AuthCallback() {
         profile_picture: payload.profile_picture || "",
       };
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(userData));
+      // Only access localStorage on the client side
+      if (typeof window !== 'undefined') {
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(userData));
+      }
+
       login({
         id: payload.id,
         name: payload.name || "",
@@ -53,11 +58,23 @@ export default function AuthCallback() {
       console.error("Error decoding token:", error);
       router.push("/auth/login");
     }
-  }, [searchParams]);
+  }, [searchParams, router, login]);
 
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
     </div>
+  );
+}
+
+export default function AuthCallback() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    }>
+      <AuthCallbackContent />
+    </Suspense>
   );
 }

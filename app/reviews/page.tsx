@@ -88,7 +88,7 @@ export default function Reviews() {
     };
 
     fetchReviews();
-  }, [user?.user_id]);
+  }, [user?.user_id,ratings,user?.token]);
 
   console.log("---", reviews);
 
@@ -117,7 +117,7 @@ export default function Reviews() {
         <div>
           <h2 className={styles.emptyTitle}>No Reviews Yet</h2>
           <p className={styles.emptyMessage}>
-            You haven't written any reviews yet.
+            You haven&apos;t written any reviews yet.
           </p>
         </div>
       </div>

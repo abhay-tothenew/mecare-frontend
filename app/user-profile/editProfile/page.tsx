@@ -10,15 +10,7 @@ import TextArea from "@/app/components/common/TextArea";
 import Button from "@/app/components/common/Button";
 import { API_ENDPOINTS } from "@/app/utils/api/config";
 
-interface EmergencyContact {
-  name: string;
-  relation: string;
-  phone: string;
-}
 
-interface FormData extends Omit<Partial<UserData>, "emergency_contact"> {
-  emergency_contact: EmergencyContact;
-}
 
 export default function EditProfile() {
   const router = useRouter();

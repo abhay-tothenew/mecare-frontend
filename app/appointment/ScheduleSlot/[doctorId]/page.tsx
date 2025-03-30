@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import styles from "@/app/styles/schedule-card.module.css";
 import { useState, useEffect } from "react";
 import Footer from "@/app/components/Footer";
@@ -23,9 +22,7 @@ export default function ScheduleSlot({
   const [doctorDetails, setDoctorDetails] = useState<Doctor>();
   const [selectedTab, setSelectedTab] = useState("video");
   const [selectedDate, setSelectedDate] = useState("");
-  const [selectedLocation, setSelectedLocation] = useState(
-    "MedicareHeart Institute, Okhla Road"
-  );
+  const [selectedLocation] = useState("MedicareHeart Institute, Okhla Road");
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -94,9 +91,7 @@ export default function ScheduleSlot({
   useEffect(() => {
     const fetchDoctorById = async () => {
       try {
-        const response = await fetch(
-          API_ENDPOINTS.DOCTOR_BY_ID(doctorId)
-        );
+        const response = await fetch(API_ENDPOINTS.DOCTOR_BY_ID(doctorId));
 
         if (!response.ok) {
           throw new Error("Failed to fetch doctor details");
@@ -147,9 +142,7 @@ export default function ScheduleSlot({
 
     const fetchAppointments = async () => {
       try {
-        const response = await fetch(
-          API_ENDPOINTS.APPOINTMENT_BY_ID(doctorId)
-        );
+        const response = await fetch(API_ENDPOINTS.APPOINTMENT_BY_ID(doctorId));
 
         if (!response.ok) {
           throw new Error("Failed to fetch appointments");
@@ -225,7 +218,6 @@ export default function ScheduleSlot({
 
     // Prevent selecting past dates
 
-    const dateStr = formatDate(date);
     if (date < today) return false;
 
     // Show all future dates as available
@@ -278,7 +270,7 @@ export default function ScheduleSlot({
       );
 
       if (overlapCheck.hasOverlap) {
-        await new Promise(resolve => setTimeout(resolve, 5000));
+        await new Promise((resolve) => setTimeout(resolve, 5000));
         setErrorMessage(overlapCheck.message);
         setShowErrorModal(true);
         return;

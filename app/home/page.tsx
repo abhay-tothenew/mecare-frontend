@@ -1,11 +1,9 @@
 "use client";
-import React, { useState, useEffect, use } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../styles/home.module.css";
 import Image from "next/image";
 import Footer from "../components/Footer";
 // import Doctors from "../../public/data/doctors.json";
-import SearchBar from "../components/SearchBar";
-import { useRouter } from "next/navigation";
 // import { auth0 } from "../lib/auth0";
 import { Doctors } from "./type";
 // import { cookies } from "next/headers";
@@ -13,7 +11,6 @@ import DoctorCard from "../components/DoctorCard";
 import { API_ENDPOINTS } from "../utils/api/config";
 
 const Home = () => {
-  const router = useRouter();
   const [topDoctors, setDoctors] = useState<Doctors[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   // const cookieStore = cookies();

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState,useCallback } from "react";
 import Image from "next/image";
 import styles from "@/app/styles/user-profile.module.css";
 import {
@@ -11,7 +11,7 @@ import {
   Stethoscope,
 } from "lucide-react";
 import { FaSpinner } from "react-icons/fa";
-import { UserData, Appointment, Doctor } from "./types";
+import { UserData, Appointment } from "./types";
 import { useAuth } from "@/app/utils/context/Authcontext";
 import Modal from "../components/common/Modal";
 import Button from "../components/Button";
@@ -74,12 +74,12 @@ export default function UserProfile() {
     }
   };
 
-  const fetchUserAppointments = async () => {
+  const fetchUserAppointments = useCallback(async () => {
     try {
       setIsAppointmentsLoading(true);
       const token = localStorage.getItem("token");
       const response = await fetch(
-        API_ENDPOINTS.APPOINTMENT_BY_ID(userData?.user_id??""),
+        API_ENDPOINTS.APPOINTMENT_BY_ID(userData?.user_id ?? ""),
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -106,7 +106,7 @@ export default function UserProfile() {
     } finally {
       setIsAppointmentsLoading(false);
     }
-  };
+  }, [userData?.user_id]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -141,7 +141,7 @@ export default function UserProfile() {
     if (userData?.user_id) {
       fetchUserAppointments();
     }
-  }, [userData]);
+  }, [userData?.user_id,fetchUserAppointments]);
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
