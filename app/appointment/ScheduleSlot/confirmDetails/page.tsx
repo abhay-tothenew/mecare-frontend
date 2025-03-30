@@ -17,13 +17,14 @@ import {
 } from "@/app/utils/validation";
 import { useAuth } from "@/app/utils/context/Authcontext";
 import { AppointmentDetails } from "./types";
+import { API_ENDPOINTS } from "@/app/utils/api/config";
 
 export default function ConfirmDetails() {
   const router = useRouter();
   const { user } = useAuth();
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const [appointmentDetails, setAppointmentDetails] =
-    useState<AppointmentDetails | null>(null);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [formData, setFormData] = useState({
     fullName: "",
     age: "",
@@ -94,7 +95,6 @@ export default function ConfirmDetails() {
     }));
   };
 
-
   const user_id = localStorage.getItem("userID");
   console.log("user_id", user_id);
   const handleSubmit = async (e: React.FormEvent) => {
@@ -118,7 +118,7 @@ export default function ConfirmDetails() {
     console.log("Full appointment data:", fullAppointmentData);
 
     try {
-      const response = await fetch("http://localhost:5000/api/appointments", {
+      const response = await fetch(API_ENDPOINTS.APPOINTMENTS, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -147,6 +147,10 @@ export default function ConfirmDetails() {
 
       if (data.success) {
         router.push("/appointment/success");
+      } else {
+        setErrorMessage(data.error);
+        setShowErrorModal(true);
+        return;
       }
     } catch (error) {
       console.log("Error submitting appointment:", error);
@@ -289,6 +293,16 @@ export default function ConfirmDetails() {
           </Button>
           <Button variant="primary" onClick={() => router.push("/auth/login")}>
             Login
+          </Button>
+        </div>
+      </Modal>
+
+      <Modal isOpen={showErrorModal} onClose={() => setShowErrorModal(false)}>
+        <h2>Cannot Book Appointment</h2>
+        <p>{errorMessage}</p>
+        <div className={styles.modalButtons}>
+          <Button variant="primary" onClick={() => setShowErrorModal(false)}>
+            OK
           </Button>
         </div>
       </Modal>

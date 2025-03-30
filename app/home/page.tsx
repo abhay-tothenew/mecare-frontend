@@ -10,10 +10,12 @@ import { useRouter } from "next/navigation";
 import { Doctors } from "./type";
 // import { cookies } from "next/headers";
 import DoctorCard from "../components/DoctorCard";
+import { API_ENDPOINTS } from "../utils/api/config";
 
 const Home = () => {
   const router = useRouter();
   const [topDoctors, setDoctors] = useState<Doctors[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   // const cookieStore = cookies();
   // const token = cookieStore.then((cookies) => cookies.get("token")?.value);
   // const user = cookieStore.then((cookies) => cookies.get("user")?.value);
@@ -24,13 +26,16 @@ const Home = () => {
   useEffect(() => {
     const fetchTopDoctors = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/doctors/top6");
+        setIsLoading(true);
+        const response = await fetch(API_ENDPOINTS.TOP_DOCTORS);
         const data = await response.json();
 
         console.log("Top Doctors", data);
         setDoctors(data.doctors);
       } catch (err) {
         console.log("Error fetching doctors", err);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -91,15 +96,21 @@ const Home = () => {
       {/* Top Doctors Section */}
       <section className={styles.topDoctors}>
         <h2>Our Top Doctors</h2>
-        <div className={styles.topDoctorsGrid}>
-          {topDoctors.map((doctor) => (
-            <DoctorCard
-              key={doctor.doctor_id}
-              doctor={doctor}
-              variant="home"
-            />
-          ))}
-        </div>
+        {isLoading ? (
+          <div className={styles.loaderContainer}>
+            <div className={styles.loader}></div>
+          </div>
+        ) : (
+          <div className={styles.topDoctorsGrid}>
+            {topDoctors.map((doctor) => (
+              <DoctorCard
+                key={doctor.doctor_id}
+                doctor={doctor}
+                variant="home"
+              />
+            ))}
+          </div>
+        )}
         {/* <button className={styles.viewAllButton}>View All</button> */}
       </section>
       <Footer />

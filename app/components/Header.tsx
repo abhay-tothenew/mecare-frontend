@@ -4,6 +4,7 @@ import Image from "next/image";
 import { redirect, useRouter } from "next/navigation";
 import styles from "../styles/Header.module.css";
 import { useAuth } from "../utils/context/Authcontext";
+import { API_ENDPOINTS } from "../utils/api/config";
 
 export default function Header() {
   const router = useRouter();
@@ -31,7 +32,8 @@ export default function Header() {
     const fetchUserData = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/users/profile",
+          // "http://localhost:5000/api/users/profile",
+          API_ENDPOINTS.PROFILE,
           {
             method: "GET",
             headers: {

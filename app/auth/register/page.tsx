@@ -6,6 +6,7 @@ import { AtSign, LockIcon, User, Phone } from "lucide-react";
 // import { registerUser } from "../../utils/api/auth/auth";
 import { redirect } from "next/navigation";
 import { useAuth } from "@/app/utils/context/Authcontext";
+import { API_ENDPOINTS } from "@/app/utils/api/config";
 
 interface RegisterUser {
   displayName: string;
@@ -116,7 +117,7 @@ export default function Register() {
       return;
     }
     try {
-      const response = await fetch("http://localhost:5000/api/users/register", {
+      const response = await fetch(API_ENDPOINTS.REGISTER, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/app/utils/context/Authcontext";
 import { Star } from "lucide-react";
 import styles from "@/app/styles/reviews-page.module.css";
+import { API_ENDPOINTS } from "../utils/api/config";
 
 interface Review {
   review_id: string;
@@ -40,7 +41,7 @@ export default function Reviews() {
 
       try {
         const response = await fetch(
-          `http://localhost:5000/api/reviews/${user.user_id}`,
+          API_ENDPOINTS.REVIEWS_BY_USER(user.user_id),
           {
             method: "GET",
             headers: {
@@ -60,7 +61,7 @@ export default function Reviews() {
         // Fetch doctor details for each review
         const doctorPromises = data?.review.map(async (review: Review) => {
           const doctorResponse = await fetch(
-            `http://localhost:5000/api/doctors/${review.doctor_id}`
+            API_ENDPOINTS.DOCTOR_BY_ID(review.doctor_id)
           );
           if (!doctorResponse.ok) {
             throw new Error(

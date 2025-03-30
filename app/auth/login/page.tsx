@@ -5,6 +5,7 @@ import styles from "../../styles/login-page.module.css";
 import { AtSign, LockIcon } from "lucide-react";
 import { redirect } from "next/navigation";
 import { useAuth } from "@/app/utils/context/Authcontext";
+import { API_ENDPOINTS } from "@/app/utils/api/config";
 
 interface LoginUser {
   email: string;
@@ -87,7 +88,7 @@ export default function Login() {
 
 
     try {
-      const response = await fetch("http://localhost:5000/api/users/login", {
+      const response = await fetch(API_ENDPOINTS.LOGIN, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -152,7 +153,7 @@ export default function Login() {
   };
 
   const handleGoogleLogin = () => {
-    redirect("http://localhost:5000/auth/google");
+    redirect(API_ENDPOINTS.GOOGLE_AUTH);
   };
 
   const handleReset = () => {

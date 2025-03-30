@@ -10,6 +10,7 @@ import {
   MapPin,
   Stethoscope,
 } from "lucide-react";
+import { FaSpinner } from "react-icons/fa";
 import { UserData, Appointment, Doctor } from "./types";
 import { useAuth } from "@/app/utils/context/Authcontext";
 import Modal from "../components/common/Modal";
@@ -17,11 +18,14 @@ import Button from "../components/Button";
 import { useRouter } from "next/navigation";
 import RescheduleModal from "../components/RescheduleModal";
 import ReviewModal from "../components/ReviewModal";
+import { API_ENDPOINTS } from "@/app/utils/api/config";
 
 export default function UserProfile() {
   const [activeTab, setActiveTab] = useState("pending");
   const [userData, setUserData] = useState<UserData>();
   const [userAppointments, setUserAppointments] = useState<Appointment[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAppointmentsLoading, setIsAppointmentsLoading] = useState(true);
   const { user } = useAuth();
   const router = useRouter();
   const [showRescheduleModal, setShowRescheduleModal] = useState(false);
@@ -55,7 +59,7 @@ export default function UserProfile() {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:5000/api/doctors/${doctorId}`,
+        API_ENDPOINTS.DOCTOR_BY_ID(doctorId),
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -72,9 +76,10 @@ export default function UserProfile() {
 
   const fetchUserAppointments = async () => {
     try {
+      setIsAppointmentsLoading(true);
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:5000/api/appointments/${userData?.user_id}`,
+        API_ENDPOINTS.APPOINTMENT_BY_ID(userData?.user_id??""),
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -98,6 +103,8 @@ export default function UserProfile() {
       setUserAppointments(appointmentsWithDoctors);
     } catch (err) {
       console.log("Error fetching user appointments", err);
+    } finally {
+      setIsAppointmentsLoading(false);
     }
   };
 
@@ -107,7 +114,7 @@ export default function UserProfile() {
         const token = localStorage.getItem("token");
 
         const response = await fetch(
-          "http://localhost:5000/api/users/profile",
+          API_ENDPOINTS.PROFILE,
           {
             method: "GET",
             headers: {
@@ -122,6 +129,8 @@ export default function UserProfile() {
         setUserData(data.user);
       } catch (err) {
         console.log("Error fetching user data", err);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -152,7 +161,7 @@ export default function UserProfile() {
     console.log("0000", appointmentId);
     try {
       const response = await fetch(
-        `http://localhost:5000/api/appointments/${appointmentId}`,
+        API_ENDPOINTS.APPOINTMENT_BY_ID(appointmentId),
         {
           method: "PUT",
           headers: {
@@ -191,225 +200,239 @@ export default function UserProfile() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.profileHeader}>
-        <div className={styles.profileInfo}>
-          <div className={styles.avatar}>
-            <Image
-              src="/assets/user-avatar.svg"
-              alt="Profile"
-              width={100}
-              height={100}
-            />
-          </div>
-          <div className={styles.userInfo}>
-            <h1>{userData?.name}</h1>
-            <p>{userData?.email}</p>
-            <p>{userData?.phone}</p>
-          </div>
+      {isLoading ? (
+        <div className={styles.loadingContainer}>
+          <FaSpinner className={styles.spinner} />
+          <p>Loading profile...</p>
         </div>
-        <button
-          className={styles.editButton}
-          onClick={() => {
-            if (userData) {
-              const searchParams = new URLSearchParams();
-              searchParams.set("userData", JSON.stringify(userData));
-              router.push(
-                `/user-profile/editProfile?${searchParams.toString()}`
-              );
-            }
-          }}
-        >
-          Edit Profile
-        </button>
-      </div>
-
-      <div className={styles.content}>
-        <div className={styles.sidebar}>
-          <div className={styles.infoCard}>
-            <h2>Personal Information</h2>
-            <div className={styles.infoGrid}>
-              <div className={styles.infoItem}>
-                <label>Age</label>
-                <p>{userData?.age}</p>
+      ) : (
+        <>
+          <div className={styles.profileHeader}>
+            <div className={styles.profileInfo}>
+              <div className={styles.avatar}>
+                <Image
+                  src="/assets/user-avatar.svg"
+                  alt="Profile"
+                  width={100}
+                  height={100}
+                />
               </div>
-              <div className={styles.infoItem}>
-                <label>Gender</label>
-                <p>{userData?.gender}</p>
-              </div>
-              <div className={styles.infoItem}>
-                <label>Blood Group</label>
-                <p>{userData?.blood_group}</p>
-              </div>
-              <div className={styles.infoItem}>
-                <label>Address</label>
-                <p>{userData?.address}</p>
+              <div className={styles.userInfo}>
+                <h1>{userData?.name}</h1>
+                <p>{userData?.email}</p>
+                <p>{userData?.phone}</p>
               </div>
             </div>
+            <button
+              className={styles.editButton}
+              onClick={() => {
+                if (userData) {
+                  const searchParams = new URLSearchParams();
+                  searchParams.set("userData", JSON.stringify(userData));
+                  router.push(
+                    `/user-profile/editProfile?${searchParams.toString()}`
+                  );
+                }
+              }}
+            >
+              Edit Profile
+            </button>
           </div>
 
-          <div className={styles.infoCard}>
-            <h2>Emergency Contact</h2>
-            <div className={styles.infoGrid}>
-              <div className={styles.infoItem}>
-                <label>Name</label>
-                <p>{userData?.emergency_name}</p>
-              </div>
-              <div className={styles.infoItem}>
-                <label>Relation</label>
-                <p>{userData?.emergency_relation}</p>
-              </div>
-              <div className={styles.infoItem}>
-                <label>Phone</label>
-                <p>{userData?.emergency_phone}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className={styles.mainContent}>
-          <div className={styles.appointmentsHeader}>
-            <h2>My Appointments</h2>
-            <div className={styles.tabs}>
-              <button
-                className={`${styles.tab} ${
-                  activeTab === "pending" ? styles.active : ""
-                }`}
-                onClick={() => setActiveTab("pending")}
-              >
-                Pending
-              </button>
-              <button
-                className={`${styles.tab} ${
-                  activeTab === "confirmed" ? styles.active : ""
-                }`}
-                onClick={() => setActiveTab("confirmed")}
-              >
-                Upcoming
-              </button>
-              <button
-                className={`${styles.tab} ${
-                  activeTab === "completed" ? styles.active : ""
-                }`}
-                onClick={() => setActiveTab("completed")}
-              >
-                Past
-              </button>
-              <button
-                className={`${styles.tab} ${
-                  activeTab === "cancelled" ? styles.active : ""
-                }`}
-                onClick={() => setActiveTab("cancelled")}
-              >
-                Cancelled
-              </button>
-            </div>
-          </div>
-
-          <div className={styles.appointmentsList}>
-            {filteredAppointments.length === 0 ? (
-              <div className={styles.noAppointments}>
-                No appointments found in this category
-              </div>
-            ) : (
-              filteredAppointments.map((appointment) => (
-                <div
-                  key={appointment.appointment_id}
-                  className={styles.appointmentCard}
-                >
-                  <div className={styles.appointmentHeader}>
-                    <div className={styles.doctorInfo}>
-                      <div className={styles.doctorAvatar}>
-                        {appointment.doctor?.avatar ? (
-                          <Image
-                            src={appointment.doctor.avatar}
-                            alt={appointment.doctor.name}
-                            width={40}
-                            height={40}
-                            className={styles.avatarImage}
-                          />
-                        ) : (
-                          <User className={styles.defaultAvatar} size={40} />
-                        )}
-                      </div>
-                      <div className={styles.doctorDetails}>
-                        <h3>
-                          {appointment.doctor?.name || "Loading doctor..."}
-                        </h3>
-                        <p className={styles.specialization}>
-                          <Stethoscope size={14} />
-                          {appointment.doctor?.specialization ||
-                            "Specialization"}
-                        </p>
-                      </div>
-                    </div>
-                    <div className={styles.appointmentType}>
-                      <span
-                        className={`${styles.badge} ${
-                          styles[appointment.status]
-                        }`}
-                      >
-                        {appointment.status}
-                      </span>
-                    </div>
+          <div className={styles.content}>
+            <div className={styles.sidebar}>
+              <div className={styles.infoCard}>
+                <h2>Personal Information</h2>
+                <div className={styles.infoGrid}>
+                  <div className={styles.infoItem}>
+                    <label>Age</label>
+                    <p>{userData?.age}</p>
                   </div>
-                  <div className={styles.appointmentDetails}>
-                    <div className={styles.detail}>
-                      <Calendar size={16} />
-                      <span>{formatDate(appointment.appointment_date)}</span>
-                    </div>
-                    <div className={styles.detail}>
-                      <Clock size={16} />
-                      <span>{formatTime(appointment.appointment_time)}</span>
-                    </div>
-                    <div className={styles.detail}>
-                      <Video size={16} />
-                      <span>{appointment.appointment_type}</span>
-                    </div>
-                    <div className={styles.detail}>
-                      <MapPin size={16} />
-                      <span>MedicareHeart Institute</span>
-                    </div>
+                  <div className={styles.infoItem}>
+                    <label>Gender</label>
+                    <p>{userData?.gender}</p>
                   </div>
-                  {(appointment.status === "pending" ||
-                    appointment.status === "confirmed") && (
-                    <div className={styles.appointmentActions}>
-                      <button
-                        className={styles.rescheduleButton}
-                        onClick={() =>
-                          handleReschedule(appointment.appointment_id)
-                        }
-                      >
-                        Reschedule
-                      </button>
-                      <button
-                        className={styles.cancelButton}
-                        onClick={() => handleCancel(appointment.appointment_id)}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  )}
-                  {appointment.status === "completed" && (
-                    <div className={styles.appointmentActions}>
-                      <button
-                        className={styles.reviewButton}
-                        onClick={() =>
-                          handleReview(
-                            appointment.doctor_id,
-                            appointment.appointment_id
-                          )
-                        }
-                      >
-                        Give Review
-                      </button>
-                    </div>
-                  )}
+                  <div className={styles.infoItem}>
+                    <label>Blood Group</label>
+                    <p>{userData?.blood_group}</p>
+                  </div>
+                  <div className={styles.infoItem}>
+                    <label>Address</label>
+                    <p>{userData?.address}</p>
+                  </div>
                 </div>
-              ))
-            )}
+              </div>
+
+              <div className={styles.infoCard}>
+                <h2>Emergency Contact</h2>
+                <div className={styles.infoGrid}>
+                  <div className={styles.infoItem}>
+                    <label>Name</label>
+                    <p>{userData?.emergency_name}</p>
+                  </div>
+                  <div className={styles.infoItem}>
+                    <label>Relation</label>
+                    <p>{userData?.emergency_relation}</p>
+                  </div>
+                  <div className={styles.infoItem}>
+                    <label>Phone</label>
+                    <p>{userData?.emergency_phone}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.mainContent}>
+              <div className={styles.appointmentsHeader}>
+                <h2>My Appointments</h2>
+                <div className={styles.tabs}>
+                  <button
+                    className={`${styles.tab} ${
+                      activeTab === "pending" ? styles.active : ""
+                    }`}
+                    onClick={() => setActiveTab("pending")}
+                  >
+                    Pending
+                  </button>
+                  <button
+                    className={`${styles.tab} ${
+                      activeTab === "confirmed" ? styles.active : ""
+                    }`}
+                    onClick={() => setActiveTab("confirmed")}
+                  >
+                    Upcoming
+                  </button>
+                  <button
+                    className={`${styles.tab} ${
+                      activeTab === "completed" ? styles.active : ""
+                    }`}
+                    onClick={() => setActiveTab("completed")}
+                  >
+                    Past
+                  </button>
+                  <button
+                    className={`${styles.tab} ${
+                      activeTab === "cancelled" ? styles.active : ""
+                    }`}
+                    onClick={() => setActiveTab("cancelled")}
+                  >
+                    Cancelled
+                  </button>
+                </div>
+              </div>
+
+              <div className={styles.appointmentsList}>
+                {isAppointmentsLoading ? (
+                  <div className={styles.loadingContainer}>
+                    <FaSpinner className={styles.spinner} />
+                    <p>Loading appointments...</p>
+                  </div>
+                ) : filteredAppointments.length === 0 ? (
+                  <div className={styles.noAppointments}>
+                    No appointments found in this category
+                  </div>
+                ) : (
+                  filteredAppointments.map((appointment) => (
+                    <div
+                      key={appointment.appointment_id}
+                      className={styles.appointmentCard}
+                    >
+                      <div className={styles.appointmentHeader}>
+                        <div className={styles.doctorInfo}>
+                          <div className={styles.doctorAvatar}>
+                            {appointment.doctor?.avatar ? (
+                              <Image
+                                src={appointment.doctor.avatar}
+                                alt={appointment.doctor.name}
+                                width={40}
+                                height={40}
+                                className={styles.avatarImage}
+                              />
+                            ) : (
+                              <User className={styles.defaultAvatar} size={40} />
+                            )}
+                          </div>
+                          <div className={styles.doctorDetails}>
+                            <h3>
+                              {appointment.doctor?.name || "Loading doctor..."}
+                            </h3>
+                            <p className={styles.specialization}>
+                              <Stethoscope size={14} />
+                              {appointment.doctor?.specialization ||
+                                "Specialization"}
+                            </p>
+                          </div>
+                        </div>
+                        <div className={styles.appointmentType}>
+                          <span
+                            className={`${styles.badge} ${
+                              styles[appointment.status]
+                            }`}
+                          >
+                            {appointment.status}
+                          </span>
+                        </div>
+                      </div>
+                      <div className={styles.appointmentDetails}>
+                        <div className={styles.detail}>
+                          <Calendar size={16} />
+                          <span>{formatDate(appointment.appointment_date)}</span>
+                        </div>
+                        <div className={styles.detail}>
+                          <Clock size={16} />
+                          <span>{formatTime(appointment.appointment_time)}</span>
+                        </div>
+                        <div className={styles.detail}>
+                          <Video size={16} />
+                          <span>{appointment.appointment_type}</span>
+                        </div>
+                        <div className={styles.detail}>
+                          <MapPin size={16} />
+                          <span>MedicareHeart Institute</span>
+                        </div>
+                      </div>
+                      {(appointment.status === "pending" ||
+                        appointment.status === "confirmed") && (
+                        <div className={styles.appointmentActions}>
+                          <button
+                            className={styles.rescheduleButton}
+                            onClick={() =>
+                              handleReschedule(appointment.appointment_id)
+                            }
+                          >
+                            Reschedule
+                          </button>
+                          <button
+                            className={styles.cancelButton}
+                            onClick={() => handleCancel(appointment.appointment_id)}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      )}
+                      {appointment.status === "completed" && (
+                        <div className={styles.appointmentActions}>
+                          <button
+                            className={styles.reviewButton}
+                            onClick={() =>
+                              handleReview(
+                                appointment.doctor_id,
+                                appointment.appointment_id
+                              )
+                            }
+                          >
+                            Give Review
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
       <Modal isOpen={showDeleteModal} onClose={() => setShowDeleteModal(false)}>
         <h2>Appointment Cancelled</h2>
         <p>

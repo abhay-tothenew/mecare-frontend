@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Footer from "../components/Footer";
 import SearchBar from "../components/SearchBar";
+import { API_ENDPOINTS } from "../utils/api/config";
 
 interface Category {
   image_url?: string;
@@ -24,7 +25,7 @@ export default function Appointment() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/disease");
+        const response = await fetch(API_ENDPOINTS.DISEASE);
         const data = await response.json();
         setCategories(data);
       } catch (error) {

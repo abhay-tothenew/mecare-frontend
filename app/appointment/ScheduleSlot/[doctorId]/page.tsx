@@ -6,6 +6,10 @@ import Footer from "@/app/components/Footer";
 import { useRouter } from "next/navigation";
 import { use } from "react";
 import { Appointment, Doctor, PageParams } from "./type";
+import { checkOverlappingAppointments } from "@/app/utils/api/appointmentController";
+import Modal from "@/app/components/common/Modal";
+import Button from "@/app/components/common/Button";
+import { API_ENDPOINTS } from "@/app/utils/api/config";
 
 export default function ScheduleSlot({
   params,
@@ -29,39 +33,52 @@ export default function ScheduleSlot({
   const [activeTimeSection, setActiveTimeSection] = useState<
     "morning" | "evening"
   >("morning");
-  const [unavailableDates, setUnavailableDates] = useState<Map<string,Set<string>>>(new Map());
+  const [unavailableDates, setUnavailableDates] = useState<
+    Map<string, Set<string>>
+  >(new Map());
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isCheckingAppointment, setIsCheckingAppointment] = useState(false);
 
   const formatDate = (date: Date) => {
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
 
   useEffect(() => {
     const fetchSlots = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:5000/api/slots/${doctorId}`
-        );
+        const response = await fetch(API_ENDPOINTS.SLOTS(doctorId));
 
         if (!response.ok) {
           throw new Error("Failed to fetch slots");
         }
 
         const data = await response.json();
-        console.log("slots----->>>", data.slots);
+        // console.log("slots----->>>", data.slots);
         const unavailableMap = new Map<string, Set<string>>();
 
-        data.slots.forEach((slot:{availability_status:boolean,slot_date:string,start_time:string})=>{
-          if(!slot.availability_status && slot.slot_date && slot.start_time){
-            const date_formatted = formatDate(new Date(slot.slot_date));
-            if(!unavailableMap.has(date_formatted)){
-              unavailableMap.set(date_formatted, new Set());
+        data.slots.forEach(
+          (slot: {
+            availability_status: boolean;
+            slot_date: string;
+            start_time: string;
+          }) => {
+            if (
+              !slot.availability_status &&
+              slot.slot_date &&
+              slot.start_time
+            ) {
+              const date_formatted = formatDate(new Date(slot.slot_date));
+              if (!unavailableMap.has(date_formatted)) {
+                unavailableMap.set(date_formatted, new Set());
+              }
+              unavailableMap.get(date_formatted)?.add(slot.start_time);
             }
-            unavailableMap.get(date_formatted)?.add(slot.start_time);
           }
-        });
+        );
 
         setUnavailableDates(unavailableMap);
       } catch (error) {
@@ -78,7 +95,7 @@ export default function ScheduleSlot({
     const fetchDoctorById = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/doctors/${doctorId}`
+          API_ENDPOINTS.DOCTOR_BY_ID(doctorId)
         );
 
         if (!response.ok) {
@@ -131,7 +148,7 @@ export default function ScheduleSlot({
     const fetchAppointments = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/appointments/${doctorId}`
+          API_ENDPOINTS.APPOINTMENT_BY_ID(doctorId)
         );
 
         if (!response.ok) {
@@ -174,7 +191,7 @@ export default function ScheduleSlot({
 
         morningSlots.push({
           time,
-          available: !isUnavailable
+          available: !isUnavailable,
         });
       }
     }
@@ -184,7 +201,7 @@ export default function ScheduleSlot({
         const time = `${hour.toString().padStart(2, "0")}:${minute
           .toString()
           .padStart(2, "0")}`;
-        
+
         // Check if this time is unavailable for any date
         const isUnavailable = Array.from(unavailableDates.values()).some(
           (times) => times.has(time)
@@ -192,7 +209,7 @@ export default function ScheduleSlot({
 
         eveningSlots.push({
           time,
-          available: !isUnavailable
+          available: !isUnavailable,
         });
       }
     }
@@ -220,7 +237,10 @@ export default function ScheduleSlot({
   };
 
   // Filter available slots based on selected date and time section
-  const availableSlots = (morningSlots: {time: string, available: boolean}[], eveningSlots: {time: string, available: boolean}[]) => {
+  const availableSlots = (
+    morningSlots: { time: string; available: boolean }[],
+    eveningSlots: { time: string; available: boolean }[]
+  ) => {
     // Get all booked appointments for the selected date
     const bookedAppointments = appointments
       .filter(
@@ -238,30 +258,61 @@ export default function ScheduleSlot({
     }));
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (!selectedSlot || !selectedDate || !doctorDetails) return;
 
-    const appointmentDetails = {
-      id: doctorId,
-      name: doctorDetails.name,
-      specialty: doctorDetails.specialization,
-      date: selectedDate,
-      time: selectedSlot,
-      type: selectedTab === "video" ? "Video Consultation" : "Hospital Visit",
-      location: {
-        name: selectedLocation,
-        address: doctorDetails.location,
-      },
-    };
+    try {
+      setIsCheckingAppointment(true);
+      const userId = localStorage.getItem("userID");
+      if (!userId) {
+        setErrorMessage("Please login to book an appointment");
+        setShowErrorModal(true);
+        return;
+      }
 
-    const encodedDetails = encodeURIComponent(
-      JSON.stringify(appointmentDetails)
-    );
+      const overlapCheck = await checkOverlappingAppointments(
+        doctorId,
+        selectedDate,
+        selectedSlot,
+        userId
+      );
 
-    console.log("doctor details", encodedDetails);
-    router.push(
-      `/appointment/ScheduleSlot/confirmDetails?details=${encodedDetails}`
-    );
+      if (overlapCheck.hasOverlap) {
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        setErrorMessage(overlapCheck.message);
+        setShowErrorModal(true);
+        return;
+      }
+
+      const appointmentDetails = {
+        id: doctorId,
+        name: doctorDetails.name,
+        specialty: doctorDetails.specialization,
+        date: selectedDate,
+        time: selectedSlot,
+        type: selectedTab === "video" ? "Video Consultation" : "Hospital Visit",
+        location: {
+          name: selectedLocation,
+          address: doctorDetails.location,
+        },
+      };
+
+      const encodedDetails = encodeURIComponent(
+        JSON.stringify(appointmentDetails)
+      );
+
+      router.push(
+        `/appointment/ScheduleSlot/confirmDetails?details=${encodedDetails}`
+      );
+    } catch (error) {
+      console.error("Error checking appointments:", error);
+      setErrorMessage(
+        "An error occurred while checking appointments. Please try again."
+      );
+      setShowErrorModal(true);
+    } finally {
+      setIsCheckingAppointment(false);
+    }
   };
 
   const handleMonthChange = (increment: number) => {
@@ -280,7 +331,7 @@ export default function ScheduleSlot({
     setCurrentMonth(newDate);
   };
 
-  console.log("selectedDate", selectedDate,unavailableDates);
+  console.log("selectedDate", selectedDate, unavailableDates);
 
   return (
     <>
@@ -412,13 +463,15 @@ export default function ScheduleSlot({
 
               <button
                 className={styles.nextButton}
-                disabled={!selectedSlot || !selectedDate}
+                disabled={
+                  !selectedSlot || !selectedDate || isCheckingAppointment
+                }
                 onClick={handleNext}
               >
-                Next
+                {isCheckingAppointment ? "Checking..." : "Next"}
               </button>
             </div>
-{/* 
+            {/* 
             <Image
               src="/assets/slot-book.svg"
               alt="Doctor with Patient"
@@ -428,6 +481,17 @@ export default function ScheduleSlot({
           </div>
         </section>
       </div>
+
+      <Modal isOpen={showErrorModal} onClose={() => setShowErrorModal(false)}>
+        <h2>Cannot Book Appointment</h2>
+        <p>{errorMessage}</p>
+        <div className={styles.modalButtons}>
+          <Button variant="primary" onClick={() => setShowErrorModal(false)}>
+            OK
+          </Button>
+        </div>
+      </Modal>
+
       <Footer />
     </>
   );

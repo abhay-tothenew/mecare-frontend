@@ -20,6 +20,7 @@ import {
 import { Doctor, Review } from "./type";
 
 import { useAuth } from "@/app/utils/context/Authcontext";
+import { API_ENDPOINTS } from "@/app/utils/api/config";
 
 export default function DoctorProfile() {
   const params = useParams();
@@ -34,10 +35,16 @@ export default function DoctorProfile() {
     const fetchDoctorDetails = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/doctors/${params.id}`
+          // `http://localhost:5000/api/doctors/${params.id}`
+          API_ENDPOINTS.DOCTOR_BY_ID(
+            typeof params.id === "string" ? params.id : params.id?.[0] ?? ""
+          )
         );
         const review_response = await fetch(
-          `http://localhost:5000/api/reviews/${params.id}`,
+          // `http://localhost:5000/api/reviews/${params.id}`,
+          API_ENDPOINTS.REVIEWS_BY_DOCTOR(
+            typeof params.id === "string" ? params.id : params.id?.[0] ?? ""
+          ),
           {
             method: "GET",
             headers: {

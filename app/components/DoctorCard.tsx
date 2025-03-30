@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import styles from "../styles/DoctorCard.module.css";
 import { useAuth } from "../utils/context/Authcontext";
 import { Star } from "lucide-react";
+import { API_ENDPOINTS } from "../utils/api/config";
 interface DoctorCardProps {
   doctor: {
     doctor_id: string;
@@ -28,6 +29,7 @@ export default function DoctorCard({
   const { user } = useAuth();
 
   const handleCardClick = () => {
+    console.log("doctor id", doctor.doctor_id);
     router.push(`/doctors/${doctor.doctor_id}`);
   };
 
@@ -35,7 +37,7 @@ export default function DoctorCard({
     const fetchDoctorRatings = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/reviews/${doctor.doctor_id}`,
+          API_ENDPOINTS.REVIEWS_BY_DOCTOR(doctor.doctor_id),
           {
             method: "GET",
             headers: {

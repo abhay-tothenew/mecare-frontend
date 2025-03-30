@@ -3,6 +3,7 @@ import Modal from "./common/Modal";
 import Button from "./Button";
 import styles from "@/app/styles/ReviewModal.module.css";
 import { useAuth } from "@/app/utils/context/Authcontext";
+import { API_ENDPOINTS } from "../utils/api/config";
 
 interface ReviewModalProps {
   isOpen: boolean;
@@ -33,7 +34,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/reviews", {
+      const response = await fetch(API_ENDPOINTS.REVIEWS, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

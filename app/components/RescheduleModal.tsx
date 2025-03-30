@@ -6,6 +6,7 @@ import Select from "./common/Select";
 import Button from "./common/Button";
 import { FaSpinner } from "react-icons/fa";
 import styles from "../styles/reschedule-modal.module.css";
+import { API_ENDPOINTS } from "../utils/api/config";
 
 interface RescheduleModalProps {
   isOpen: boolean;
@@ -34,7 +35,8 @@ export default function RescheduleModal({
     const fetchAppointmentDetails = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/appointments/${userId}`
+          // `http://localhost:5000/api/appointments/${userId}`
+          API_ENDPOINTS.APPOINTMENT_BY_ID(userId)
         );
 
         const data = await response.json();
@@ -63,7 +65,7 @@ export default function RescheduleModal({
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:5000/api/appointments/details/${appointmentId}`,
+        API_ENDPOINTS.APPOINTMENT_DETAILS(appointmentId ?? ""),
         {
           method: "PUT",
           headers: {

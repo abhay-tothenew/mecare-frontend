@@ -4,10 +4,11 @@ import styles from "../../styles/categoryDoctor.module.css";
 import Footer from "@/app/components/Footer";
 // import SearchBar from "@/app/components/SearchBar";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
+// import Image from "next/image";
 import { use } from "react";
 import { Doctor } from "./type";
 import DoctorCard from "@/app/components/DoctorCard";
+import { API_ENDPOINTS } from "@/app/utils/api/config";
 
 export default function Category({
   params,
@@ -18,7 +19,7 @@ export default function Category({
   const category = resolvedParams.category;
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [filteredDoctors, setFilteredDoctors] = useState<Doctor[]>([]);
-  const [display_category, setDisplayCategory] = useState("");
+  // const [display_category, setDisplayCategory] = useState("");
   const [filters, setFilters] = useState({
     rating: 0,
     experience: "all",
@@ -27,27 +28,34 @@ export default function Category({
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
 
   const first_index = (currentPage - 1) * 6;
   const last_index = currentPage * 6;
   const currentDoctors = filteredDoctors.slice(first_index, last_index);
 
-  const router = useRouter();
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedQuery(searchQuery);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   useEffect(() => {
     const fetchBySpecialty = async () => {
       try {
         const categoryName = category.split("_").join(" ");
         // console.log("category_name", categoryName);
-          // category.charAt(0).toUpperCase() + category.slice(1);
-          const category_name = categoryName.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
-          
-          console.log("category_name", category_name);
-        const response = await fetch(
-          `http://localhost:5000/api/doctors/specialization/${category_name}`
-        );
+        // category.charAt(0).toUpperCase() + category.slice(1);
+        const category_name = categoryName
+          .split(" ")
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(" ");
 
-        
+        console.log("category_name", category_name);
+        const response = await fetch(API_ENDPOINTS.DOCTORS_BY_SPECIALIZATION(category_name));
+
         const data = await response.json();
         console.log("data category--->", data);
         setDoctors(data.doctors);
@@ -60,14 +68,13 @@ export default function Category({
     fetchBySpecialty();
   }, []);
 
-
-  console.log("doctos0000",doctors);
+  // console.log("doctos0000", doctors);
 
   useEffect(() => {
     let updatedDoctors = doctors;
 
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase().trim();
+    if (debouncedQuery.trim()) {
+      const query = debouncedQuery.toLowerCase().trim();
       updatedDoctors = updatedDoctors.filter(
         (doctor) =>
           doctor.name.toLowerCase().includes(query) ||
@@ -96,7 +103,7 @@ export default function Category({
     }
 
     setFilteredDoctors(updatedDoctors);
-  }, [filters, doctors, searchQuery]);
+  }, [filters, doctors, debouncedQuery]);
 
   // Handle filter changes
   const handleFilterChange = (type: string, value: string | number) => {
@@ -124,15 +131,15 @@ export default function Category({
       {/* <SearchBar /> */}
 
       {/* Add Search Box */}
-          <div className={styles.searchBox}>
-            <input
-              type="text"
-              placeholder="Search by name, specialization, or location..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className={styles.searchInput}
-            />
-          </div>
+      <div className={styles.searchBox}>
+        <input
+          type="text"
+          placeholder="Search by name, specialization, or location..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className={styles.searchInput}
+        />
+      </div>
 
       <div className={styles.container}>
         <div className={styles.doctorsContainer}>
@@ -142,8 +149,6 @@ export default function Category({
               Book appointments with minimum wait-time & verified doctor details
             </p>
           </div>
-
-          
 
           {/* Mobile filters - Dropdown version */}
           <div className={styles.mobileFilters}>

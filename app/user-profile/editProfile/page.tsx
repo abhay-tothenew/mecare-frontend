@@ -8,6 +8,7 @@ import Input from "@/app/components/common/Input";
 import Select from "@/app/components/common/Select";
 import TextArea from "@/app/components/common/TextArea";
 import Button from "@/app/components/common/Button";
+import { API_ENDPOINTS } from "@/app/utils/api/config";
 
 interface EmergencyContact {
   name: string;
@@ -21,20 +22,6 @@ interface FormData extends Omit<Partial<UserData>, "emergency_contact"> {
 
 export default function EditProfile() {
   const router = useRouter();
-  const [formData, setFormData] = useState<FormData>({
-    name: "",
-    email: "",
-    phone: "",
-    age: 0,
-    gender: "",
-    blood_group: "",
-    address: "",
-    emergency_contact: {
-      name: "",
-      relation: "",
-      phone: "",
-    },
-  });
   const [userData, setUserData] = useState<UserData>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -44,16 +31,13 @@ export default function EditProfile() {
       try {
         const token = localStorage.getItem("token");
 
-        const response = await fetch(
-          "http://localhost:5000/api/users/profile",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await fetch(API_ENDPOINTS.PROFILE, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         const data = await response.json();
         console.log("user data", data);
@@ -90,7 +74,7 @@ export default function EditProfile() {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:5000/api/users/${userData?.user_id}`,
+        API_ENDPOINTS.USERS(userData?.user_id ?? ""),
         {
           method: "PUT",
           headers: {
