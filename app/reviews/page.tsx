@@ -5,43 +5,31 @@ import { useAuth } from "@/app/utils/context/Authcontext";
 import { Star } from "lucide-react";
 import styles from "@/app/styles/reviews-page.module.css";
 import { API_ENDPOINTS } from "../utils/api/config";
-
-interface Review {
-  review_id: string;
-  rating: number;
-  review_text: string;
-  doctor_id: string;
-  created_at: string;
-  average_rating: number;
-}
-
-interface doctor {
-  doctor_id: string;
-  name: string;
-}
-interface Doctor {
-  doctor?: doctor;
-}
-
-interface Rating {
-  rating: number;
-}
+import { Review, Doctor, Rating } from "./type";
+import { FaSpinner } from "react-icons/fa";
+import Modal from "@/app/components/common/Modal";
+import { useRouter } from "next/navigation";
 
 export default function Reviews() {
   const { user } = useAuth();
+  const router = useRouter();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [doctors, setDoctors] = useState<{ [key: string]: Doctor }>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [ratings, setRatings] = useState<Rating[]>([]);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
-    const fetchReviews = async () => {
-      if (!user?.user_id) return;
+    if (!user?.user_id || !user?.token) {
+      setShowLoginModal(true);
+      return;
+    }
 
+    const fetchReviews = async () => {
       try {
         const response = await fetch(
-          API_ENDPOINTS.REVIEWS_BY_USER(user.user_id),
+          API_ENDPOINTS.REVIEWS_BY_USER(user.user_id as string),
           {
             method: "GET",
             headers: {
@@ -57,8 +45,6 @@ export default function Reviews() {
         setReviews(data.review);
         setRatings(data.review.rating);
 
-        console.log("review page", ratings);
-
         // Fetch doctor details for each review
         const doctorPromises = data?.review.map(async (review: Review) => {
           const doctorResponse = await fetch(
@@ -70,8 +56,6 @@ export default function Reviews() {
             );
           }
           const doctorData = await doctorResponse.json();
-
-          console.log("doctor data", doctorData);
           return { [review.doctor_id]: doctorData };
         });
 
@@ -89,14 +73,12 @@ export default function Reviews() {
     };
 
     fetchReviews();
-  }, [user?.user_id,ratings,user?.token]);
-
-  console.log("---", reviews);
+  }, [user?.user_id, user?.token]);
 
   if (loading) {
     return (
       <div className={styles.loadingContainer}>
-        <div className={styles.spinner}></div>
+        <FaSpinner className={styles.spinner} />
       </div>
     );
   }
@@ -126,35 +108,56 @@ export default function Reviews() {
   }
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>Your Reviews</h1>
-      <div className={styles.reviewsGrid}>
-        {reviews.map((review) => (
-          <div key={review.review_id} className={styles.reviewCard}>
-            <div className={styles.reviewHeader}>
-              <h2 className={styles.doctorName}>
-                {doctors[review.doctor_id].doctor?.name || "Loading..."}
-              </h2>
-              <div className={styles.starsContainer}>
-                {reviews.map((rating, index) => (
-                  <Star
-                    key={index}
-                    className={`w-5 h-5 ${
-                      index < review.rating
-                        ? "fill-yellow-400 text-yellow-400"
-                        : "text-gray-300"
-                    }`}
-                  />
-                ))}
+    <>
+      <div className={styles.container}>
+        <h1 className={styles.title}>Your Reviews</h1>
+        <div className={styles.reviewsGrid}>
+          {reviews.map((review) => (
+            <div key={review.review_id} className={styles.reviewCard}>
+              <div className={styles.reviewHeader}>
+                <h2 className={styles.doctorName}>
+                  {doctors[review.doctor_id].doctor?.name || "Loading..."}
+                </h2>
+                <div className={styles.starsContainer}>
+                  {reviews.map((rating, index) => (
+                    <Star
+                      key={index}
+                      className={`w-5 h-5 ${
+                        index < review.rating
+                          ? "fill-yellow-400 text-yellow-400"
+                          : "text-gray-300"
+                      }`}
+                    />
+                  ))}
+                </div>
               </div>
+              <p className={styles.reviewComment}>{review.review_text}</p>
+              <p className={styles.reviewDate}>
+                {new Date(review.created_at).toLocaleDateString()}
+              </p>
             </div>
-            <p className={styles.reviewComment}>{review.review_text}</p>
-            <p className={styles.reviewDate}>
-              {new Date(review.created_at).toLocaleDateString()}
-            </p>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+
+      <Modal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)}>
+        <h2>Login Required</h2>
+        <p>Please login to view your reviews.</p>
+        <div className={styles.modalButtons}>
+          <button
+            className={styles.cancelButton}
+            onClick={() => setShowLoginModal(false)}
+          >
+            Cancel
+          </button>
+          <button
+            className={styles.submitButton}
+            onClick={() => router.push("/auth/login")}
+          >
+            Login
+          </button>
+        </div>
+      </Modal>
+    </>
   );
 }
