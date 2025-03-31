@@ -53,7 +53,7 @@ function AuthCallbackContent() {
       });
 
       // Redirect based on role
-      router.push(payload.role ? "/home" : "/home");
+      router.push(payload.role ? "https://mecare-frontend.vercel.app/home" : "https://mecare-frontend.vercel.app/home");
     } catch (error) {
       console.error("Error decoding token:", error);
       router.push("/auth/login");
