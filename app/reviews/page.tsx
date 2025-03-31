@@ -53,6 +53,7 @@ export default function Reviews() {
           throw new Error("Failed to fetch reviews");
         }
         const data = await response.json();
+        console.log("review page", data);
         setReviews(data.review);
         setRatings(data.review.rating);
 

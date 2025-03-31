@@ -53,7 +53,7 @@ function AuthCallbackContent() {
       });
 
       // Redirect based on role
-      router.push(payload.role === "patient" ? "/home" : "/home");
+      router.push(payload.role ? "/home" : "/home");
     } catch (error) {
       console.error("Error decoding token:", error);
       router.push("/auth/login");
