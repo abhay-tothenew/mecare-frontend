@@ -74,6 +74,7 @@ export default function Reviews() {
 
     fetchReviews();
   }, [user?.user_id, user?.token]);
+  console.log(ratings);
 
   if (loading) {
     return (
